@@ -1,0 +1,58 @@
+(A) decorate completed task +Decorate grey strikethrough
+x (A) decorate project +Decorate light blue
+(B) mark done with date or undone and remove date +Line
+(B) make configurable (file names, keybindings, colors)
+decorate priority +Decorate yellow
+decorate context +Decorate green
+decorate tag +Decorate purple
+decorate due date, today and overdue +Decorate purple, yellow bold, red bold
+increase/decrease priority or remove priority +Line
+add/remove waiting/next tags (do I need these? Or do they go into separate .txt files?) +Line
+add due date, shortcut +Line
+quick sorts/views: Next (any A or top priority), Project, due, tag value +List
+move from inbox.txt to todo.txt, someday.txt or to a project file or create a Project.md +File
+archive tasks to done.txt +File
+move to inbox from project - maybe a "next" that tags/prioritizes and moves to inbox) +File
+make test file from official format document +Test
+write test cases for decorators (how?) +Test
+write test cases for line commands +Test
+write test cases for file commands +Test
+defer a task (what does that mean? Should it be a separate .txt file that is different than someday?)
+follow note:xxx link
+take chunk of text and create note and save name in clipboard
+flush all changes to Git (maybe not necessary if I have the job)
+iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?
+
+make decoration work whenever buffer changes +Bug
+
+--
+references
+https://vscode.rocks/decorations/
+https://vscode.rocks/testing/
+https://vscode.rocks/codelens/
+
+(Need to decide if waiting is a tag or presence in a file)
+choices:
+  - move to a file
+  - context @wait
+  - tag wait:tom
+  - priority (W)
+tag and context allow them to stay in todo.txt or other file
+tag allows knowing who
+moving to file gets it off list and easy to review later
+prority seems like a kludge but is somewhat right
+
+(Need to decide if defer is a tag or presence in a file)
+choices:
+  - move to a file
+  - context @defer
+  - tag defer:yyyy-mm-dd
+  - priority (D)
+tag and context allow them to stay in todo.txt or other file
+tag allows knowing when to look at again (but was always an issue with Todoist if the date isn't real
+  and I just want to do it later, which is the usual)
+move to file means just more files
+priority seems like a kludge but sort of works
+
+need to read about alternatives to GTD in todo.txt for different "states"
+
