@@ -1,10 +1,9 @@
-(A) decorate completed task +Decorate grey strikethrough
-x (A) decorate project +Decorate light blue
-(B) mark done with date or undone and remove date +Line
-(B) make configurable (file names, keybindings, colors)
-decorate priority +Decorate yellow
-decorate context +Decorate green
-decorate tag +Decorate purple
+(A) make configurable (file names, keybindings, colors)
+(A) add keybinding for toggle-completion +Config
+(B) decorate priority +Decorate yellow
+(B) decorate context +Decorate green
+(B) decorate tag +Decorate purple
+(B) add build step to make a VSIX package so I can install on my own +Config
 decorate due date, today and overdue +Decorate purple, yellow bold, red bold
 increase/decrease priority or remove priority +Line
 add/remove waiting/next tags (do I need these? Or do they go into separate .txt files?) +Line
@@ -23,7 +22,10 @@ take chunk of text and create note and save name in clipboard
 flush all changes to Git (maybe not necessary if I have the job)
 iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?
 
-make decoration work whenever buffer changes +Bug
+x 2019-04-19 (A) decorate completed task +Decorate grey strikethrough
+x 2019-04-19 (A) decorate project +Decorate light blue
+x 2019-04-19 (B) mark done with date or undone and remove date +Line
+x 2019-04-19 make decoration work whenever buffer changes +Bug
 
 --
 references

@@ -3,6 +3,7 @@
 	"displayName": "todotxt-mode",
 	"description": "Commands and decorators for managing todo.txt files",
 	"version": "0.0.1",
+	"publisher": "davraamides",
 	"engines": {
 		"vscode": "^1.33.0"
 	},
@@ -10,14 +11,14 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"onLanguage:plaintext"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
+				"command": "extension.toggleCompletion",
+				"title": "todotxt-mode: Toggle Task Completion"
 			}
 		]
 	},

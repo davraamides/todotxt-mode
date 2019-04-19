@@ -1,41 +1,22 @@
-'use strict';
+//'use strict';
 
 import * as vscode from 'vscode';
+import * as ToDoCommands from './ToDoCommands';
+import ToDoController from './ToDoController';
+import ToDoDecorator from './decorators/ToDoDecorator';
 
-const decorationType = vscode.window.createTextEditorDecorationType({
-	color: 'rgb(25, 172, 230)',
-})
-
+// this method is called when your extension is activated
+// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	vscode.workspace.onWillSaveTextDocument(event => {
-		const openEditor = vscode.window.visibleTextEditors.filter(editor => editor.document.uri === event.document.uri)[0]
-		decorate(openEditor)
-	})
 
-	function decorate(editor: vscode.TextEditor) {
-		let text = editor.document.getText()
-		let regex = /(\+\w+)/
-		let decorationsArray: vscode.DecorationOptions[] = []
-		const lines = text.split('\n')
-		for (let line = 0; line < lines.length; line++) {
-			let match = lines[line].match(regex)
-			if (match !== null && match.index !== undefined) {
-				let range = new vscode.Range(
-					new vscode.Position(line, match.index),
-					new vscode.Position(line, match.index + match[1].length)
-				)
-				let decoration = { range }
-				decorationsArray.push(decoration)
-			}
-		}
-		editor.setDecorations(decorationType, decorationsArray)
-	}
-	let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
-		vscode.window.showInformationMessage('Hello VS Code');
-	});
+	let toDoDecorator = new ToDoDecorator();
+	let toDoController = new ToDoController(toDoDecorator);
+	ToDoCommands.ActivateCommands(context);
 
-	context.subscriptions.push(disposable);
+	// By Default Decorate the document
+	toDoDecorator.decorateDocument();
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() {
+}
