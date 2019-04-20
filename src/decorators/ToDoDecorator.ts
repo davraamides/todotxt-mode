@@ -2,18 +2,38 @@ import * as vscode from 'vscode';
 import { window, Range } from 'vscode';
 //import StyleConstants from '../utils/StyleConstants';
 import * as path from 'path';
+import { TextDecoder } from 'util';
 //import AppConstants from '../utils/AppConstants';
+
+var DEFAULT_STYLE = {
+    textDecoration: "line-through",
+    opacity: "0.5"
+};
 
 export default class ToDoDecorator {
 
-    dateDecorations: vscode.DecorationOptions[] = [];
+    //dateDecorations: vscode.DecorationOptions[] = [];
+    completedDecorations: vscode.DecorationOptions[] = [];
     projectDecorations: vscode.DecorationOptions[] = [];
     priorityDecorations: vscode.DecorationOptions[] = [];
-    overdueDecorations: vscode.DecorationOptions[] = [];
-    completedDecorations: vscode.DecorationOptions[] = [];
+    tagDecorations: vscode.DecorationOptions[] = [];
+    //overdueDecorations: vscode.DecorationOptions[] = [];
     contextDecorations: vscode.DecorationOptions[] = [];
-    activeEditor!: vscode.TextEditor;
-/*
+    activeEditor: vscode.TextEditor;
+    completedTaskStyle: vscode.DecorationRenderOptions;
+
+    constructor() {
+        let settings = vscode.workspace.getConfiguration("todotxtmode");
+        if (settings) {
+            let message: string = settings["message"];
+            if (message) {
+                vscode.window.showWarningMessage(message);
+            }
+            let style = Object.assign({}, DEFAULT_STYLE, settings["completedTaskStyle"]);
+            this.completedDecorationType = vscode.window.createTextEditorDecorationType(style);
+         }
+    }
+    /*
     private dateDecorationType = vscode.window.createTextEditorDecorationType({
         light: {
             color: StyleConstants.DATE_LIGHT
@@ -31,31 +51,41 @@ export default class ToDoDecorator {
             color: 'rgb(25, 172, 230)'
         }
     });
-/*
+
     private priorityDecorationType = vscode.window.createTextEditorDecorationType({
         light: {
-            color: StyleConstants.PRIORITY_LIGHT
+            color: 'rgb(230, 216, 25)'
         },
         dark: {
-            color: StyleConstants.PRIORITY_DARK
+            color: 'rgb(230, 216, 25)'
         }
     });
 
+    private tagDecorationType = vscode.window.createTextEditorDecorationType({
+        light: {
+            color: 'rgb(179, 58, 172)'
+        },
+        dark: {
+            color: 'rgb(179, 58, 172)'
+        }
+    });
+
+/*
     private overdueDecorationType = vscode.window.createTextEditorDecorationType({
 
     });
-
+*/
     private contextDecorationType = vscode.window.createTextEditorDecorationType({
         light: {
-            color: StyleConstants.CONTEXT_LIGHT
+            color: 'rgb(40, 161, 86)'
         },
         dark: {
-            color: StyleConstants.CONTEXT_DARK
+            color: 'rgb(40, 161, 86)'
         }
     });
-*/
+
     private completedDecorationType = vscode.window.createTextEditorDecorationType({
-        textDecoration: 'text-decoration: line-through; opacity: 0.5;'
+        textDecoration: 'font-style: italic; text-decoration: line-through; opacity: 0.5;'
     });
 
     public decorateDocument() {
@@ -89,9 +119,12 @@ export default class ToDoDecorator {
             Iterate over regexes and update all arrays
         */
         //this.parseRegex(AppConstants.DATE_REGEX, this.dateDecorations, inputLine);
+        // since + and @ are non-word characters, we use \B in the regex but for
+        // tags, we use \b since they start with word characters
         this.parseRegex(/\B\+[^+@\s]+/g, this.projectDecorations, inputLine);
-        //this.parseRegex(AppConstants.CONTEXT_REGEX, this.contextDecorations, inputLine);
-        //this.parseRegex(AppConstants.PRIORITY_REGEX, this.priorityDecorations, inputLine);
+        this.parseRegex(/\B@[^+@\s]+/g, this.contextDecorations, inputLine);
+        this.parseRegex(/[(][A-Z][)]/g, this.priorityDecorations, inputLine);
+        this.parseRegex(/\b[^+@\s]+:\w+/g, this.tagDecorations, inputLine);
 
         if (inputLine.text.startsWith("x ") || inputLine.text.startsWith("X ")) {
             let decoration = { range: inputLine.range };
@@ -100,11 +133,12 @@ export default class ToDoDecorator {
     }
 
     private clearAllDecorations() {
-        this.dateDecorations = [];
+        //this.dateDecorations = [];
         this.projectDecorations = [];
         this.priorityDecorations = [];
         this.contextDecorations = [];
-        this.overdueDecorations = [];
+        this.tagDecorations = [];
+        //this.overdueDecorations = [];
         this.completedDecorations = [];
     }
 
@@ -112,9 +146,10 @@ export default class ToDoDecorator {
         // Set all new decorations
         //this.activeEditor.setDecorations(this.dateDecorationType, this.dateDecorations);
         this.activeEditor.setDecorations(this.projectDecorationType, this.projectDecorations);
-        //this.activeEditor.setDecorations(this.contextDecorationType, this.contextDecorations);
+        this.activeEditor.setDecorations(this.contextDecorationType, this.contextDecorations);
         this.activeEditor.setDecorations(this.completedDecorationType, this.completedDecorations);
-        //this.activeEditor.setDecorations(this.priorityDecorationType, this.priorityDecorations);
+        this.activeEditor.setDecorations(this.priorityDecorationType, this.priorityDecorations);
+        this.activeEditor.setDecorations(this.tagDecorationType, this.tagDecorations);
     }
 
     private parseRegex(iRegExp: RegExp, decorationOptions: vscode.DecorationOptions[], inputLine: vscode.TextLine) {
