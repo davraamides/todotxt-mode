@@ -35,7 +35,19 @@
 			{
 				"command": "extension.sortByTag",
 				"title": "todotxt-mode: Sort by Tag"
-			}
+			},
+			{
+				"command": "extension.archiveTasks",
+				"title": "todotxt-mode: Archive completed tasks"
+			},
+			{
+				"command": "extension.moveTasksToWaiting",
+				"title": "todotxt-mode: Move tasks to Waiting file"
+			},
+			{
+				"command": "extension.moveTasksToSomeday",
+				"title": "todotxt-mode: Move tasks to Someday file"
+			}			
 		],
 		"keybindings": [
 			{

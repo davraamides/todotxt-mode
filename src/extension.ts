@@ -1,7 +1,7 @@
 //'use strict';
 
 import * as vscode from 'vscode';
-import * as ToDoCommands from './ToDoCommands';
+import * as Commands from './commands';
 import Decorator from './decorations';
 
 // this method is called when your extension is activated
@@ -11,7 +11,7 @@ export function activate(context: vscode.ExtensionContext) {
 	console.log(s);
 	//console.log(JSON.stringify(s, null, 2));
 	let decorator = new Decorator();
-	ToDoCommands.ActivateCommands(context);
+	Commands.ActivateCommands(context);
 
 	vscode.window.onDidChangeTextEditorSelection(editor => {
 		decorator.decorateDocument();

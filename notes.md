@@ -4,8 +4,11 @@
 https://vscode.rocks/decorations/
 https://vscode.rocks/testing/
 https://vscode.rocks/codelens/
+
 Project that uses settings in package.json and then retrieves them in code.
 https://github.com/foxundermoon/vs-shell-format
+
+https://vscode-docs.readthedocs.io/en/stable/
 
 ## Packaging
 The `vsce` tool is for managing VS Code Extensions. Install the command with
