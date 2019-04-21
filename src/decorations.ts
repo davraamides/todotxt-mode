@@ -41,7 +41,7 @@ export default class Decorator {
         if (activeEditor != undefined) {
             // Only Decorate Document if it's in the classic filenaming convention
             let fileName = path.basename(activeEditor.document.fileName);
-            if (fileName == "todo.txt") {
+            if (fileName.endsWith(".txt")) {
                 // Iterate over each line and parse accordingl∏
                 for (var i = 0; i < activeEditor.document.lineCount; i++) {
                     let line = activeEditor.document.lineAt(i);

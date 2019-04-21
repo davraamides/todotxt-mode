@@ -13,9 +13,18 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     let toggleCompletion = vscode.commands.registerCommand('extension.toggleCompletion', () => {
         ToDoTasks.toggleCompletedTasks();
     });
+    let sortByContext = vscode.commands.registerCommand('extension.sortByContext', () => {
+        Utils.sortLines("context");
+    });
     let sortByPriority = vscode.commands.registerCommand('extension.sortByPriority', () => {
         Utils.sortLines("priority");
-    })
+    });
+    let sortByProject = vscode.commands.registerCommand('extension.sortByProject', () => {
+        Utils.sortLines("project");
+    });
+    let sortByTag = vscode.commands.registerCommand('extension.sortByTag', () => {
+        Utils.sortLines("tag");
+    });
 /*
     let archiveTasks = vscode.commands.registerCommand('extension.archiveTasks', () => {
         ToDoTasks.bulkArchiveTasks();

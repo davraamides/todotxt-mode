@@ -21,8 +21,20 @@
 				"title": "todotxt-mode: Toggle Task Completion"
 			},
 			{
+				"command": "extension.sortByContext",
+				"title": "todotxt-mode: Sort by Context"
+			},
+			{
 				"command": "extension.sortByPriority",
 				"title": "todotxt-mode: Sort by Priority"
+			},
+			{
+				"command": "extension.sortByProject",
+				"title": "todotxt-mode: Sort by Project"
+			},
+			{
+				"command": "extension.sortByTag",
+				"title": "todotxt-mode: Sort by Tag"
 			}
 		],
 		"keybindings": [

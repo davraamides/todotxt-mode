@@ -14,65 +14,60 @@ export namespace Utils {
 
     export function sortLines(byField: string) {
         console.log("sorting by " + byField);
+        // get lines into array of strings
+        // parse out sort key into leading value of array of tuples
+        // sort list
+        // replace entire buffer
+        //slines = sorted([(get(l), l) for l in lines])
+        //lines = [_[1] for _ in slines]
         let editor = vscode.window.activeTextEditor;
-        let parsedLines = getParsedLines(editor.document, byField);
-        for (var i = 0; i < parsedLines.length; i++) {
-            console.log(parsedLines[i]);
+        let selectionLine = editor.selection.start.line;
+        let lineObjects = getLineObjects(editor.document, byField);
+        for (var i = 0; i < lineObjects.length; i++) {
+            console.log(lineObjects[i]["value"] + ":" + lineObjects[i]["line"] + ":" + lineObjects[i]["text"]);
         }
-        let sortedLines = sortByKey(byField, parsedLines);
-        deleteAndPopulate(editor, sortedLines);
+        lineObjects.sort((obja, objb) => {
+            if (obja["value"] > objb["value"]) {
+                return 1;
+            }
+            if (obja["value"] < objb["value"]) {
+                return -1;
+            }
+            // for lines with equal field values, use the line number to make the sort stable
+            return obja["line"] - objb["line"];
+        })
+        let sortedLines: string[] = [];
+        for (var i = 0; i < lineObjects.length; i++) {
+            sortedLines.push(lineObjects[i]["text"]);
+        }
+        editor.edit(editBuilder => {
+            const range = new vscode.Range(0, 0, sortedLines.length - 1, editor.document.lineAt(sortedLines.length -1).text.length);
+            editBuilder.replace(range, sortedLines.join('\n'));
+        });
+        // this does not alway seem to trigger a redecoration so maybe leave this alone and 
+        // just decorate after each sort
+        editor.selection = new vscode.Selection(new vscode.Position(selectionLine, 0), new vscode.Position(selectionLine, 0));
     }
 
-    function getParsedLines(doc: vscode.TextDocument, field: string): Array<Object> {
-        var parsedLines: Array<Object> = new Array<Object>();
+    function getLineObjects(doc: vscode.TextDocument, field: string): object[] {
+        var lineObjects: object[] = [];
+        let regex = Defaults.FIELD_REGEX_MAP[field];
 
         for (var i = 0; i < doc.lineCount; i++) {
-            let lineText = doc.lineAt(i).text;
-            let regex = Defaults.FIELD_REGEX_MAP[field];
-            let fieldValue = parseRegexResponse(lineText.match(regex));
-            parsedLines.push({ "line": i, "lineText": lineText, "field": fieldValue});
+            let text = doc.lineAt(i).text;
+            let value = parseField(text, regex);
+            lineObjects.push({text: text, value: value, line: i});
         }
-        return parsedLines;
+        return lineObjects;
     }
 
-    function parseRegexResponse(regexResponse: Array<String>): String {
-        if (regexResponse != null) {
-            return regexResponse.pop();
+    function parseField(line: string, regex: RegExp): string {
+        let response = line.match(regex);
+        if (response != null) {
+            return response.pop();
         }
+        // force to bottom
         return "z";
     }
 
-    function sortByKey(iKey: String, iArray: Array<Object>): Array<Object> {
-        var sortedArray = iArray.sort((obj1, obj2) => {
-
-            if (obj1[iKey.toString()] > obj2[iKey.toString()]) {
-                return 1;
-            }
-            if (obj1[iKey.toString()] < obj2[iKey.toString()]) {
-                return -1;
-            }
-            return 0;
-        });
-
-        return sortedArray;
-    }
-
-    function deleteAndPopulate(editor: vscode.TextEditor, docObject: Array<Object>) {
-
-        editor.edit(builder => {
-
-            for (var i = 0; i < docObject.length; i++) {
-                let replaceRange = editor.document.lineAt(i).range;
-                let lineText = docObject[i]["lineText"];
-                builder.replace(replaceRange, lineText);
-            }
-        });
-
-        editor.selection = new vscode.Selection(new vscode.Position(0, 0), new vscode.Position(0, 0));
-    }
 };
-/*
-sorting
-- sort by field
-- replace lines
-*/

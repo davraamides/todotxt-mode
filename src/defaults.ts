@@ -1,15 +1,17 @@
 export namespace Defaults {
 
-    // use capturing patterns so they can be used for getting
-    // the values for sorting and other commands
-    export const CONTEXT_REGEX = /\B(@[^+@\s]+)/g;
-    export const PRIORITY_REGEX = /([(][A-Z][)])/g;
-    export const PROJECT_REGEX = /\B(\+[^+@\s]+)/g;
-    export const TAG_REGEX = /\b([^+@\s]+:\w+)/g;
+    // The ontext and project patterns are prefixed with non-word boundary (\B) as they
+    // begin with non-word chars (+@). The tag pattern is prefixed with a word bounday (\b)
+    // as tags begin with a word char.
+    export const CONTEXT_REGEX = /\B@[^+@\s]+/g;
+    export const PRIORITY_REGEX = /[(][A-Z][)]/g;
+    export const PROJECT_REGEX = /\B\+[^+@\s]+/g;
+    export const TAG_REGEX = /\b\w+:\w+/g;
     export const COMPLETED_REGEX = /^x .*$/g;
 
+    // put them in a map so sorting by any field is consistent
     export const FIELD_REGEX_MAP = {
-        'content': CONTEXT_REGEX,
+        'context': CONTEXT_REGEX,
         'priority': PRIORITY_REGEX,
         'project': PROJECT_REGEX,
         'tag': TAG_REGEX,
