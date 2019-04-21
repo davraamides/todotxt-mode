@@ -4,28 +4,13 @@ import { Defaults } from './defaults'
 
 export namespace Utils {
 
-    function getFieldFromLine(regex: RegExp, line: vscode.TextLine) {
-        let result: RegExpExecArray = regex.exec(line.text);
-        if (result) {
-            return result.groups[1];
-        }
-        return undefined;
-    }
-
     export function sortLines(byField: string) {
-        console.log("sorting by " + byField);
-        // get lines into array of strings
-        // parse out sort key into leading value of array of tuples
-        // sort list
-        // replace entire buffer
-        //slines = sorted([(get(l), l) for l in lines])
-        //lines = [_[1] for _ in slines]
         let editor = vscode.window.activeTextEditor;
         let selectionLine = editor.selection.start.line;
         let lineObjects = getLineObjects(editor.document, byField);
-        for (var i = 0; i < lineObjects.length; i++) {
-            console.log(lineObjects[i]["value"] + ":" + lineObjects[i]["line"] + ":" + lineObjects[i]["text"]);
-        }
+
+        // sort the lines by the values of byField. leave lines without a field
+        // in their existing order (i.e. a stable sort)
         lineObjects.sort((obja, objb) => {
             if (obja["value"] > objb["value"]) {
                 return 1;
@@ -40,6 +25,7 @@ export namespace Utils {
         for (var i = 0; i < lineObjects.length; i++) {
             sortedLines.push(lineObjects[i]["text"]);
         }
+        // replace all the lines in the editor with the new sorted lines
         editor.edit(editBuilder => {
             const range = new vscode.Range(0, 0, sortedLines.length - 1, editor.document.lineAt(sortedLines.length -1).text.length);
             editBuilder.replace(range, sortedLines.join('\n'));
@@ -49,25 +35,31 @@ export namespace Utils {
         editor.selection = new vscode.Selection(new vscode.Position(selectionLine, 0), new vscode.Position(selectionLine, 0));
     }
 
+    // get the lines of the document as objects with the text, field value and line number
     function getLineObjects(doc: vscode.TextDocument, field: string): object[] {
         var lineObjects: object[] = [];
         let regex = Defaults.FIELD_REGEX_MAP[field];
+        let sortCompletedTasksToEnd = vscode.workspace.getConfiguration('todotxtmode').get("sortCompletedTasksToEnd", false);
 
         for (var i = 0; i < doc.lineCount; i++) {
             let text = doc.lineAt(i).text;
-            let value = parseField(text, regex);
+            let value = parseField(text, regex, sortCompletedTasksToEnd);
             lineObjects.push({text: text, value: value, line: i});
         }
         return lineObjects;
     }
 
-    function parseField(line: string, regex: RegExp): string {
+    // return the first matching portion of a regex in a line
+    function parseField(line: string, regex: RegExp, sortCompletedTasksToEnd: boolean): string {
+        if (sortCompletedTasksToEnd && line.startsWith("x ")) {
+            // force to very bottom, include date for sorting
+            return "z " + line.substr(2, 10);
+        }
         let response = line.match(regex);
         if (response != null) {
             return response.pop();
         }
         // force to bottom
-        return "z";
+        return "y";
     }
-
 };

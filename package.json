@@ -54,6 +54,11 @@
 					"default": "Hello!",
 					"description": "test message"
 				},
+				"todotxtmode.sortCompletedTasksToEnd": {
+					"type": "boolean",
+					"default": true,
+					"description": "Alwasy place completed tasks at end of list when sorting"
+				},
 				"todotxtmode.completedTaskStyle": {
 					"type": "object",
 					"description": "style for completed tasks",

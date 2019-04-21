@@ -11,10 +11,10 @@ make test file from official format document +Test
 write test cases for decorators (how?) +Test
 write test cases for line commands +Test
 write test cases for file commands +Test
+not always redecorating after a sort +Bug
 command to follow a note:xxx link
 command to take text selection and create note and save in clipboard (or add to task above selection?)
 flush all changes to Git (maybe not necessary if I have the job)
-add option to always sort completed tasks to the bottom
 search command to find all tasks with high priority (A/B) or overdue or due within next 5 days
 iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?
 x 2019-04-19 (A) decorate completed task +Decorate grey strikethrough
@@ -26,4 +26,5 @@ x 2019-04-20 (B) decorate priority +Decorate yellow @prog
 x 2019-04-20 (B) decorate context +Decorate green @wait
 x 2019-04-20 (B) decorate tag @done +Decorate purple
 x 2019-04-21 (B) add build step to make a VSIX package so I can install on my own +Config
+x 2019-04-21 add option to always sort completed tasks to the bottom
 
