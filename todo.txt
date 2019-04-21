@@ -31,6 +31,9 @@ https://vscode.rocks/decorations/
 https://vscode.rocks/testing/
 https://vscode.rocks/codelens/
 
+Project that uses settings in package.json and then retrieves them in code.
+https://github.com/foxundermoon/vs-shell-format
+
 (Need to decide if waiting is a tag or presence in a file)
 choices:
   - move to a file
