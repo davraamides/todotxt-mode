@@ -5,6 +5,7 @@ import * as vscode from 'vscode';
 //import { TaskUtils } from './utils/TaskUtils';
 //import { ToDoSort } from './commands/ToDoSort';
 import { ToDoTasks } from './commands/ToDoTasks';
+import { Utils } from './utils';
 
 
 export function ActivateCommands(context: vscode.ExtensionContext) {
@@ -12,6 +13,9 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     let toggleCompletion = vscode.commands.registerCommand('extension.toggleCompletion', () => {
         ToDoTasks.toggleCompletedTasks();
     });
+    let sortByPriority = vscode.commands.registerCommand('extension.sortByPriority', () => {
+        Utils.sortLines("priority");
+    })
 /*
     let archiveTasks = vscode.commands.registerCommand('extension.archiveTasks', () => {
         ToDoTasks.bulkArchiveTasks();

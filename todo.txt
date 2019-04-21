@@ -19,6 +19,17 @@ take chunk of text and create note and save name in clipboard
 flush all changes to Git (maybe not necessary if I have the job)
 iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?
 
+operators i will need
+- get priority: return range and value
+- get project: for sorting
+- get context: for sorting
+- get tag: for sorting
+- replace priority
+- append tag
+- delete lines in file
+- append lines to file
+- open note file
+
 x 2019-04-19 (A) decorate completed task +Decorate grey strikethrough
 x 2019-04-19 (A) decorate project +Decorate light blue
 x 2019-04-19 (B) mark done with date or undone and remove date +Line

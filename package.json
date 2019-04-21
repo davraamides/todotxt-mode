@@ -19,6 +19,10 @@
 			{
 				"command": "extension.toggleCompletion",
 				"title": "todotxt-mode: Toggle Task Completion"
+			},
+			{
+				"command": "extension.sortByPriority",
+				"title": "todotxt-mode: Sort by Priority"
 			}
 		],
 		"keybindings": [

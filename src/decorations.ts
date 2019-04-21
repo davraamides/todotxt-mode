@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { Range } from 'vscode';
 import * as path from 'path';
-
+import { Defaults } from './defaults';
 
 class Decoration {
     name: string;
@@ -21,50 +21,19 @@ class Decoration {
 // since + and @ are non-word characters, we use \B in the regex but for
 // tags, we use \b since they start with word characters
 // need to use g option such that the while loop will terminate
-let decorations: Decoration[] = [
-    new Decoration('context', /\B@[^+@\s]+/g, {
-        light: {
-            color: 'rgb(40, 161, 86)'
-        },
-        dark: {
-            color: 'rgb(40, 161, 86)'
-        }
-    }),
-    new Decoration('priority', /[(][A-Z][)]/g, {
-        light: {
-            color: 'rgb(230, 216, 25)'
-        },
-        dark: {
-            color: 'rgb(230, 216, 25)'
-        }
-    }),
-    new Decoration('project', /\B\+[^+@\s]+/g, {
-        light: {
-            color: 'rgb(25, 172, 230)'
-        },
-        dark: {
-            color: 'rgb(25, 172, 230)'
-        }
-    }),
-    new Decoration('tag', /\b[^+@\s]+:\w+/g, {
-        light: {
-            color: 'rgb(179, 58, 172)'
-        },
-        dark: {
-            color: 'rgb(179, 58, 172)'
-        }
-    }),
-    new Decoration('completed', /^x .*$/g, {
-        textDecoration: "line-through",
-        opacity: "0.5"
-    })
-]
-
 export default class Decorator {
+
+    decorations: Decoration[] = [
+        new Decoration('context', Defaults.CONTEXT_REGEX, Defaults.CONTEXT_STYLE),
+        new Decoration('priority', Defaults.PRIORITY_REGEX, Defaults.PRIORITY_STYLE),
+        new Decoration('project', Defaults.PROJECT_REGEX, Defaults.PROJECT_STYLE),
+        new Decoration('tag', Defaults.TAG_REGEX, Defaults.TAG_STYLE),
+        new Decoration('completed', Defaults.COMPLETED_REGEX, Defaults.COMPLETED_STYLE),
+    ]
 
     public decorateDocument() {
         // Clear all current decorations and set active editor
-        decorations.forEach(decoration => {
+        this.decorations.forEach(decoration => {
             decoration.decorationOptions = [];
         });
 
@@ -76,14 +45,14 @@ export default class Decorator {
                 // Iterate over each line and parse accordingl∏
                 for (var i = 0; i < activeEditor.document.lineCount; i++) {
                     let line = activeEditor.document.lineAt(i);
-                    decorations.forEach(decoration => {
+                    this.decorations.forEach(decoration => {
                         this.parseRegex(decoration.regex, decoration.decorationOptions, line);
                     })
                 }
             }
 
             // Set final decorations
-            decorations.forEach(decoration => {
+            this.decorations.forEach(decoration => {
                 activeEditor.setDecorations(decoration.decorationType, decoration.decorationOptions);
             });
         }
