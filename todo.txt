@@ -1,14 +1,10 @@
-(A) decorate completed task +Decorate grey strikethrough
-x (A) decorate project +Decorate light blue
-(B) mark done with date or undone and remove date +Line
-(B) make configurable (file names, keybindings, colors)
-decorate priority +Decorate yellow
-decorate context +Decorate green
-decorate tag +Decorate purple
+(A) make configurable (file names, keybindings, colors)
+x 2019-04-20 (B) decorate tag @done +Decorate purple
+x 2019-04-21 (B) add build step to make a VSIX package so I can install on my own +Config
 decorate due date, today and overdue +Decorate purple, yellow bold, red bold
 increase/decrease priority or remove priority +Line
 add/remove waiting/next tags (do I need these? Or do they go into separate .txt files?) +Line
-add due date, shortcut +Line
+add due date, shortcut +Line due:tomorrow
 quick sorts/views: Next (any A or top priority), Project, due, tag value +List
 move from inbox.txt to todo.txt, someday.txt or to a project file or create a Project.md +File
 archive tasks to done.txt +File
@@ -23,7 +19,24 @@ take chunk of text and create note and save name in clipboard
 flush all changes to Git (maybe not necessary if I have the job)
 iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?
 
-make decoration work whenever buffer changes +Bug
+operators i will need
+- get priority: return range and value
+- get project: for sorting
+- get context: for sorting
+- get tag: for sorting
+- replace priority
+- append tag
+- delete lines in file
+- append lines to file
+- open note file
+
+x 2019-04-19 (A) decorate completed task +Decorate grey strikethrough
+x 2019-04-19 (A) decorate project +Decorate light blue
+x 2019-04-19 (B) mark done with date or undone and remove date +Line
+x 2019-04-19 make decoration work whenever buffer changes +Bug
+x 2019-04-20 (A) add keybinding for toggle-completion +Config
+x 2019-04-20 (B) decorate priority +Decorate yellow @prog
+x 2019-04-20 (B) decorate context +Decorate green @wait
 
 --
 references
@@ -31,8 +44,27 @@ https://vscode.rocks/decorations/
 https://vscode.rocks/testing/
 https://vscode.rocks/codelens/
 
+<<<<<<< HEAD
 Project that uses settings in package.json and then retrieves them in code.
 https://github.com/foxundermoon/vs-shell-format
+=======
+Packaging:
+from the root folder of the extension, enter
+
+    vsce package
+
+This will create a .vsix file (you have to change the first few lines of
+the README.md file for it to work). You install vsce with
+
+    sudo npm install -g vsce
+
+Then you can install the extension with
+
+    code --install-extension todotxt-mode-0.0.1.vsix 
+
+I had to restart VS code to see the effect. You can uninstall it from the UI or
+from the code command.
+>>>>>>> 16527d217f1ecdfb07294bec4f3799dafe0ac96e
 
 (Need to decide if waiting is a tag or presence in a file)
 choices:

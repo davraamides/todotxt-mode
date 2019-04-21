@@ -3,6 +3,7 @@
 	"displayName": "todotxt-mode",
 	"description": "Commands and decorators for managing todo.txt files",
 	"version": "0.0.1",
+	"publisher": "davraamides",
 	"engines": {
 		"vscode": "^1.33.0"
 	},
@@ -10,16 +11,61 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"onLanguage:plaintext"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
+				"command": "extension.toggleCompletion",
+				"title": "todotxt-mode: Toggle Task Completion"
+			},
+			{
+				"command": "extension.sortByPriority",
+				"title": "todotxt-mode: Sort by Priority"
 			}
-		]
+		],
+		"keybindings": [
+			{
+				"command": "extension.toggleCompletion",
+				"key": "ctrl+shift+x",
+				"mac": "ctrl+shift+x",
+				"when": "editorTextFocus"
+			}
+		],
+		"configuration": {
+			"type": "object",
+			"title": "todotxt-mode configuraton",
+			"properties": {
+				"todotxtmode.message": {
+					"type": ["string", "null"],
+					"default": "Hello!",
+					"description": "test message"
+				},
+				"todotxtmode.completedTaskStyle": {
+					"type": "object",
+					"description": "style for completed tasks",
+					"properties": {
+						"color": {
+							"type": "string"
+						},
+				        "textDecoration": {
+							"type": "string"
+						},
+				        "opacity": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		}
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/davraamides/todotxt-mode.git"
+	},
+	"bugs": {
+		"url": "https://github.com/davraamides/todotxt-mode/issues"
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
