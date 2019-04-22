@@ -41,13 +41,17 @@
 				"title": "todotxt-mode: Archive completed tasks"
 			},
 			{
+				"command": "extension.moveTasksToTodo",
+				"title": "todotxt-mode: Move tasks to Todo file"
+			},
+			{
 				"command": "extension.moveTasksToWaiting",
 				"title": "todotxt-mode: Move tasks to Waiting file"
 			},
 			{
 				"command": "extension.moveTasksToSomeday",
 				"title": "todotxt-mode: Move tasks to Someday file"
-			}			
+			}
 		],
 		"keybindings": [
 			{

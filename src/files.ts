@@ -24,49 +24,47 @@ export namespace Files {
         }
 
         if (window.activeTextEditor != undefined) {
-
-            // Only Decorate Document if it's in the classic filenaming convention
             let fileName = path.basename(window.activeTextEditor.document.fileName);
-            //let eol = TaskUtils.determineEOL(vscode.window.activeTextEditor.document.eol);
-            let eol = vscode.window.activeTextEditor.document.eol;
-
+            let eol = vscode.window.activeTextEditor.document.eol == vscode.EndOfLine.CRLF ? '\r\n' : '\n';
             let totalLines = window.activeTextEditor.document.lineCount;
             for (var i = 0; i <= totalLines - 1; i++) {
                 let lineObject = window.activeTextEditor.document.lineAt(i);
-
-                if (currDoc.lineAt(i).text.endsWith("x ")) {
-                    //fs.appendFileSync(destinationFileName, lineObject.text + eol);
+                if (currDoc.lineAt(i).text.startsWith("x ")) {
+                    fs.appendFileSync(destinationFileName, lineObject.text + eol);
                     lineDeletes.push(i);
                 }
             }
-
-            //TaskUtils.deleteLines(lineDeletes, editor, currDoc);
+            deleteLines(lineDeletes, editor, currDoc);
             editor.selection = new vscode.Selection(new vscode.Position(0, 0), new vscode.Position(0, 0));
         }
     }
     export function moveTasks(destinationFileName: string) {
-
         const editor = vscode.window.activeTextEditor;
         let window = vscode.window;
         let currDoc = editor.document;
-        //let destinationFileName = path.dirname(currDoc.fileName) + path.sep + DONE_FILENAME;
         let lineDeletes = [];
 
         if (window.activeTextEditor != undefined) {
             let fileName = path.basename(window.activeTextEditor.document.fileName);
-            //let eol = TaskUtils.determineEOL(vscode.window.activeTextEditor.document.eol);
-            let eol = vscode.window.activeTextEditor.document.eol;
-
+            let eol = vscode.window.activeTextEditor.document.eol == vscode.EndOfLine.CRLF ? '\r\n' : '\n';
             for (var i = editor.selection.start.line; i <= editor.selection.end.line; i++) {
                 let lineObject = window.activeTextEditor.document.lineAt(i);
-                //create file if doesn't exist and pop info message
-                //fs.appendFileSync(destinationFileName, lineObject.text + eol);
+                fs.appendFileSync(destinationFileName, lineObject.text + eol);
                 lineDeletes.push(i);
             }
-
-            //TaskUtils.deleteLines(lineDeletes, editor, currDoc);
+            deleteLines(lineDeletes, editor, currDoc);
             editor.selection = new vscode.Selection(new vscode.Position(0, 0), new vscode.Position(0, 0));
         }
     }
 
+    function deleteLines(lines: Number[], editor: vscode.TextEditor, document: vscode.TextDocument) {
+        if (lines.length > 0) {
+            lines = lines.reverse();
+            editor.edit(builder => {
+                lines.forEach(a => {
+                    builder.delete(document.lineAt(a.valueOf()).rangeIncludingLineBreak);
+                })
+            }).then(() => { });
+        }
+    }
 };

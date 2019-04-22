@@ -39,6 +39,9 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     let archiveTasks = vscode.commands.registerCommand('extension.archiveTasks', () => {
         Files.archiveTasks();
     });
+    let moveTasksToTodo = vscode.commands.registerCommand('extension.moveTasksToTodo', () => {
+        Files.moveTasks(Files.TODO_FILENAME);
+    });
     let moveTasksToWaiting = vscode.commands.registerCommand('extension.moveTasksToWaiting', () => {
         Files.moveTasks(Files.WAIT_FILENAME);
     });
@@ -53,6 +56,7 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     context.subscriptions.push(sortByProject);
     context.subscriptions.push(sortByTag);
     context.subscriptions.push(archiveTasks);
+    context.subscriptions.push(moveTasksToTodo);
     context.subscriptions.push(moveTasksToWaiting);
     context.subscriptions.push(moveTasksToSomeday);
 }

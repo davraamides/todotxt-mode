@@ -1,0 +1,14 @@
+x 2019-04-22 move from inbox.txt to todo.txt, someday.txt, waiting.txt, deferred.txt +File
+x 2019-04-22 add "next" command to move select tasks to inbox.txt +File
+x 2019-04-22 add "defer" command to move selected tasks to deferred.txt +File
+x 2019-04-22 add "wait" command to move selected tasks to waiting.txt +File
+x 2019-04-19 (A) decorate completed task +Decorate grey strikethrough
+x 2019-04-19 (A) decorate project +Decorate light blue
+x 2019-04-19 (B) mark done with date or undone and remove date +Line
+x 2019-04-19 make decoration work whenever buffer changes +Bug
+x 2019-04-20 (A) add keybinding for toggle-completion +Config
+x 2019-04-20 (B) decorate priority +Decorate yellow @prog
+x 2019-04-20 (B) decorate context +Decorate green @wait
+x 2019-04-20 (B) decorate tag @done +Decorate purple
+x 2019-04-21 (B) add build step to make a VSIX package so I can install on my own +Config
+x 2019-04-21 add option to always sort completed tasks to the bottom

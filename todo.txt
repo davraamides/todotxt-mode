@@ -1,12 +1,8 @@
 (A) make configurable (file names, keybindings, colors)
 (A) decorate due date, today and overdue +Decorate purple, yellow bold, red bold
 (A) increase/decrease priority or remove priority +Line
-move from inbox.txt to todo.txt, someday.txt, waiting.txt, deferred.txt +File
 move from inbox.txt to to a project file or create a Project.md +File
-add "next" command to move select tasks to inbox.txt +File
-add "defer" command to move selected tasks to deferred.txt +File
-add "wait" command to move selected tasks to waiting.txt +File
-archive tasks to done.txt +File
+x 2019-04-22 archive tasks to done.txt +File
 make test file from official format document +Test
 write test cases for decorators (how?) +Test
 write test cases for line commands +Test
@@ -17,14 +13,4 @@ command to take text selection and create note and save in clipboard (or add to 
 flush all changes to Git (maybe not necessary if I have the job)
 search command to find all tasks with high priority (A/B) or overdue or due within next 5 days
 iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?
-x 2019-04-19 (A) decorate completed task +Decorate grey strikethrough
-x 2019-04-19 (A) decorate project +Decorate light blue
-x 2019-04-19 (B) mark done with date or undone and remove date +Line
-x 2019-04-19 make decoration work whenever buffer changes +Bug
-x 2019-04-20 (A) add keybinding for toggle-completion +Config
-x 2019-04-20 (B) decorate priority +Decorate yellow @prog
-x 2019-04-20 (B) decorate context +Decorate green @wait
-x 2019-04-20 (B) decorate tag @done +Decorate purple
-x 2019-04-21 (B) add build step to make a VSIX package so I can install on my own +Config
-x 2019-04-21 add option to always sort completed tasks to the bottom
 
