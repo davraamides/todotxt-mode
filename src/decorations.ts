@@ -1,7 +1,9 @@
 import * as vscode from 'vscode';
 import { Range } from 'vscode';
 import * as path from 'path';
-import { Defaults } from './defaults';
+
+import { Patterns } from './patterns';
+import { Settings } from './settings';
 
 class Decoration {
     name: string;
@@ -24,11 +26,11 @@ class Decoration {
 export default class Decorator {
 
     decorations: Decoration[] = [
-        new Decoration('context', Defaults.CONTEXT_REGEX, Defaults.CONTEXT_STYLE),
-        new Decoration('priority', Defaults.PRIORITY_REGEX, Defaults.PRIORITY_STYLE),
-        new Decoration('project', Defaults.PROJECT_REGEX, Defaults.PROJECT_STYLE),
-        new Decoration('tag', Defaults.TAG_REGEX, Defaults.TAG_STYLE),
-        new Decoration('completed', Defaults.COMPLETED_REGEX, Defaults.COMPLETED_STYLE),
+        new Decoration('context', Patterns.ContextRegex, Settings.ContextStyle),
+        new Decoration('priority', Patterns.PriorityRegex, Settings.PriorityStyle),
+        new Decoration('project', Patterns.ProjectRegex, Settings.ProjectStyle),
+        new Decoration('tag', Patterns.TagRegex, Settings.TagStyle),
+        new Decoration('completed', Patterns.CompletedRegex, Settings.CompletedStyle),
     ]
 
     public decorateDocument() {

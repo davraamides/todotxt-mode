@@ -1,6 +1,6 @@
 'use strict';
 import * as vscode from 'vscode';
-import { Utils } from './utils';
+import { Sorting } from './sorting';
 import { Files } from './files';
 
 export function ActivateCommands(context: vscode.ExtensionContext) {
@@ -25,16 +25,16 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
         editor.selection = new vscode.Selection(new vscode.Position(currLine, 0), new vscode.Position(currLine, 0));
     });
     let sortByContext = vscode.commands.registerCommand('extension.sortByContext', () => {
-        Utils.sortLines("context");
+        Sorting.sortLines("context");
     });
     let sortByPriority = vscode.commands.registerCommand('extension.sortByPriority', () => {
-        Utils.sortLines("priority");
+        Sorting.sortLines("priority");
     });
     let sortByProject = vscode.commands.registerCommand('extension.sortByProject', () => {
-        Utils.sortLines("project");
+        Sorting.sortLines("project");
     });
     let sortByTag = vscode.commands.registerCommand('extension.sortByTag', () => {
-        Utils.sortLines("tag");
+        Sorting.sortLines("tag");
     });
     let archiveTasks = vscode.commands.registerCommand('extension.archiveTasks', () => {
         Files.archiveTasks();

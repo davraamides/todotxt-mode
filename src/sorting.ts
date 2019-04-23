@@ -1,8 +1,9 @@
 import * as vscode from 'vscode';
-import { isArray } from 'util';
-import { Defaults } from './defaults'
 
-export namespace Utils {
+import { Patterns } from './patterns';
+import { Settings } from './settings';
+
+export namespace Sorting {
 
     export function sortLines(byField: string) {
         let editor = vscode.window.activeTextEditor;
@@ -30,20 +31,21 @@ export namespace Utils {
             const range = new vscode.Range(0, 0, sortedLines.length - 1, editor.document.lineAt(sortedLines.length -1).text.length);
             editBuilder.replace(range, sortedLines.join('\n'));
         });
-        // this does not alway seem to trigger a redecoration so maybe leave this alone and 
-        // just decorate after each sort
+
+        // trigger a decoration by forcing the selection to change
+        let selectedLineLength = editor.document.lineAt(selectionLine).text.length;
+        editor.selection = new vscode.Selection(new vscode.Position(selectionLine, selectedLineLength), new vscode.Position(selectionLine, selectedLineLength));
         editor.selection = new vscode.Selection(new vscode.Position(selectionLine, 0), new vscode.Position(selectionLine, 0));
     }
 
     // get the lines of the document as objects with the text, field value and line number
     function getLineObjects(doc: vscode.TextDocument, field: string): object[] {
         var lineObjects: object[] = [];
-        let regex = Defaults.FIELD_REGEX_MAP[field];
-        let sortCompletedTasksToEnd = vscode.workspace.getConfiguration('todotxtmode').get("sortCompletedTasksToEnd", false);
+        let regex = Patterns.FieldRegex[field];
 
         for (var i = 0; i < doc.lineCount; i++) {
             let text = doc.lineAt(i).text;
-            let value = parseField(text, regex, sortCompletedTasksToEnd);
+            let value = parseField(text, regex, Settings.SortCompletedTasksToEnd);
             lineObjects.push({text: text, value: value, line: i});
         }
         return lineObjects;

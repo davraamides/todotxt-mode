@@ -10,6 +10,21 @@ https://github.com/foxundermoon/vs-shell-format
 
 https://vscode-docs.readthedocs.io/en/stable/
 
+## code organization
+
+Reorganize code into these groups:
+x- patterns: the regexes for the field and completed tasks
+- task manipulations: completion, changing fields, adding fields, rearringing fields
+- file manipulations: moving tasks from one file to another
+- decorations: formatting tasks
+- sorting: reording tasks within a file
+- tests: test cases for code
+x- configuration/settings: getting settings from the config and handling defaults as well as constants
+- notes: refactoring selection to a note file and adding note tag (or putting in clipboard) and following a note
+- find/search/review: searching all files for tasks, iterating over project MD files for task lists
+- projects? all the stuff to append to projects? or is this just in other sections
+
+
 ## Packaging
 The `vsce` tool is for managing VS Code Extensions. Install the command with
 

@@ -7,7 +7,7 @@ make test file from official format document +Test
 write test cases for decorators (how?) +Test
 write test cases for line commands +Test
 write test cases for file commands +Test
-not always redecorating after a sort +Bug
+x 2019-04-23 not always redecorating after a sort +Bug
 command to follow a note:xxx link
 command to take text selection and create note and save in clipboard (or add to task above selection?)
 flush all changes to Git (maybe not necessary if I have the job)
