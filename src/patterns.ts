@@ -9,10 +9,13 @@ export namespace Patterns {
     // The ontext and project patterns are prefixed with non-word boundary (\B) as they
     // begin with non-word chars (+@). The tag pattern is prefixed with a word bounday (\b)
     // as tags begin with a word char.
-    export const ContextRegex = /\B@[^+@\s]+/g;
-    export const PriorityRegex = /[(][A-Z][)]/g;
-    export const ProjectRegex = /\B\+[^+@\s]+/g;
-    export const TagRegex = /\b\w+:\w+/g;
+    export const ContextRegex = /\B@\S+\b/g;
+    export const PriorityRegex = /^[(][A-Z][)]\s/g;
+    export const ProjectRegex = /\B\+\S+\b/g;
+    export const TagRegex = /\b\w+:[^\s]+\b/g;
+
+    //export const TagValueRegex = /\b([^:\s]+):([^:\s]+)\b/g;
+    export const TagValueRegex = /\b(\w+):(\w+)\b/g;
     export const CompletedRegex = /^x .*$/g;
 
     // put them in a map so sorting by any field is consistent

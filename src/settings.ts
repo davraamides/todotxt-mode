@@ -8,17 +8,24 @@ import * as vscode from 'vscode';
 
 export namespace Settings {
 
-    export const Message:string = vscode.workspace.getConfiguration("todotxtmode").get("message");
-    export const SortCompletedTasksToEnd:boolean = vscode.workspace.getConfiguration('todotxtmode').get("sortCompletedTasksToEnd", false);
+    function getSetting<T>(field:string, defaultValue?: T): T | undefined {
+        return vscode.workspace.getConfiguration("todotxtmode").get(field, defaultValue);
+    }
+//    export const Message:string = vscode.workspace.getConfiguration("todotxtmode").get("message");
+//    export const SortCompletedTasksToEnd:boolean = vscode.workspace.getConfiguration('todotxtmode').get("sortCompletedTasksToEnd", false);
+    export const Message:string = getSetting("message");
+    export const SortCompletedTasksToEnd:boolean = getSetting("sortCompletedTasksToEnd", false);
 
-    export const ContextStyle = {
+    export const ContextStyle = Object.assign({}, getSetting("contextStyle"), 
+//    export const ContextStyle = {
+    {
         light: {
             color: 'rgb(40, 161, 86)'
         },
         dark: {
             color: 'rgb(40, 161, 86)'
         }
-    };
+    });
     export const PriorityStyle = {
         light: {
             color: 'rgb(230, 216, 25)'

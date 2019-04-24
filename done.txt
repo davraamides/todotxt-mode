@@ -12,3 +12,5 @@ x 2019-04-20 (B) decorate context +Decorate green @wait
 x 2019-04-20 (B) decorate tag @done +Decorate purple
 x 2019-04-21 (B) add build step to make a VSIX package so I can install on my own +Config
 x 2019-04-21 add option to always sort completed tasks to the bottom
+x 2019-04-22 archive tasks to done.txt +File
+x 2019-04-23 not always redecorating after a sort +Bug

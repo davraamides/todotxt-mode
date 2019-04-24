@@ -1,20 +1,22 @@
-(A) make configurable (file names, keybindings, colors)
-x 2019-04-20 (B) decorate tag @done +Decorate purple
-x 2019-04-21 (B) add build step to make a VSIX package so I can install on my own +Config
-decorate due date, today and overdue +Decorate purple, yellow bold, red bold
-increase/decrease priority or remove priority +Line
-add/remove waiting/next tags (do I need these? Or do they go into separate .txt files?) +Line
 (A) add due date, shortcut +Line due:tomorrow
-quick sorts/views: Next (any A or top priority), Project, due, tag value +List
+follow note:xxx link
+decorate due date, today and overdue +Decorate purple, yellow bold, red bold
 move from inbox.txt to todo.txt, someday.txt or to a project file or create a Project.md +File
 archive tasks to done.txt +File
 move to inbox from project - maybe a "next" that tags/prioritizes and moves to inbox) +File
+increase/decrease priority or remove priority +Line
+add/remove waiting/next tags (do I need these? Or do they go into separate .txt files?) +Line
+quick sorts/views: Next (any A or top priority), Project, due, tag value +List
 make test file from official format document +Test
+a task with a due date due:2019-04-01
 write test cases for decorators (how?) +Test
 write test cases for line commands +Test
 write test cases for file commands +Test
+a second task with a later due date due:2019-05-01
+(A) make configurable (file names, keybindings, colors)
 (D) defer a task (what does that mean? Should it be a separate .txt file that is different than someday?)
-follow note:xxx link
 take chunk of text and create note and save name in clipboard
 flush all changes to Git (maybe not necessary if I have the job)
 iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?
+x 2019-04-20 (B) decorate tag @done +Decorate purple
+x 2019-04-21 (B) add build step to make a VSIX package so I can install on my own +Config

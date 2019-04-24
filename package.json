@@ -37,6 +37,10 @@
 				"title": "todotxt-mode: Sort by Tag"
 			},
 			{
+				"command": "extension.sortByDueDate",
+				"title": "todotxt-mode: Sort by date of 'due' Tag"
+			},
+			{
 				"command": "extension.archiveTasks",
 				"title": "todotxt-mode: Archive completed tasks"
 			},

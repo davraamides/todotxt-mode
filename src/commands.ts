@@ -25,16 +25,19 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
         editor.selection = new vscode.Selection(new vscode.Position(currLine, 0), new vscode.Position(currLine, 0));
     });
     let sortByContext = vscode.commands.registerCommand('extension.sortByContext', () => {
-        Sorting.sortLines("context");
+        Sorting.sortLinesByField("context");
     });
     let sortByPriority = vscode.commands.registerCommand('extension.sortByPriority', () => {
-        Sorting.sortLines("priority");
+        Sorting.sortLinesByField("priority");
     });
     let sortByProject = vscode.commands.registerCommand('extension.sortByProject', () => {
-        Sorting.sortLines("project");
+        Sorting.sortLinesByField("project");
     });
     let sortByTag = vscode.commands.registerCommand('extension.sortByTag', () => {
-        Sorting.sortLines("tag");
+        Sorting.sortLinesByField("tag");
+    });
+    let sortByDueDate = vscode.commands.registerCommand('extension.sortByDueDate', () => {
+        Sorting.sortLinesByTagValue("due");
     });
     let archiveTasks = vscode.commands.registerCommand('extension.archiveTasks', () => {
         Files.archiveTasks();
