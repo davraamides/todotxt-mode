@@ -2,16 +2,22 @@
 import * as vscode from 'vscode';
 import { Sorting } from './sorting';
 import { Files } from './files';
+import { Patterns } from "./patterns";
 
+function getTaskAtSelection() : [number, string] {
+    const editor = vscode.window.activeTextEditor;
+    let currLine = editor.selection.start.line;
+    let currDoc = editor.document;
+    return [currLine, currDoc.lineAt(currLine).text];
+}
 export function ActivateCommands(context: vscode.ExtensionContext) {
 
     let toggleCompletion = vscode.commands.registerCommand('extension.toggleCompletion', () => {
         // Get the current line and find the first 2 characters
         const editor = vscode.window.activeTextEditor;
-        let currLine = editor.selection.start.line;
-        let currDoc = editor.document;
+        let [currLine, text] = getTaskAtSelection();
 
-        if (currDoc.lineAt(currLine).text.startsWith("x ")) {
+        if (text.startsWith("x ")) {
             editor.edit(builder => {
                 builder.delete(new vscode.Range(new vscode.Position(currLine, 0), new vscode.Position(currLine, 13)));
                 editor.selection = new vscode.Selection(new vscode.Position(currLine, 14), new vscode.Position(currLine, 14));
@@ -22,6 +28,8 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
                 builder.insert(new vscode.Position(currLine, 0), "x " + today + " ");
             })
         }
+        let selectedLineLength = editor.document.lineAt(currLine).text.length;
+        editor.selection = new vscode.Selection(new vscode.Position(currLine, selectedLineLength), new vscode.Position(currLine, selectedLineLength));
         editor.selection = new vscode.Selection(new vscode.Position(currLine, 0), new vscode.Position(currLine, 0));
     });
     let sortByContext = vscode.commands.registerCommand('extension.sortByContext', () => {
@@ -39,6 +47,9 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     let sortByDueDate = vscode.commands.registerCommand('extension.sortByDueDate', () => {
         Sorting.sortLinesByTagValue("due");
     });
+    let formatTasks = vscode.commands.registerCommand('extension.formatTasks', () => {
+        Patterns.formatSelectedTasks();
+    });
     let archiveTasks = vscode.commands.registerCommand('extension.archiveTasks', () => {
         Files.archiveTasks();
     });
@@ -51,6 +62,37 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     let moveTasksToSomeday = vscode.commands.registerCommand('extension.moveTasksToSomeday', () => {
         Files.moveTasks(Files.SOMEDAY_FILENAME);
     });
+    let moveTasksToProject = vscode.commands.registerCommand('extension.moveTasksToProject', () => {
+        async function showInputBox() {
+            const result = await vscode.window.showInputBox({
+                prompt: 'Project file:'
+            });
+            vscode.window.showInformationMessage(`Got: ${result}`);
+        }
+        showInputBox();
+
+        const options: vscode.OpenDialogOptions = {
+            canSelectMany: false,
+            openLabel: 'Open',
+            filters: {
+                'Markdown files': ['md'],
+                'Text files': ['txt'],
+                'All files': ['*']
+            }
+        };
+
+        vscode.window.showOpenDialog(options).then(fileUri => {
+            if (fileUri && fileUri[0]) {
+                console.log('Selected file: ' + fileUri[0].fsPath);
+            }
+        });
+    });
+    vscode.languages.registerHoverProvider('typescript', {
+        provideHover(doc: vscode.TextDocument) {
+            return new vscode.Hover('For *all* TypeScript documents.');
+        }
+    });
+
 
     // add to list of disposables so they will be cleaned up when deactivated
     context.subscriptions.push(toggleCompletion);
@@ -58,6 +100,8 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     context.subscriptions.push(sortByPriority);
     context.subscriptions.push(sortByProject);
     context.subscriptions.push(sortByTag);
+    context.subscriptions.push(sortByDueDate);
+    context.subscriptions.push(formatTasks);
     context.subscriptions.push(archiveTasks);
     context.subscriptions.push(moveTasksToTodo);
     context.subscriptions.push(moveTasksToWaiting);

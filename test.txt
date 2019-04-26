@@ -1,4 +1,10 @@
-(A) add due date, shortcut +Line due:tomorrow
+(A) add due date, shortcut due:tomorrow @ctx +Line
+(A) add due date, shortcut due:tomorrow @cts +Line
+(A) add due date, shortcut due:tomorrow @ctx @other
+(A) add due date, shortcut due:tomorrow @ctx +Line
+(A) make configurable (file names, keybindings, colors)
+(B) a second task with a later due date due:2019-05-01
+(D) defer a task (what does that mean? Should it be a separate .txt file that is different than someday?)
 follow note:xxx link
 decorate due date, today and overdue +Decorate purple, yellow bold, red bold
 move from inbox.txt to todo.txt, someday.txt or to a project file or create a Project.md +File
@@ -12,9 +18,6 @@ a task with a due date due:2019-04-01
 write test cases for decorators (how?) +Test
 write test cases for line commands +Test
 write test cases for file commands +Test
-a second task with a later due date due:2019-05-01
-(A) make configurable (file names, keybindings, colors)
-(D) defer a task (what does that mean? Should it be a separate .txt file that is different than someday?)
 take chunk of text and create note and save name in clipboard
 flush all changes to Git (maybe not necessary if I have the job)
 iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?

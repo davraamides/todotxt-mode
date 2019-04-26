@@ -41,6 +41,10 @@
 				"title": "todotxt-mode: Sort by date of 'due' Tag"
 			},
 			{
+				"command": "extension.formatTasks",
+				"title": "todotxt-mode: Format selected tasks with fields in specified order"
+			},
+			{
 				"command": "extension.archiveTasks",
 				"title": "todotxt-mode: Archive completed tasks"
 			},
@@ -55,6 +59,10 @@
 			{
 				"command": "extension.moveTasksToSomeday",
 				"title": "todotxt-mode: Move tasks to Someday file"
+			},
+			{
+				"command": "extension.moveTasksToProject",
+				"title": "todotxt-mode: Move tasks to Project Markdown file"
 			}
 		],
 		"keybindings": [
