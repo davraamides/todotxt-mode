@@ -20,9 +20,7 @@ class Decoration {
         this.decorationType = vscode.window.createTextEditorDecorationType(style);
     }
 }
-// since + and @ are non-word characters, we use \B in the regex but for
-// tags, we use \b since they start with word characters
-// need to use g option such that the while loop will terminate
+
 export default class Decorator {
 
     decorations: Decoration[] = [

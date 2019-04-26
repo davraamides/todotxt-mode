@@ -18,10 +18,18 @@ command to strip all priorities
 maybe better to have two commands: 
 1) move to project, which interactively selects the project file (do I really need this? so easy to just copy/paste)
 2) create project from task, which prompts for a file name and creates a new project file (same with this one)
+
 how would command with note work:
 - enter some notes, probably below the task
 - select the notes and cmd-shift-p and run create task note which prompts with [Task]-Note-yyyy-mm-dd.md (task selected)
-- on enter, copies text, appends to file with "### <file>" and text below
+  showInputBox
+- on enter, copies text to clipboard, appends to file with "### <file>" and text below
+  openTextDocument/showTextDocument/editBuilder
 - deletes selected text
+  TBD or editbuilder with replace
 - adds note:<file> to clipboard
+  TBD
 - puts informational message to paste note tag to appropriate task
+  showInformationMessage
+--
+

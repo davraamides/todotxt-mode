@@ -8,12 +8,12 @@ import { Sorting } from './sorting';
  */
 export namespace Patterns {
 
-    export const ContextField = 'context';
-    export const PriorityField = 'priority';
-    export const ProjectField = 'project';
-    export const TagField = 'tag';
+    const ContextField = 'context';
+    const PriorityField = 'priority';
+    const ProjectField = 'project';
+    const TagField = 'tag';
 
-    // The ontext and project patterns are prefixed with non-word boundary (\B) as they
+    // The context and project patterns are prefixed with non-word boundary (\B) as they
     // begin with non-word chars (+@). The tag pattern is prefixed with a word bounday (\b)
     // as tags begin with a word char.
     export const ContextRegex = /\B@\S+\b/g;

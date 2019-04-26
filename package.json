@@ -78,7 +78,10 @@
 			"title": "todotxt-mode configuraton",
 			"properties": {
 				"todotxtmode.message": {
-					"type": ["string", "null"],
+					"type": [
+						"string",
+						"null"
+					],
 					"default": "Hello!",
 					"description": "test message"
 				},
@@ -94,10 +97,10 @@
 						"color": {
 							"type": "string"
 						},
-				        "textDecoration": {
+						"textDecoration": {
 							"type": "string"
 						},
-				        "opacity": {
+						"opacity": {
 							"type": "string"
 						}
 					}
@@ -125,5 +128,8 @@
 		"tslint": "^5.12.1",
 		"@types/node": "^10.12.21",
 		"@types/mocha": "^2.2.42"
+	},
+	"dependencies": {
+		"vsce": "^1.59.0"
 	}
 }

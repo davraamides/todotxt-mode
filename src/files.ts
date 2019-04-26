@@ -2,24 +2,21 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 
-export namespace Files {
+import { Helpers } from './helpers';
+import { Settings } from './settings';
 
-    // move to configuration
-    export const TODO_FILENAME = 'todo.txt'
-    export const DONE_FILENAME = 'done.txt'
-    export const SOMEDAY_FILENAME = 'incubate.txt'
-    export const WAIT_FILENAME = 'waiting.txt'
+export namespace Files {
 
     export function archiveTasks() {
 
         const editor = vscode.window.activeTextEditor;
         let window = vscode.window;
         let currDoc = editor.document;
-        let destinationFileName = path.dirname(currDoc.fileName) + path.sep + DONE_FILENAME;
+        let destinationFileName = path.dirname(currDoc.fileName) + path.sep + Settings.DoneFilename;
         let lineDeletes = [];
 
-        if (path.basename(currDoc.fileName) != TODO_FILENAME) {
-            vscode.window.showInformationMessage("Archive only available for the " + TODO_FILENAME + " file");
+        if (path.basename(currDoc.fileName) != Settings.TodoFilename) {
+            vscode.window.showInformationMessage("Archive only available for the " + Settings.TodoFilename + " file");
             return;
         }
 
@@ -35,7 +32,6 @@ export namespace Files {
                 }
             }
             deleteLines(lineDeletes, editor, currDoc);
-            editor.selection = new vscode.Selection(new vscode.Position(0, 0), new vscode.Position(0, 0));
         }
     }
     export function moveTasks(destinationFileName: string) {
@@ -53,7 +49,6 @@ export namespace Files {
                 lineDeletes.push(i);
             }
             deleteLines(lineDeletes, editor, currDoc);
-            editor.selection = new vscode.Selection(new vscode.Position(0, 0), new vscode.Position(0, 0));
         }
     }
 
@@ -66,5 +61,6 @@ export namespace Files {
                 })
             }).then(() => { });
         }
+        Helpers.triggerSelectionChange();
     }
 };

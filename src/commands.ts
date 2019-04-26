@@ -1,8 +1,10 @@
 'use strict';
 import * as vscode from 'vscode';
-import { Sorting } from './sorting';
 import { Files } from './files';
-import { Patterns } from "./patterns";
+import { Helpers } from './helpers';
+import { Patterns } from './patterns';
+import { Settings } from './settings';
+import { Sorting } from './sorting';
 
 function getTaskAtSelection() : [number, string] {
     const editor = vscode.window.activeTextEditor;
@@ -28,9 +30,7 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
                 builder.insert(new vscode.Position(currLine, 0), "x " + today + " ");
             })
         }
-        let selectedLineLength = editor.document.lineAt(currLine).text.length;
-        editor.selection = new vscode.Selection(new vscode.Position(currLine, selectedLineLength), new vscode.Position(currLine, selectedLineLength));
-        editor.selection = new vscode.Selection(new vscode.Position(currLine, 0), new vscode.Position(currLine, 0));
+        Helpers.triggerSelectionChange();
     });
     let sortByContext = vscode.commands.registerCommand('extension.sortByContext', () => {
         Sorting.sortLinesByField("context");
@@ -54,13 +54,13 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
         Files.archiveTasks();
     });
     let moveTasksToTodo = vscode.commands.registerCommand('extension.moveTasksToTodo', () => {
-        Files.moveTasks(Files.TODO_FILENAME);
+        Files.moveTasks(Settings.TodoFilename);
     });
     let moveTasksToWaiting = vscode.commands.registerCommand('extension.moveTasksToWaiting', () => {
-        Files.moveTasks(Files.WAIT_FILENAME);
+        Files.moveTasks(Settings.WaitFilename);
     });
     let moveTasksToSomeday = vscode.commands.registerCommand('extension.moveTasksToSomeday', () => {
-        Files.moveTasks(Files.SOMEDAY_FILENAME);
+        Files.moveTasks(Settings.SomedayFilename);
     });
     let moveTasksToProject = vscode.commands.registerCommand('extension.moveTasksToProject', () => {
         async function showInputBox() {

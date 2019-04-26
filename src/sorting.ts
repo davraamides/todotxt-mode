@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 
 import { Patterns } from './patterns';
 import { Settings } from './settings';
+import { Helpers } from './helpers';
 
 export namespace Sorting {
 
@@ -101,10 +102,6 @@ export namespace Sorting {
             const range = new vscode.Range(startLine, 0, endLine, editor.document.lineAt(endLine).text.length);
             editBuilder.replace(range, sortedLines.join('\n'));
         });
-
-        // trigger a decoration by forcing the selection to change
-        let selectedLineLength = editor.document.lineAt(startLine).text.length;
-        editor.selection = new vscode.Selection(new vscode.Position(startLine, selectedLineLength), new vscode.Position(startLine, selectedLineLength));
-        editor.selection = new vscode.Selection(new vscode.Position(startLine, 0), new vscode.Position(startLine, 0));
+        Helpers.triggerSelectionChange();
     }
 };

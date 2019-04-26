@@ -8,11 +8,12 @@ import * as vscode from 'vscode';
 
 export namespace Settings {
 
-    function getSetting<T>(field:string, defaultValue?: T): T | undefined {
-        return vscode.workspace.getConfiguration("todotxtmode").get(field, defaultValue);
-    }
-//    export const Message:string = vscode.workspace.getConfiguration("todotxtmode").get("message");
-//    export const SortCompletedTasksToEnd:boolean = vscode.workspace.getConfiguration('todotxtmode').get("sortCompletedTasksToEnd", false);
+    // move to configuration
+    export const TodoFilename:string = 'todo.txt'
+    export const DoneFilename:string = 'done.txt'
+    export const SomedayFilename:string = 'incubate.txt'
+    export const WaitFilename:string = 'waiting.txt'
+    
     export const Message:string = getSetting("message");
     export const SortCompletedTasksToEnd:boolean = getSetting("sortCompletedTasksToEnd", false);
 
@@ -54,5 +55,9 @@ export namespace Settings {
         textDecoration: "line-through",
         opacity: "0.5"
     };
+
+    function getSetting<T>(field:string, defaultValue?: T): T | undefined {
+        return vscode.workspace.getConfiguration("todotxtmode").get(field, defaultValue);
+    }
 
 }
