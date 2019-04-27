@@ -1,7 +1,7 @@
 x 2019-04-26 (A) make all sorts, formats, moves work on selected row ranges
 (B) move from inbox.txt to to a project file or create a Project.md +File
 (B) command to follow a note:xxx link
-(B) command to take text selection and create note and save in clipboard (or add to task above selection?)
+x 2019-04-27 (B) command to take text selection and create note and save in clipboard (or add to task above selection?)
 (B) search command to find all tasks with high priority (A/B) or overdue or due within next 5 days
 (B) iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?
 decorate due date, today and overdue +Decorate purple, yellow bold, red bold
@@ -13,23 +13,9 @@ write test cases for line commands +Test
 write test cases for file commands +Test
 flush all changes to Git (maybe not necessary if I have the job)
 command to strip all priorities
+make note link open file when clicking on it: https://github.com/Jack89ita/vscode-open-file-from-path/blob/master/extension.js
 
 --
 maybe better to have two commands: 
 1) move to project, which interactively selects the project file (do I really need this? so easy to just copy/paste)
 2) create project from task, which prompts for a file name and creates a new project file (same with this one)
-
-how would command with note work:
-- enter some notes, probably below the task
-- select the notes and cmd-shift-p and run create task note which prompts with [Task]-Note-yyyy-mm-dd.md (task selected)
-  showInputBox
-- on enter, copies text to clipboard, appends to file with "### <file>" and text below
-  openTextDocument/showTextDocument/editBuilder
-- deletes selected text
-  TBD or editbuilder with replace
-- adds note:<file> to clipboard
-  TBD
-- puts informational message to paste note tag to appropriate task
-  showInformationMessage
---
-

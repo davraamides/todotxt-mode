@@ -63,6 +63,10 @@
 			{
 				"command": "extension.moveTasksToProject",
 				"title": "todotxt-mode: Move tasks to Project Markdown file"
+			},
+			{
+				"command": "extension.createTaskNote",
+				"title": "todotxt-mode: Create note for task"
 			}
 		],
 		"keybindings": [

@@ -1,5 +1,6 @@
 'use strict';
 import * as vscode from 'vscode';
+import * as path from 'path';
 import { Files } from './files';
 import { Helpers } from './helpers';
 import { Patterns } from './patterns';
@@ -12,6 +13,13 @@ function getTaskAtSelection() : [number, string] {
     let currDoc = editor.document;
     return [currLine, currDoc.lineAt(currLine).text];
 }
+
+function getDateTimeParts() {
+    var dt = new Date();
+    var [date, time] = new Date(dt.getTime() - (dt.getTimezoneOffset() * 60000)).toISOString().split('T');
+    return [date, time.slice(0, 8)];
+}
+
 export function ActivateCommands(context: vscode.ExtensionContext) {
 
     let toggleCompletion = vscode.commands.registerCommand('extension.toggleCompletion', () => {
@@ -26,7 +34,7 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
             })
         } else {
             editor.edit(builder => {
-                let today = new Date().toJSON().slice(0, 10);
+                let today = getDateTimeParts()[0];
                 builder.insert(new vscode.Position(currLine, 0), "x " + today + " ");
             })
         }
@@ -61,6 +69,38 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     });
     let moveTasksToSomeday = vscode.commands.registerCommand('extension.moveTasksToSomeday', () => {
         Files.moveTasks(Settings.SomedayFilename);
+    });
+    let createTaskNote = vscode.commands.registerCommand('extension.createTaskNote', () => {
+        const activeEditor = vscode.window.activeTextEditor;
+        const selection = activeEditor.selection;
+        if (selection.isEmpty) {
+            vscode.window.showInformationMessage("No text selected for note");
+            return;
+        }
+        const selectedText = activeEditor.document.getText(selection);
+        activeEditor.edit(builder => {
+            builder.delete(selection);
+        });
+ 
+        let [date, time] = getDateTimeParts();
+        vscode.window.showInputBox({
+            prompt: 'Note file:',
+            value: "[Task]-Note-" + date.replace(/-/g, '') + "-" + time.replace(/:/g, '') + ".md",
+            valueSelection: [0, 6]
+        }).then((noteFile:string) => {
+            let notePath = vscode.Uri.parse("untitled:" + vscode.workspace.rootPath + path.sep + noteFile);
+            vscode.workspace.openTextDocument(notePath).then((document: vscode.TextDocument) => {
+                vscode.window.showTextDocument(document).then((editor: vscode.TextEditor) => {
+                    editor.edit(builder => {
+                        builder.insert(new vscode.Position(0, 0), selectedText);
+                    });
+                });
+            }, (error: any) => {
+                console.error(error);
+            });
+            vscode.env.clipboard.writeText("note:" + noteFile);
+            vscode.window.showInformationMessage("Paste the new note tag into the appropriate task");
+        });
     });
     let moveTasksToProject = vscode.commands.registerCommand('extension.moveTasksToProject', () => {
         async function showInputBox() {
