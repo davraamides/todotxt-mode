@@ -60,7 +60,7 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
         Files.moveTasks(Settings.TodoFilename);
     });
     let moveTasksToWaiting = vscode.commands.registerCommand('extension.moveTasksToWaiting', () => {
-        Files.moveTasks(Settings.WaitFilename);
+        Files.moveTasks(Settings.WaitingFilename);
     });
     let moveTasksToSomeday = vscode.commands.registerCommand('extension.moveTasksToSomeday', () => {
         Files.moveTasks(Settings.SomedayFilename);

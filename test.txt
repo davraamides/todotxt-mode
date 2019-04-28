@@ -9,6 +9,7 @@ follow note:xxx link
 this is a three line
 note for the
 task above.
+make this a waiting task +Foo
 decorate due date, today and overdue +Decorate purple, yellow bold, red bold
 move from inbox.txt to todo.txt, someday.txt or to a project file or create a Project.md +File
 archive tasks to done.txt +File

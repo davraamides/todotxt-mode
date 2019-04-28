@@ -33,15 +33,19 @@ export default class Decorator {
     ]
 
     public decorateDocument() {
+        let editor = vscode.window.activeTextEditor;
+        let fileName = path.basename(editor.document.fileName);
+
+        if (Helpers.excludeDecorations(fileName)) {
+            return;
+        }
         // Clear all current decorations and set active editor
         this.decorations.forEach(decoration => {
             decoration.decorationOptions = [];
         });
 
-        let editor = vscode.window.activeTextEditor;
         if (editor != undefined) {
             // Only Decorate Document if it's in the classic filenaming convention
-            let fileName = path.basename(editor.document.fileName);
             if (Helpers.isTodoTypeFile(fileName)) {
                 // Iterate over each line and parse accordingl∏
                 for (var i = 0; i < editor.document.lineCount; i++) {

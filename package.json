@@ -81,18 +81,20 @@
 			"type": "object",
 			"title": "todotxt-mode configuraton",
 			"properties": {
-				"todotxtmode.message": {
-					"type": [
-						"string",
-						"null"
-					],
-					"default": "Hello!",
-					"description": "test message"
-				},
 				"todotxtmode.sortCompletedTasksToEnd": {
 					"type": "boolean",
 					"default": true,
 					"description": "Alwasy place completed tasks at end of list when sorting"
+				},
+				"todotxtmode.commandFilePattern": {
+					"type": "string",
+					"decription": "Regex pattern of filenames to apply todotxt-mode commands",
+					"default": "^.*\\.txt$"
+				},
+				"todotxtmode.excludeDecorationsFilePattern": {
+					"type": "string",
+					"description": "Regex pattern of filenames to exclude todotxt-mode decorations",
+					"default": "^done\\.txt$"
 				},
 				"todotxtmode.completedTaskStyle": {
 					"type": "object",

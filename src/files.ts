@@ -12,7 +12,7 @@ export namespace Files {
         const editor = vscode.window.activeTextEditor;
         let window = vscode.window;
         let currDoc = editor.document;
-        let destinationFileName = path.dirname(currDoc.fileName) + path.sep + Settings.DoneFilename;
+        let destinationPathName = path.dirname(currDoc.fileName) + path.sep + Settings.DoneFilename;
         let lineDeletes = [];
 
         if (path.basename(currDoc.fileName) != Settings.TodoFilename) {
@@ -21,13 +21,12 @@ export namespace Files {
         }
 
         if (window.activeTextEditor != undefined) {
-            let fileName = path.basename(window.activeTextEditor.document.fileName);
             let eol = vscode.window.activeTextEditor.document.eol == vscode.EndOfLine.CRLF ? '\r\n' : '\n';
             let totalLines = window.activeTextEditor.document.lineCount;
             for (var i = 0; i <= totalLines - 1; i++) {
                 let lineObject = window.activeTextEditor.document.lineAt(i);
                 if (currDoc.lineAt(i).text.startsWith("x ")) {
-                    fs.appendFileSync(destinationFileName, lineObject.text + eol);
+                    fs.appendFileSync(destinationPathName, lineObject.text + eol);
                     lineDeletes.push(i);
                 }
             }
@@ -39,13 +38,13 @@ export namespace Files {
         let window = vscode.window;
         let currDoc = editor.document;
         let lineDeletes = [];
+        let destinationPathName = path.dirname(currDoc.fileName) + path.sep + destinationFileName;
 
         if (window.activeTextEditor != undefined) {
-            let fileName = path.basename(window.activeTextEditor.document.fileName);
             let eol = vscode.window.activeTextEditor.document.eol == vscode.EndOfLine.CRLF ? '\r\n' : '\n';
             for (var i = editor.selection.start.line; i <= editor.selection.end.line; i++) {
                 let lineObject = window.activeTextEditor.document.lineAt(i);
-                fs.appendFileSync(destinationFileName, lineObject.text + eol);
+                fs.appendFileSync(destinationPathName, lineObject.text + eol);
                 lineDeletes.push(i);
             }
             deleteLines(lineDeletes, editor, currDoc);

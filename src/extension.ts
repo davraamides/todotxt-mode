@@ -5,8 +5,6 @@ import Decorator from './decorations';
 import { Settings } from './settings';
 
 export function activate(context: vscode.ExtensionContext) {
-	console.log(Settings.Message);
-
 	let decorator = new Decorator();
 	Commands.ActivateCommands(context);
 

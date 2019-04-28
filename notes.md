@@ -10,21 +10,6 @@ https://github.com/foxundermoon/vs-shell-format
 
 https://vscode-docs.readthedocs.io/en/stable/
 
-## code organization
-
-Reorganize code into these groups:
-x- patterns: the regexes for the field and completed tasks
-- task manipulations: completion, changing fields, adding fields, rearringing fields
-- file manipulations: moving tasks from one file to another
-- decorations: formatting tasks
-- sorting: reording tasks within a file
-- tests: test cases for code
-x- configuration/settings: getting settings from the config and handling defaults as well as constants
-- notes: refactoring selection to a note file and adding note tag (or putting in clipboard) and following a note
-- find/search/review: searching all files for tasks, iterating over project MD files for task lists
-- projects? all the stuff to append to projects? or is this just in other sections
-
-
 ## Packaging
 The `vsce` tool is for managing VS Code Extensions. Install the command with
 
@@ -52,6 +37,8 @@ Need to decide if waiting is a tag or presence in a file. Choices:
 - priority (W): kludgy but sort of makes sense
 
 I think I'm going to start with a `waiting.txt` file because I want to keep `todo.txt` clean and focused on the things I'm trying to get done now (or this week). The good thing about presence in a file is that you don't need to manage the field if you complete it or move it back to `todo.txt`.
+
+I should also think about adding a context for the person I'm waiting on but for now can just add that to the task before running the moveToWaiting command.
 
 ## Handling Deferred tasks
 Similar to *waiting* tasks, I could use presence in a file (`incubate.txt` or `deferred.tx`), a context, a tag or a priority for deferred tasks. But these are not the same as *waiting* tasks because it's a decision I'm making to punt them for a while. It's more about priority but without the tediousness of modifying the priority. These are more like things you plan to do in the next few weeks, just not this week.

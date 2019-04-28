@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { Settings } from './settings';
 
 export namespace Helpers {
 
@@ -26,9 +27,12 @@ export namespace Helpers {
     export function isCompleted(text: string): boolean {
         return text.startsWith("x ");        
     }
-
     export function isTodoTypeFile(filename: string): boolean {
-        return filename.endsWith(".txt");
+        return filename.match(Settings.CommandFilePattern) != null;
+    }
+
+    export function excludeDecorations(filename: string): boolean {
+        return filename.match(Settings.ExcludeDecorationsFilePattern) != null;
     }
 
     // trigger redecoration of the document by forcing the selection to change

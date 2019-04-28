@@ -1,7 +1,5 @@
-x 2019-04-26 (A) make all sorts, formats, moves work on selected row ranges
 (B) move from inbox.txt to to a project file or create a Project.md +File
 (B) command to follow a note:xxx link
-x 2019-04-27 (B) command to take text selection and create note and save in clipboard (or add to task above selection?)
 (B) search command to find all tasks with high priority (A/B) or overdue or due within next 5 days
 (B) iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?
 decorate due date, today and overdue +Decorate purple, yellow bold, red bold

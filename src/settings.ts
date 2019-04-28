@@ -14,10 +14,12 @@ export namespace Settings {
     export const TodoFilename:string = 'todo.txt'
     export const DoneFilename:string = 'done.txt'
     export const SomedayFilename:string = 'incubate.txt'
-    export const WaitFilename:string = 'waiting.txt'
+    export const WaitingFilename:string = 'waiting.txt'
     
     export const Message:string = getSetting("message");
     export const SortCompletedTasksToEnd:boolean = getSetting("sortCompletedTasksToEnd", false);
+    export const CommandFilePattern:string = getSetting("commandFilePattern");
+    export const ExcludeDecorationsFilePattern:string = getSetting("excludeDecorationsFilePattern");
 
     export const ContextStyle = Object.assign({}, getSetting("contextStyle"), 
 //    export const ContextStyle = {

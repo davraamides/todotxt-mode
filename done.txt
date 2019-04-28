@@ -14,3 +14,5 @@ x 2019-04-21 (B) add build step to make a VSIX package so I can install on my ow
 x 2019-04-21 add option to always sort completed tasks to the bottom
 x 2019-04-22 archive tasks to done.txt +File
 x 2019-04-23 not always redecorating after a sort +Bug
+x 2019-04-26 (A) make all sorts, formats, moves work on selected row ranges
+x 2019-04-27 (B) command to take text selection and create note and save in clipboard (or add to task above selection?)
