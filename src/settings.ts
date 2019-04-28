@@ -8,6 +8,8 @@ import * as vscode from 'vscode';
 
 export namespace Settings {
 
+    export const CompletedTagLength = "x yyyy-mm-dd ".length;
+
     // move to configuration
     export const TodoFilename:string = 'todo.txt'
     export const DoneFilename:string = 'done.txt'

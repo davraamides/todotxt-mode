@@ -7,36 +7,31 @@ import { Patterns } from './patterns';
 import { Settings } from './settings';
 import { Sorting } from './sorting';
 
-function getTaskAtSelection() : [number, string] {
-    const editor = vscode.window.activeTextEditor;
-    let currLine = editor.selection.start.line;
-    let currDoc = editor.document;
-    return [currLine, currDoc.lineAt(currLine).text];
-}
-
-function getDateTimeParts() {
-    var dt = new Date();
-    var [date, time] = new Date(dt.getTime() - (dt.getTimezoneOffset() * 60000)).toISOString().split('T');
-    return [date, time.slice(0, 8)];
-}
-
 export function ActivateCommands(context: vscode.ExtensionContext) {
 
+    // TODO move the implementation to commands.ts
     let toggleCompletion = vscode.commands.registerCommand('extension.toggleCompletion', () => {
-        // Get the current line and find the first 2 characters
         const editor = vscode.window.activeTextEditor;
-        let [currLine, text] = getTaskAtSelection();
-
-        if (text.startsWith("x ")) {
-            editor.edit(builder => {
-                builder.delete(new vscode.Range(new vscode.Position(currLine, 0), new vscode.Position(currLine, 13)));
-                editor.selection = new vscode.Selection(new vscode.Position(currLine, 14), new vscode.Position(currLine, 14));
-            })
-        } else {
-            editor.edit(builder => {
-                let today = getDateTimeParts()[0];
-                builder.insert(new vscode.Position(currLine, 0), "x " + today + " ");
-            })
+        let [startLine, endLine] = Helpers.getSelectedLineRange(false);
+        for (var i = startLine; i <= endLine; i++) {
+            let text = editor.document.lineAt(i).text;
+            if (Helpers.isCompleted(text)) {
+                editor.edit(builder => {
+                    builder.delete(
+                        new vscode.Range(new vscode.Position(i, 0),
+                        new vscode.Position(i, Settings.CompletedTagLength))
+                    );
+                    editor.selection = new vscode.Selection(
+                        new vscode.Position(i, Settings.CompletedTagLength + 1), 
+                        new vscode.Position(i, Settings.CompletedTagLength + 1)
+                    );
+                })
+            } else {
+                editor.edit(builder => {
+                    let today = Helpers.getDateTimeParts()[0];
+                    builder.insert(new vscode.Position(i, 0), "x " + today + " ");
+                })
+            }
         }
         Helpers.triggerSelectionChange();
     });
@@ -70,6 +65,7 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     let moveTasksToSomeday = vscode.commands.registerCommand('extension.moveTasksToSomeday', () => {
         Files.moveTasks(Settings.SomedayFilename);
     });
+    // TODO move to commands.ts
     let createTaskNote = vscode.commands.registerCommand('extension.createTaskNote', () => {
         const activeEditor = vscode.window.activeTextEditor;
         const selection = activeEditor.selection;
@@ -82,7 +78,7 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
             builder.delete(selection);
         });
  
-        let [date, time] = getDateTimeParts();
+        let [date, time] = Helpers.getDateTimeParts();
         vscode.window.showInputBox({
             prompt: 'Note file:',
             value: "[Task]-Note-" + date.replace(/-/g, '') + "-" + time.replace(/:/g, '') + ".md",
@@ -102,6 +98,7 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
             vscode.window.showInformationMessage("Paste the new note tag into the appropriate task");
         });
     });
+    // TODO finish implementation
     let moveTasksToProject = vscode.commands.registerCommand('extension.moveTasksToProject', () => {
         async function showInputBox() {
             const result = await vscode.window.showInputBox({
@@ -127,12 +124,6 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
             }
         });
     });
-    vscode.languages.registerHoverProvider('typescript', {
-        provideHover(doc: vscode.TextDocument) {
-            return new vscode.Hover('For *all* TypeScript documents.');
-        }
-    });
-
 
     // add to list of disposables so they will be cleaned up when deactivated
     context.subscriptions.push(toggleCompletion);
@@ -146,4 +137,6 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     context.subscriptions.push(moveTasksToTodo);
     context.subscriptions.push(moveTasksToWaiting);
     context.subscriptions.push(moveTasksToSomeday);
+    context.subscriptions.push(moveTasksToProject);
+    context.subscriptions.push(createTaskNote);
 }

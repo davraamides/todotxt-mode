@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as Commands from './commands';
+
 import Decorator from './decorations';
 import { Settings } from './settings';
 

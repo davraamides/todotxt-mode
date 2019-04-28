@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Sorting } from './sorting';
+import { Helpers } from './helpers';
 /*
  * Configuration settings and constants
  *
@@ -35,7 +35,7 @@ export namespace Patterns {
     export function formatSelectedTasks() {
         // Get the current line and find the first 2 characters
         const editor = vscode.window.activeTextEditor;
-        let [startLine, endLine] = Sorting.getSelectedLineRange(false);
+        let [startLine, endLine] = Helpers.getSelectedLineRange(false);
 
         let newLines = [];
         for (var i = startLine; i <= endLine; i++) {

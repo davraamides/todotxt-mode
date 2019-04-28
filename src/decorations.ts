@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { Range } from 'vscode';
 import * as path from 'path';
 
+import { Helpers } from './helpers';
 import { Patterns } from './patterns';
 import { Settings } from './settings';
 
@@ -37,14 +38,14 @@ export default class Decorator {
             decoration.decorationOptions = [];
         });
 
-        let activeEditor = vscode.window.activeTextEditor;
-        if (activeEditor != undefined) {
+        let editor = vscode.window.activeTextEditor;
+        if (editor != undefined) {
             // Only Decorate Document if it's in the classic filenaming convention
-            let fileName = path.basename(activeEditor.document.fileName);
-            if (fileName.endsWith(".txt")) {
+            let fileName = path.basename(editor.document.fileName);
+            if (Helpers.isTodoTypeFile(fileName)) {
                 // Iterate over each line and parse accordingl∏
-                for (var i = 0; i < activeEditor.document.lineCount; i++) {
-                    let line = activeEditor.document.lineAt(i);
+                for (var i = 0; i < editor.document.lineCount; i++) {
+                    let line = editor.document.lineAt(i);
                     this.decorations.forEach(decoration => {
                         this.parseRegex(decoration.regex, decoration.decorationOptions, line);
                     })
@@ -53,7 +54,7 @@ export default class Decorator {
 
             // Set final decorations
             this.decorations.forEach(decoration => {
-                activeEditor.setDecorations(decoration.decorationType, decoration.decorationOptions);
+                editor.setDecorations(decoration.decorationType, decoration.decorationOptions);
             });
         }
     }

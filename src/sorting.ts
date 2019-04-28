@@ -7,29 +7,17 @@ import { Helpers } from './helpers';
 export namespace Sorting {
 
     export function sortLinesByField(fieldName: string) {
-        let [startLine, endLine] = getSelectedLineRange(true);
+        let [startLine, endLine] = Helpers.getSelectedLineRange(true);
         let regex = Patterns.FieldRegex[fieldName];
         let lineObjects = getLineObjects(vscode.window.activeTextEditor.document, startLine, endLine, fieldName, regex, parseField);
         sort(lineObjects, startLine, endLine);
     }
 
     export function sortLinesByTagValue(tagName: string) {
-        let [startLine, endLine] = getSelectedLineRange(true);
+        let [startLine, endLine] = Helpers.getSelectedLineRange(true);
         let regex = Patterns.TagValueRegex;
         let lineObjects = getLineObjects(vscode.window.activeTextEditor.document, startLine, endLine, tagName, regex, parseTagValue);
         sort(lineObjects, startLine, endLine);
-    }
-
-    // move to utils
-    export function getSelectedLineRange(defaultToAll: boolean): [number, number] {
-        let selection = vscode.window.activeTextEditor.selection;
-        if (selection.start.line != selection.end.line) {
-            return [selection.start.line, selection.end.line];
-        }
-        if (defaultToAll) {
-            return [0, vscode.window.activeTextEditor.document.lineCount - 1];            
-        }
-        return [selection.start.line, selection.start.line];
     }
 
     // get the lines of the document as objects with the text, field value and line number
