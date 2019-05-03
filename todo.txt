@@ -18,3 +18,4 @@ maybe better to have two commands:
 1) move to project, which interactively selects the project file (do I really need this? so easy to just copy/paste)
 2) create project from task, which prompts for a file name and creates a new project file (same with this one)
 add an option as a section delimiter (eg '^--$') that if set will break the .txt file into regions that are ignored?
+

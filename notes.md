@@ -10,7 +10,24 @@ https://github.com/foxundermoon/vs-shell-format
 
 https://vscode-docs.readthedocs.io/en/stable/
 
+## Setup
+Install Node.js from: https://nodejs.org/en/
+This installs in /usr/local/bin/node and /usr/local/bin/npm
+
+Thin install Yoeman. I had to Stop Little Snitch even though I wasn in passive mode for some reason.
+
+    sudo npm install -g yo generator-code
+
+Install the Typescript compiler
+
+    sudo npm install -g typescript
+
+Install the node types
+
+    npm install @types/node
+
 ## Packaging
+
 The `vsce` tool is for managing VS Code Extensions. Install the command with
 
     sudo npm install -g vsce
