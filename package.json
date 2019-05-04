@@ -67,7 +67,11 @@
 			{
 				"command": "extension.createTaskNote",
 				"title": "todotxt-mode: Create note for task"
-			}
+			},
+			{
+				"command": "extension.removePriorities",
+				"title": "todotxt-mode: Remove task priorities"
+			}			
 		],
 		"keybindings": [
 			{
@@ -85,6 +89,11 @@
 					"type": "boolean",
 					"default": true,
 					"description": "Alwasy place completed tasks at end of list when sorting"
+				},
+				"todotxtmode.sectionDelimiterPattern": {
+					"type": "string",
+					"description": "Regex pattern to delimit todo tasks section from other parts of the file",
+					"default": "^--$"
 				},
 				"todotxtmode.commandFilePattern": {
 					"type": "string",

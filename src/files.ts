@@ -22,8 +22,8 @@ export namespace Files {
 
         if (window.activeTextEditor != undefined) {
             let eol = vscode.window.activeTextEditor.document.eol == vscode.EndOfLine.CRLF ? '\r\n' : '\n';
-            let totalLines = window.activeTextEditor.document.lineCount;
-            for (var i = 0; i <= totalLines - 1; i++) {
+            let lastLine = Helpers.getLastTodoLineInDocument();
+            for (var i = 0; i <= lastLine; i++) {
                 let lineObject = window.activeTextEditor.document.lineAt(i);
                 if (currDoc.lineAt(i).text.startsWith("x ")) {
                     fs.appendFileSync(destinationPathName, lineObject.text + eol);
@@ -42,7 +42,8 @@ export namespace Files {
 
         if (window.activeTextEditor != undefined) {
             let eol = vscode.window.activeTextEditor.document.eol == vscode.EndOfLine.CRLF ? '\r\n' : '\n';
-            for (var i = editor.selection.start.line; i <= editor.selection.end.line; i++) {
+            let [startLine, endLine] = Helpers.getSelectedLineRange(false);
+            for (var i = startLine; i <= endLine; i++) {
                 let lineObject = window.activeTextEditor.document.lineAt(i);
                 fs.appendFileSync(destinationPathName, lineObject.text + eol);
                 lineDeletes.push(i);

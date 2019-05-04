@@ -1,7 +1,7 @@
 (B) move from inbox.txt to to a project file or create a Project.md +File
 (B) command to follow a note:xxx link
-(B) search command to find all tasks with high priority (A/B) or overdue or due within next 5 days
-(B) iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?
+search command to find all tasks with high priority (A/B) or overdue or due within next 5 days
+iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?
 decorate due date, today and overdue +Decorate purple, yellow bold, red bold
 increase/decrease priority or remove priority +Line
 make configurable (file names, keybindings, colors)
@@ -10,12 +10,12 @@ write test cases for decorators (how?) +Test
 write test cases for line commands +Test
 write test cases for file commands +Test
 flush all changes to Git (maybe not necessary if I have the job)
-command to strip all priorities
+(A) command to strip all priorities
 make note link open file when clicking on it: https://github.com/Jack89ita/vscode-open-file-from-path/blob/master/extension.js
-
+x 2019-05-04 (A) add an option as a section delimiter (eg '^--$') that if set will break the .txt file into regions that are ignored?
 --
+
 maybe better to have two commands: 
 1) move to project, which interactively selects the project file (do I really need this? so easy to just copy/paste)
 2) create project from task, which prompts for a file name and creates a new project file (same with this one)
-add an option as a section delimiter (eg '^--$') that if set will break the .txt file into regions that are ignored?
-
+(A) need to add this

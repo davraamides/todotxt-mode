@@ -34,8 +34,10 @@ export default class Decorator {
 
     public decorateDocument() {
         let editor = vscode.window.activeTextEditor;
+        if (! editor || ! editor.document) {
+            return;
+        }
         let fileName = path.basename(editor.document.fileName);
-
         if (Helpers.excludeDecorations(fileName)) {
             return;
         }
@@ -47,8 +49,9 @@ export default class Decorator {
         if (editor != undefined) {
             // Only Decorate Document if it's in the classic filenaming convention
             if (Helpers.isTodoTypeFile(fileName)) {
-                // Iterate over each line and parse accordingl∏
-                for (var i = 0; i < editor.document.lineCount; i++) {
+                // Iterate over each line and parse accordingl
+                let lastLine = Helpers.getLastTodoLineInDocument();
+                for (var i = 0; i <= lastLine; i++) {
                     let line = editor.document.lineAt(i);
                     this.decorations.forEach(decoration => {
                         this.parseRegex(decoration.regex, decoration.decorationOptions, line);

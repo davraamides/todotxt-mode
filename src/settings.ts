@@ -9,6 +9,7 @@ import * as vscode from 'vscode';
 export namespace Settings {
 
     export const CompletedTagLength = "x yyyy-mm-dd ".length;
+    export const PriorityTagLength = "(A) ".length;
 
     // move to configuration
     export const TodoFilename:string = 'todo.txt'
@@ -20,6 +21,7 @@ export namespace Settings {
     export const SortCompletedTasksToEnd:boolean = getSetting("sortCompletedTasksToEnd", false);
     export const CommandFilePattern:string = getSetting("commandFilePattern");
     export const ExcludeDecorationsFilePattern:string = getSetting("excludeDecorationsFilePattern");
+    export const SectionDelimiterPattern:string = getSetting("sectionDelimiterPattern");
 
     export const ContextStyle = Object.assign({}, getSetting("contextStyle"), 
 //    export const ContextStyle = {
