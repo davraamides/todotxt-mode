@@ -6,19 +6,42 @@ import { Helpers } from './helpers';
 import { Patterns } from './patterns';
 import { Settings } from './settings';
 
+/*
+regular one
+for each line
+  for each decoration
+     for each match in the decoratins pattern
+        add the decoration options to the list
+
+dated/value one
+for each line
+   for each dated decoration
+       for each match in the pattern
+           look at value of match and apply appropriate style
+so would need a parse routine that returns the set of match regions and values
+*/
 class Decoration {
     name: string;
     regex: RegExp;
-    style: Object;
+    //style: Object;
     decorationOptions: vscode.DecorationOptions[];
     decorationType: vscode.TextEditorDecorationType;
 
     constructor(name: string, regex: RegExp, style: vscode.DecorationRenderOptions) {
         this.name = name;
         this.regex = regex;
-        this.style = style;
+        //this.style = style;
         this.decorationOptions = [];
         this.decorationType = vscode.window.createTextEditorDecorationType(style);
+    }
+}
+class DateDecoration extends Decoration {
+    beforeDateStyle: object;
+    onDateStyle: object;
+    afterDateStyle: object;
+
+    constructor(name: string, tag: string) {
+        super(name, new RegExp("\\b" + tag + ":\\d{4}-\\d{2}-\\d{2}\\b"), x);
     }
 }
 
@@ -30,6 +53,7 @@ export default class Decorator {
         new Decoration('project', Patterns.ProjectRegex, Settings.ProjectStyle),
         new Decoration('tag', Patterns.TagRegex, Settings.TagStyle),
         new Decoration('completed', Patterns.CompletedRegex, Settings.CompletedStyle),
+        new DateDecoration('due-tag', 'due'),
     ]
 
     public decorateDocument() {
@@ -47,9 +71,7 @@ export default class Decorator {
         });
 
         if (editor != undefined) {
-            // Only Decorate Document if it's in the classic filenaming convention
             if (Helpers.isTodoTypeFile(fileName)) {
-                // Iterate over each line and parse accordingl
                 let lastLine = Helpers.getLastTodoLineInDocument();
                 for (var i = 0; i <= lastLine; i++) {
                     let line = editor.document.lineAt(i);
