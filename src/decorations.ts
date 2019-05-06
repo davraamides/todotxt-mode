@@ -5,6 +5,7 @@ import * as path from 'path';
 import { Helpers } from './helpers';
 import { Patterns } from './patterns';
 import { Settings } from './settings';
+import { finished } from 'stream';
 
 /*
 regular one
@@ -81,9 +82,10 @@ export default class Decorator {
                 let lastLine = Helpers.getLastTodoLineInDocument();
                 for (var i = 0; i <= lastLine; i++) {
                     let line = editor.document.lineAt(i);
-                    this.decorations.forEach(decoration => {
-                        this.parseRegex(decoration.regex, decoration.decorationOptions, line);
-                    })
+                    // this.decorations.forEach(decoration => {
+                    //     this.parseRegex(decoration.regex, decoration.decorationOptions, line);
+                    // })
+                    let matches = this.findMatchingPatterns(decoration.regex, line);
                 }
             }
 
