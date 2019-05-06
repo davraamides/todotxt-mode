@@ -19,8 +19,9 @@ export namespace Helpers {
             return [selection.start.line, selection.end.line];
         }
         if (defaultToAll) {
-            return [0, vscode.window.activeTextEditor.document.lineCount - 1];
+            return [0, getLastTodoLineInDocument()];
         }
+        // selection is empty but defaultToAll is false so just return the current line
         return [selection.start.line, selection.start.line];
     }
 
@@ -33,6 +34,19 @@ export namespace Helpers {
 
     export function excludeDecorations(filename: string): boolean {
         return filename.match(Settings.ExcludeDecorationsFilePattern) != null;
+    }
+
+    export function getLastTodoLineInDocument(): number {
+        // if the sectionDelimiterPattern setting has been set, find the first matching line
+        let document = vscode.window.activeTextEditor.document;
+        if (Settings.SectionDelimiterPattern != undefined && Settings.SectionDelimiterPattern.length > 0) {
+            for (var i = 0; i < document.lineCount; i++) {
+                if (document.lineAt(i).text.match(Settings.SectionDelimiterPattern)) {
+                    return i == 0 ? 0 : i - 1; // return the previous line unless the first line has the delimiter
+                }
+            }
+        }
+        return document.lineCount - 1;
     }
 
     // trigger redecoration of the document by forcing the selection to change

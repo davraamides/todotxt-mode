@@ -9,7 +9,7 @@ import { Sorting } from './sorting';
 
 export function ActivateCommands(context: vscode.ExtensionContext) {
 
-    // TODO move the implementation to commands.ts
+    // TODO move the implementation to commands.ts or somewhere else
     let toggleCompletion = vscode.commands.registerCommand('extension.toggleCompletion', () => {
         const editor = vscode.window.activeTextEditor;
         let [startLine, endLine] = Helpers.getSelectedLineRange(false);
@@ -65,6 +65,31 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     let moveTasksToSomeday = vscode.commands.registerCommand('extension.moveTasksToSomeday', () => {
         Files.moveTasks(Settings.SomedayFilename);
     });
+    // TODO move the implementation to commands.ts or somewhere else
+    let removePriorities = vscode.commands.registerCommand('extension.removePriorities', () => {
+        const editor = vscode.window.activeTextEditor;
+        let [startLine, endLine] = Helpers.getSelectedLineRange(true);
+        let linesWithPriority:number[] = [];
+        for (var i = startLine; i <= endLine; i++) {
+            let text = editor.document.lineAt(i).text;
+            if (! Helpers.isCompleted(text)) {
+                let taskObj = Patterns.parseTask(text);
+                if (taskObj[Patterns.PriorityField] != undefined) {
+                    linesWithPriority.push(i);
+                }
+            }
+        }
+        editor.edit(builder => {
+            linesWithPriority.forEach(i => {
+                builder.delete(
+                    new vscode.Range(new vscode.Position(i, 0),
+                    new vscode.Position(i, Settings.PriorityTagLength))
+                );
+            })
+        }).then(() => { });
+        Helpers.triggerSelectionChange();
+    });
+
     // TODO move to commands.ts
     let createTaskNote = vscode.commands.registerCommand('extension.createTaskNote', () => {
         const activeEditor = vscode.window.activeTextEditor;
