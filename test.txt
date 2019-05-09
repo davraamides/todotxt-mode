@@ -21,7 +21,7 @@ follow note:xxx link
 this is a three line
 note for the
 task above.
-a task with a due date due:2019-04-01
+a task with a due date due:2019-05-09
 take chunk of text and create note and save name in clipboard
 flush all changes to Git (maybe not necessary if I have the job)
 iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?

@@ -33,12 +33,28 @@ export namespace Settings {
             color: 'rgb(40, 161, 86)'
         }
     });
-    export const PriorityStyle = {
+    export const HighPriorityStyle = {
         light: {
             color: 'rgb(230, 216, 25)'
         },
         dark: {
             color: 'rgb(230, 216, 25)'
+        }
+    };
+    export const MediumPriorityStyle = {
+        light: {
+            color: 'rgb(167, 157, 28)'
+        },
+        dark: {
+            color: 'rgb(167, 157, 28)'
+        }
+    };
+    export const LowPriorityStyle = {
+        light: {
+            color: 'rgb(100, 95, 16)'
+        },
+        dark: {
+            color: 'rgb(100, 95, 16)'
         }
     };
     export const ProjectStyle = {
@@ -61,6 +77,30 @@ export namespace Settings {
         textDecoration: "line-through",
         opacity: "0.5"
     };
+    export const PastDateStyle = {
+        light: {
+            color: 'rgb(177, 58, 28)'
+        },
+        dark: {
+            color: 'rgb(177, 58, 28)'
+        }
+    };
+    export const PresentDateStyle = {
+        light: {
+            color: 'rgb(219, 216, 26)'
+        },
+        dark: {
+            color: 'rgb(219, 216, 26)'
+        }
+    };
+    export const FutureDateStyle = {
+        light: {
+            color: 'rgb(118, 194, 31)'
+        },
+        dark: {
+            color: 'rgb(118, 194, 31)'
+        }
+    }
 
     function getSetting<T>(field:string, defaultValue?: T): T | undefined {
         return vscode.workspace.getConfiguration("todotxtmode").get(field, defaultValue);

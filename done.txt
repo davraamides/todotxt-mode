@@ -16,3 +16,6 @@ x 2019-04-22 archive tasks to done.txt +File
 x 2019-04-23 not always redecorating after a sort +Bug
 x 2019-04-26 (A) make all sorts, formats, moves work on selected row ranges
 x 2019-04-27 (B) command to take text selection and create note and save in clipboard (or add to task above selection?)
+x 2019-05-09 decorate due date, today and overdue +Decorate purple, yellow bold, red bold
+x 2019-05-04 (A) command to strip all priorities
+x 2019-05-04 (A) add an option as a section delimiter (eg '^--$') that if set will break the .txt file into regions that are ignored?

@@ -6,76 +6,28 @@ import { Helpers } from './helpers';
 import { Patterns } from './patterns';
 import { Settings } from './settings';
 import { finished } from 'stream';
+import { createSecurePair } from 'tls';
 
-/*
-regular one
-for each line
-  for each decoration
-     for each match in the decoratins pattern
-        add the decoration options to the list
-
-dated/value one
-for each line
-   for each dated decoration
-       for each match in the pattern
-           look at value of match and apply appropriate style
-so would need a parse routine that returns the set of match regions and values
-
-for each line
-   for each Decoration
-       matches = get matches
-       for each match
-          add decoration (based on value)
-
-*/
-//
-// a Decoration is an RE pattern and a decoration style/type
-// when deocarting the document, the lines are scanned for matches of 
-// the pattern and the ranges of those matches are stored in the decorationOptions array.
-// when you actually decorate the document, you apply the pairs of styles and range arrays
-// via the setDecorations call
-//
-/*
-I just want to refactor the algorithm such that each decorate can examine teh value
-of the matching pattern to apply the decoration in the way they want AND to ignore
-the decoration
-
-for each line in the document
-    for each decoration
-        matches = findMatches(decoration.pattern, line)
-        for each match:
-            decoration.addMatch(match)
-
-default decoration addMatch(match)
-    decorationOptions.push({ begin: match.begPos, end: match.endPos })
-
-custom decoration addMatch(match)
-    d = new Decoration(x, y, (match) => {
-        dt = toDate(match.value)
-        if dt == today()
-            decorationOptions.push({ begin: match.begPos, end: match.endPos})
-    })
-
-GO BACK TO ORIGINAL AND REWRITE TO THE DEFAULT FORMAT ABOVE SO THEN I CAN OVERRIDE WITH
-A DYNAMIC CLASS AND CUSTOM ADDMATCH METHOD
-*/
-class Decoration {
-    name: string; // not currently used
+interface IDecoration {
     regex: RegExp;
-    //style: Object;
+    addMatch(match: object): void;
+    clear(): void;
+    apply(editor: vscode.TextEditor): void;
+}
+
+class Decoration implements IDecoration {
+    regex: RegExp;
     decorationOptions: vscode.DecorationOptions[];
     decorationType: vscode.TextEditorDecorationType;
 
-    constructor(name: string, regex: RegExp, style: vscode.DecorationRenderOptions) {
-        this.name = name;
+    constructor(regex: RegExp, style: vscode.DecorationRenderOptions) {
         this.regex = regex;
-        //this.style = style;
         this.decorationOptions = [];
         this.decorationType = vscode.window.createTextEditorDecorationType(style);
     }
 
     addMatch(match: object) {
-        this.decorationOptions.push({ range: match['range' });
+        this.decorationOptions.push({ range: match['range'] });
     }
 
     clear() {
@@ -86,78 +38,110 @@ class Decoration {
         editor.setDecorations(this.decorationType, this.decorationOptions);
     }
 }
-// this needs to have a map of priority to decorationType and priority to decorationOptions[]
-// should reallly make an interface
-class ProrityDecoration extends Decoration {
-    decorationOptionsMap = {}; // how do I ceclare a dict of array?
-    decorationTypeMap = { of vscode.TextEditorDecorationType }; // and a map of a type?
-    constructor(name: string, styleMap, defaultStyle) {
-        super(name, Patterns.PriorityRegex, defaultStyle);
-        for (var style in styleMap) {
-            this.decorationTypeMap[style.key] = vscode.window.createTextEditorDecorationType(style.value);
+
+class PriorityDecoration implements IDecoration {
+    regex: RegExp;
+    decorationOptionsMap: { [priority: string]: vscode.DecorationOptions[] } = {};
+    decorationTypeMap: { [priority: string]: vscode.TextEditorDecorationType } = {};
+    defaultDecorationType: vscode.TextEditorDecorationType;
+    constructor(
+        styleMap: { [priority: string]: vscode.DecorationRenderOptions },
+        defaultStyle: vscode.DecorationRenderOptions) {
+        this.regex = Patterns.PriorityRegex;
+        this.defaultDecorationType = vscode.window.createTextEditorDecorationType(defaultStyle);
+        for (var priority in styleMap) {
+            this.decorationTypeMap[priority] = vscode.window.createTextEditorDecorationType(styleMap[priority]);
         }
     }
 
     addMatch(match: object) {
-        let decOptions = this.decorationOptionsMap[match['value']];
-        decOptions.push({ range: match['range'] });
+        if (! this.decorationOptionsMap[match['value']]) {
+            this.decorationOptionsMap[match['value']] = [];
+        }
+        this.decorationOptionsMap[match['value']].push({ range: match['range'] });
     }
 
     clear() {
-        for (key in this.decorationOptionsMap) {
-            this.decorationOptionsMap[key] = [];
+        for (var priority in this.decorationOptionsMap) {
+            this.decorationOptionsMap[priority] = [];
         }
     }
 
     apply(editor: vscode.TextEditor) {
-        for (key in this.decorationsOptionsMap) {
-            let decType = decorationTypeMap.get(key, this.decorationType);
-            editor.setDecorations(decType, this.decorationOptionsMap[key]);
+        for (var priority in this.decorationOptionsMap) {
+            if (priority in this.decorationTypeMap) {
+                editor.setDecorations(this.decorationTypeMap[priority], this.decorationOptionsMap[priority]);
+            } else {
+                editor.setDecorations(this.defaultDecorationType, this.decorationOptionsMap[priority]);
+            }
         }
     }
 }
-class ValueDecoration extends Decoration {
-    constructor(name: string, tag: string, (value:string) => {}:object) {
-        super(name, new RegExp("\\b" + tag + ":\\d{4}-\\d{2}-\\d{2}\\b"), x);
+class DateDecoration implements IDecoration {
+    regex: RegExp;
+    tag: string;
+    pastDecorationOptions: vscode.DecorationOptions[];
+    pastDecorationType: vscode.TextEditorDecorationType;
+    presentDecorationOptions: vscode.DecorationOptions[];
+    presentDecorationType: vscode.TextEditorDecorationType;
+    futureDecorationOptions: vscode.DecorationOptions[];
+    futureDecorationType: vscode.TextEditorDecorationType;
+
+    constructor(tag: string, pastStyle: vscode.DecorationRenderOptions,
+        presentStyle: vscode.DecorationRenderOptions, futureStyle: vscode.DecorationRenderOptions) {
+        this.regex = Patterns.TagDateRegex;
+        this.tag = tag;
+        this.pastDecorationType = vscode.window.createTextEditorDecorationType(pastStyle);
+        this.presentDecorationType = vscode.window.createTextEditorDecorationType(presentStyle);
+        this.futureDecorationType = vscode.window.createTextEditorDecorationType(futureStyle);
+    }
+
+    addMatch(match: object) {
+        let bits = match['value'].split(':');
+        if (bits[0] != this.tag) {
+            return;
+        }
+        let date: string = bits[1];
+        let today: string = Helpers.getDateTimeParts()[0];
+        if (date < today) {
+            this.pastDecorationOptions.push({ range: match['range'] });
+        } else if (date > today) {
+            this.futureDecorationOptions.push({ range: match['range'] });
+        } else {
+            this.presentDecorationOptions.push({ range: match['range'] });
+        }
+    }
+
+    clear() {
+        this.pastDecorationOptions = [];
+        this.presentDecorationOptions = [];
+        this.futureDecorationOptions = [];
+    }
+
+    apply(editor: vscode.TextEditor) {
+        editor.setDecorations(this.pastDecorationType, this.pastDecorationOptions);
+        editor.setDecorations(this.presentDecorationType, this.presentDecorationOptions);
+        editor.setDecorations(this.futureDecorationType, this.futureDecorationOptions);
     }
 }
 
 export default class Decorator {
 
-    decorations: Decoration[] = [
-        new Decoration('context', Patterns.ContextRegex, Settings.ContextStyle),
-        new Decoration('priority', Patterns.PriorityRegex, Settings.PriorityStyle),
-        new Decoration('project', Patterns.ProjectRegex, Settings.ProjectStyle),
-        new Decoration('tag', Patterns.TagRegex, Settings.TagStyle),
-        new Decoration('completed', Patterns.CompletedRegex, Settings.CompletedStyle),
-        new DateDecoration('due-tag', 'due'),
-        new ValueDecoration('due-past', 'due', (value:string) => {
-            let date = toDate(value);
-            if (date > today()) {
-                return duePastStyle;
-            }
-            return undefined;
-        }),
-        new ValueDecoration('due-today', 'due', (value: string) => {
-            let date = toDate(value);
-            if (date == today()) {
-                return dueTodayStyle;
-            }
-            return undefined;
-        }),
-        new ValueDecoration('due-future', 'due', (value: string) => {
-            let date = toDate(value);
-            if (date > today()) {
-                return dueFutureStyle;
-            }
-            return undefined;
-        }),
-        new ValueDecoration('priority-a', 'priority', (value: string) => {
-            if (value == "(A)") {
-                return priorityAStyle;
-            }
-            return undefined;
-        }),
+    decorations: IDecoration[] = [
+        new Decoration(Patterns.ContextRegex, Settings.ContextStyle),
+        new Decoration(Patterns.ProjectRegex, Settings.ProjectStyle),
+        new Decoration(Patterns.CompletedRegex, Settings.CompletedStyle),
+        new PriorityDecoration({
+            '(A)': Settings.HighPriorityStyle,
+            '(B)': Settings.MediumPriorityStyle,
+            '(C)': Settings.LowPriorityStyle
+        }, Settings.LowPriorityStyle),
+        new DateDecoration('due',
+            Settings.PastDateStyle,
+            Settings.PresentDateStyle,
+            Settings.FutureDateStyle),
+        // first decoration wins so put the general tag one after the specific priority one
+        new Decoration(Patterns.TagRegex, Settings.TagStyle)
     ]
 
     public decorateDocument() {
@@ -213,7 +197,7 @@ export default class Decorator {
             let endPos = new vscode.Position(line.range.start.line, line.firstNonWhitespaceCharacterIndex + result.index + result[0].length);
             //let decoration = { range: new Range(begPos, endPos) };
             //decorationOptions.push(decoration);
-            matches.push({ range: new Range(begPos, endPos), match: result[0]})
+            matches.push({ range: new Range(begPos, endPos), value: result[0]})
         }
         return matches;
     }

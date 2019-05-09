@@ -4,8 +4,10 @@ import { Settings } from './settings';
 export namespace Helpers {
 
     // get currente date/time as [yyyy-mm-dd, hh:mm:ss] strings
-    export function getDateTimeParts() {
-        var dt = new Date();
+    export function getDateTimeParts(dt: Date = undefined) {
+        if (! dt) {
+            dt = new Date();
+        }
         var [date, time] = new Date(dt.getTime() - (dt.getTimezoneOffset() * 60000)).toISOString().split('T');
         return [date, time.slice(0, 8)];
     }
