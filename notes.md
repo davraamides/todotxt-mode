@@ -18,6 +18,10 @@ Thin install Yoeman. I had to Stop Little Snitch even though I wasn in passive m
 
     sudo npm install -g yo generator-code
 
+NOTE: on Windows at work because of Palo HTTPS decrypt, I kept getting errors from npm about self-signed certs. I finally got around it by telling npm to use the http repository and not the https one:
+
+    npm config set registry http://registry.npmjs.org/
+
 Install the Typescript compiler
 
     sudo npm install -g typescript

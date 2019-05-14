@@ -12,3 +12,5 @@ create a publisher +Publish
 test locally +Publish
 write a better README.md file +Publish
 a file to note:README.md is here
+color preferences only take effect after reload - see how to make them more dynamic +Bug
+hover on Windows not working, should have a log file and a setting +Bug
