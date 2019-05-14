@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { Settings } from './settings';
+import { Patterns } from './patterns';
 
 export namespace Helpers {
 
@@ -33,7 +34,12 @@ export namespace Helpers {
     export function isTodoTypeFile(filename: string): boolean {
         return filename.match(Settings.CommandFilePattern) != null;
     }
-
+    export function isNoteTag(text: string): boolean {
+        if (text.match(Patterns.TagRegex)) {
+            return text.split(':')[0] == 'note';
+        }
+        return false;
+    }
     export function excludeDecorations(filename: string): boolean {
         return filename.match(Settings.ExcludeDecorationsFilePattern) != null;
     }

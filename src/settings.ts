@@ -23,84 +23,46 @@ export namespace Settings {
     export const ExcludeDecorationsFilePattern:string = getSetting("excludeDecorationsFilePattern");
     export const SectionDelimiterPattern:string = getSetting("sectionDelimiterPattern");
 
-    export const ContextStyle = Object.assign({}, getSetting("contextStyle"), 
-//    export const ContextStyle = {
-    {
-        light: {
-            color: 'rgb(40, 161, 86)'
-        },
-        dark: {
-            color: 'rgb(40, 161, 86)'
-        }
-    });
+    export const ContextStyle = {
+        light: { color: getSetting("contextStyle.light.color", "rgb(40, 161, 86)") },
+        dark: { color: getSetting("contextStyle.dark.color", "rgb(40, 161, 86)") }
+    }
     export const HighPriorityStyle = {
-        light: {
-            color: 'rgb(230, 216, 25)'
-        },
-        dark: {
-            color: 'rgb(230, 216, 25)'
-        }
-    };
+        light: { color: getSetting("highPriorityStyle.light.color", "rgb(230, 216, 25)") },
+        dark: { color: getSetting("highPriorityStyle.dark.color", "rgb(230, 216, 25)") }
+    }
     export const MediumPriorityStyle = {
-        light: {
-            color: 'rgb(167, 157, 28)'
-        },
-        dark: {
-            color: 'rgb(167, 157, 28)'
-        }
-    };
+        light: { color: getSetting("mediumPriorityStyle.light.color", "rgb(167, 157, 28)") },
+        dark: { color: getSetting("mediumPriorityStyle.dark.color", "rgb(167, 157, 28)") }
+    }
     export const LowPriorityStyle = {
-        light: {
-            color: 'rgb(100, 95, 16)'
-        },
-        dark: {
-            color: 'rgb(100, 95, 16)'
-        }
-    };
+        light: { color: getSetting("lowPriorityStyle.light.color", "rgb(100, 95, 16)") },
+        dark: { color: getSetting("lowPriorityStyle.dark.color", "rgb(100, 95, 16)") }
+    }
     export const ProjectStyle = {
-        light: {
-            color: 'rgb(25, 172, 230)'
-        },
-        dark: {
-            color: 'rgb(25, 172, 230)'
-        }
-    };
+        light: { color: getSetting("projectStyle.light.color", "rgb(25, 172, 230)") },
+        dark: { color: getSetting("projectStyle.dark.color", "rgb(25, 172, 230)") }
+    }
     export const TagStyle = {
-        light: {
-            color: 'rgb(179, 58, 172)'
-        },
-        dark: {
-            color: 'rgb(179, 58, 172)'
-        }
-    };
+        light: { color: getSetting("tagStyle.light.color", "rgb(179, 58, 172)") },
+        dark: { color: getSetting("tagStyle.dark.color", "rgb(179, 58, 172)") }
+    }
+    export const PastDateStyle = {
+        light: { color: getSetting("pastDateStyle.light.color", "rgb(177, 58, 28)") },
+        dark: { color: getSetting("pastDateStyle.dark.color", "rgb(177, 58, 28)") }
+    }
+    export const PresentDateStyle = {
+        light: { color: getSetting("presentDateStyle.light.color", "rgb(219, 216, 26)") },
+        dark: { color: getSetting("presentDateStyle.dark.color", "rgb(219, 216, 26)") }
+    }
+    export const FutureDateStyle = {
+        light: { color: getSetting("futureDateStyle.light.color", "rgb(118, 194, 31)") },
+        dark: { color: getSetting("futureDateStyle.dark.color", "rgb(118, 194, 31)") }
+    }
     export const CompletedStyle = {
         textDecoration: "line-through",
         opacity: "0.5"
     };
-    export const PastDateStyle = {
-        light: {
-            color: 'rgb(177, 58, 28)'
-        },
-        dark: {
-            color: 'rgb(177, 58, 28)'
-        }
-    };
-    export const PresentDateStyle = {
-        light: {
-            color: 'rgb(219, 216, 26)'
-        },
-        dark: {
-            color: 'rgb(219, 216, 26)'
-        }
-    };
-    export const FutureDateStyle = {
-        light: {
-            color: 'rgb(118, 194, 31)'
-        },
-        dark: {
-            color: 'rgb(118, 194, 31)'
-        }
-    }
 
     function getSetting<T>(field:string, defaultValue?: T): T | undefined {
         return vscode.workspace.getConfiguration("todotxtmode").get(field, defaultValue);

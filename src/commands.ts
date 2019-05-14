@@ -6,6 +6,7 @@ import { Helpers } from './helpers';
 import { Patterns } from './patterns';
 import { Settings } from './settings';
 import { Sorting } from './sorting';
+import * as fs from 'fs';
 
 export function ActivateCommands(context: vscode.ExtensionContext) {
 
@@ -99,6 +100,7 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
             return;
         }
         const selectedText = activeEditor.document.getText(selection);
+        // move this so only happens if the save below succeeds?
         activeEditor.edit(builder => {
             builder.delete(selection);
         });
@@ -109,16 +111,15 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
             value: "[Task]-Note-" + date.replace(/-/g, '') + "-" + time.replace(/:/g, '') + ".md",
             valueSelection: [0, 6]
         }).then((noteFile:string) => {
-            let notePath = vscode.Uri.parse("untitled:" + vscode.workspace.rootPath + path.sep + noteFile);
-            vscode.workspace.openTextDocument(notePath).then((document: vscode.TextDocument) => {
-                vscode.window.showTextDocument(document).then((editor: vscode.TextEditor) => {
-                    editor.edit(builder => {
-                        builder.insert(new vscode.Position(0, 0), selectedText);
-                    });
-                });
+            let notePath = __dirname + path.sep + noteFile;
+            fs.writeFileSync(notePath, selectedText, 'utf8');
+            /* This loads it into a tab but not sure I want that to happen so I commented it out for now
+            vscode.workspace.openTextDocument(vscode.Uri.file(notePath)).then((document: vscode.TextDocument) => {
+                vscode.window.showTextDocument(document);
             }, (error: any) => {
                 console.error(error);
             });
+            */
             vscode.env.clipboard.writeText("note:" + noteFile);
             vscode.window.showInformationMessage("Paste the new note tag into the appropriate task");
         });

@@ -1,7 +1,7 @@
 (B) move from inbox.txt to to a project file or create a Project.md +File
-(B) make configurable (file names, keybindings, colors)
-(B) make note link open file when clicking on it: https://github.com/Jack89ita/vscode-open-file-from-path/blob/master/extension.js
-search command to find all tasks with high priority (A/B) or overdue or due within next 5 days
+x 2019-05-10 (B) make configurable (file names, keybindings, colors)
+x 2019-05-12 (B) make note link open file when clicking on it: https://github.com/Jack89ita/vscode-open-file-from-path/blob/master/extension.js
+x 2019-05-12 search command to find all tasks with high priority (A/B) or overdue or due within next 5 days (Cmd-Shift-F)
 iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?
 make test file from official format document +Test
 write test cases for decorators (how?) +Test

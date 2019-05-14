@@ -2,7 +2,7 @@
 	"name": "todotxt-mode",
 	"displayName": "todotxt-mode",
 	"description": "Commands and decorators for managing todo.txt files",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"publisher": "davraamides",
 	"engines": {
 		"vscode": "^1.33.0"
@@ -85,6 +85,26 @@
 			"type": "object",
 			"title": "todotxt-mode configuraton",
 			"properties": {
+				"todotxtmode.todoFilename": {
+					"type": "string",
+					"default": "todo.txt",
+					"description": "Name of main todo text file"
+				},
+				"todotxtmode.doneFilename": {
+					"type": "string",
+					"default": "done.txt",
+					"description": "Name of archive file for completed tasks"
+				},
+				"todotxtmode.somedayFilename": {
+					"type": "string",
+					"default": "someday.txt",
+					"description": "Name of file for someday/maybe tasks"
+				},
+				"todotxtmode.waitingFilename": {
+					"type": "string",
+					"default": "waiting.txt",
+					"description": "Name of file for deferred/waiting tasks"
+				},
 				"todotxtmode.sortCompletedTasksToEnd": {
 					"type": "boolean",
 					"default": true,
@@ -105,20 +125,105 @@
 					"description": "Regex pattern of filenames to exclude todotxt-mode decorations",
 					"default": "^done\\.txt$"
 				},
-				"todotxtmode.completedTaskStyle": {
-					"type": "object",
-					"description": "style for completed tasks",
-					"properties": {
-						"color": {
-							"type": "string"
-						},
-						"textDecoration": {
-							"type": "string"
-						},
-						"opacity": {
-							"type": "string"
-						}
-					}
+				"todotxtmode.contextStyle.light.color": {
+					"type": "string",
+					"description": "Color of context field in light mode",
+					"default": "rgb(40, 161, 86)"
+				},
+				"todotxtmode.contextStyle.dark.color": {
+					"type": "string",
+					"description": "Color of context field in dark mode",
+					"default": "rgb(40, 161, 86)"
+				},
+				"todotxtmode.highPriorityStyle.light.color": {
+					"type": "string",
+					"description": "Color of context field in light mode",
+					"default": "rgb(230, 216, 25)"
+				},
+				"todotxtmode.highPriorityStyle.dark.color": {
+					"type": "string",
+					"description": "Color of context field in dark mode",
+					"default": "rgb(230, 216, 25)"
+				},
+				"todotxtmode.mediumPriorityStyle.light.color": {
+					"type": "string",
+					"description": "Color of context field in light mode",
+					"default": "rgb(100, 95, 16)"
+				},
+				"todotxtmode.mediumPriorityStyle.dark.color": {
+					"type": "string",
+					"description": "Color of context field in dark mode",
+					"default": "rgb(100, 95, 16)"
+				},
+				"todotxtmode.lowPriorityStyle.light.color": {
+					"type": "string",
+					"description": "Color of context field in light mode",
+					"default": "rgb(0, 255, 0)"
+				},
+				"todotxtmode.lowPriorityStyle.dark.color": {
+					"type": "string",
+					"description": "Color of context field in dark mode",
+					"default": "rgb(0, 55, 0)"
+				},
+				"todotxtmode.projectStyle.light.color": {
+					"type": "string",
+					"description": "Color of context field in light mode",
+					"default": "rgb(25, 172, 230)"
+				},
+				"todotxtmode.projectStyle.dark.color": {
+					"type": "string",
+					"description": "Color of context field in dark mode",
+					"default": "rgb(25, 172, 230)"
+				},
+				"todotxtmode.tagStyle.light.color": {
+					"type": "string",
+					"description": "Color of context field in light mode",
+					"default": "rgb(179, 58, 172)"
+				},
+				"todotxtmode.tagStyle.dark.color": {
+					"type": "string",
+					"description": "Color of context field in dark mode",
+					"default": "rgb(179, 58, 172)"
+				},
+				"todotxtmode.pastDateStyle.light.color": {
+					"type": "string",
+					"description": "Color of context field in light mode",
+					"default": "rgb(177, 58, 28)"
+				},
+				"todotxtmode.pastDateStyle.dark.color": {
+					"type": "string",
+					"description": "Color of context field in dark mode",
+					"default": "rgb(177, 58, 28)"
+				},
+				"todotxtmode.presentDateStyle.light.color": {
+					"type": "string",
+					"description": "Color of context field in light mode",
+					"default": "rgb(219, 216, 26)"
+				},
+				"todotxtmode.presentDateStyle.dark.color": {
+					"type": "string",
+					"description": "Color of context field in dark mode",
+					"default": "rgb(219, 216, 26)"
+				},
+				"todotxtmode.futureDateStyle.light.color": {
+					"type": "string",
+					"description": "Color of context field in light mode",
+					"default": "rgb(118, 194, 31"
+				},
+				"todotxtmode.futureDateStyle.dark.color": {
+					"type": "string",
+					"description": "Color of context field in dark mode",
+					"default": "rgb(118, 194, 31"
+				},
+				"todotxtmode.completedStyle.textDecoration": {
+					"type": "string",
+					"description": "Text decoration for completed tasks",
+					"default": "line-through"
+				},
+				"todotxtmode.completedStyle.opacity": {
+					"type": "string",
+					"description": "Opacity for completed tasks",
+					"default": "0.5"
 				}
 			}
 		}

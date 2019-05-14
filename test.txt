@@ -17,11 +17,11 @@ write test cases for file commands +Test
 (A) make configurable (file names, keybindings, colors)
 (B) a second task with a later due date due:2019-05-01
 (D) defer a task (what does that mean? Should it be a separate .txt file that is different than someday?)
-follow note:xxx link
-this is a three line
+follow link
+this is a three line note:done.txt
 note for the
 task above.
-a task with a due date due:2019-05-09
+a task with a due date due:2019-05-10
 take chunk of text and create note and save name in clipboard
 flush all changes to Git (maybe not necessary if I have the job)
 iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?
@@ -33,3 +33,11 @@ these are notes and should not be decorated or acted upon now
 so +Project @context tag:value should not be highligted
 (A) nor priority
 x nor a complated task
+
+--
+This is a *sample* note for a task.
+- Do thing a
+- Do thing b
+
+Click [here](http://google.com) for more info.
+
