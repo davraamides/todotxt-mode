@@ -11,3 +11,4 @@ create a couple of screenshots of it +Publish
 create a publisher +Publish
 test locally +Publish
 write a better README.md file +Publish
+a file to note:README.md is here

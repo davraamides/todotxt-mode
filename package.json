@@ -16,7 +16,11 @@
 		"theme": "dark"
 	},
 	"licenes": "MIT",
-	"keywords": ["todotxt", "todo.txt", "task"],
+	"keywords": [
+		"todotxt",
+		"todo.txt",
+		"task"
+	],
 	"activationEvents": [
 		"onLanguage:plaintext"
 	],
@@ -78,7 +82,7 @@
 			{
 				"command": "extension.removePriorities",
 				"title": "todotxt-mode: Remove task priorities"
-			}			
+			}
 		],
 		"keybindings": [
 			{
