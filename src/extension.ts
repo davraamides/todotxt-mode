@@ -27,14 +27,10 @@ export function activate(context: vscode.ExtensionContext) {
 			if (Helpers.isNoteTag(word)) {
 				let bits = word.split(':');
 				let fname = bits[1];
-				let folder = path.normalize(path.dirname(vscode.window.activeTextEditor.document.uri.path));
+				let folder = path.normalize(path.dirname(vscode.window.activeTextEditor.document.fileName));
 				vscode.window.showInformationMessage(`path: ${folder}`);
 				try {
 					let notepath:string = path.join(folder, fname);
-					// figure out the right way to handle windows path
-					if (process.platform == 'win32' && notepath[2] == ':' && notepath[0] == '\\') {
-						notepath = notepath.slice(1);
-					}
 					let note = fs.readFileSync(notepath);
 					// this link fails on windows - it probably needs the leading \ but then needs them converted to / or something
 					let message = new vscode.MarkdownString(`[Open note](file://${notepath})\n\n${note}` );
