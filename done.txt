@@ -19,3 +19,6 @@ x 2019-04-27 (B) command to take text selection and create note and save in clip
 x 2019-05-09 decorate due date, today and overdue +Decorate purple, yellow bold, red bold
 x 2019-05-04 (A) command to strip all priorities
 x 2019-05-04 (A) add an option as a section delimiter (eg '^--$') that if set will break the .txt file into regions that are ignored?
+x 2019-05-10 (B) make configurable (file names, keybindings, colors)
+x 2019-05-12 (B) make note link open file when clicking on it: https://github.com/Jack89ita/vscode-open-file-from-path/blob/master/extension.js
+x 2019-05-12 search command to find all tasks with high priority (A/B) or overdue or due within next 5 days (Cmd-Shift-F)

@@ -10,6 +10,13 @@
 	"categories": [
 		"Other"
 	],
+	"icon": "images/todotxt-mode.png",
+	"galleryBanner": {
+		"color": "#474747",
+		"theme": "dark"
+	},
+	"licenes": "MIT",
+	"keywords": ["todotxt", "todo.txt", "task"],
 	"activationEvents": [
 		"onLanguage:plaintext"
 	],
@@ -235,6 +242,7 @@
 	"bugs": {
 		"url": "https://github.com/davraamides/todotxt-mode/issues"
 	},
+	"homepage": "https://github.com/davraamides/todotxt-mode/blob/master/README.md",
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
