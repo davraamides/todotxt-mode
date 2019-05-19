@@ -1,5 +1,0 @@
-make this a waiting task +Foo
-write test cases for line commands +Test
-write test cases for file commands +Test
-this is a task with a +Project
-this is a task with a +Project

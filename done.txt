@@ -28,3 +28,6 @@ x 2019-05-19 (C) test locally +Publish
 x 2019-05-19 (B) write a better README.md file +Publish
 x 2019-05-14 (A) colors for priorities are off
 x 2019-05-19 make test file from official format document +Test
+x 2019-05-19 (C) learn about publishing here https://code.visualstudio.com/api/working-with-extensions/publishing-extension +Publish
+x 2019-05-19 (C) get a personal access token +Publish
+x 2019-05-19 (C) create a publisher +Publish
