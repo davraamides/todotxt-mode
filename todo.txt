@@ -1,5 +1,5 @@
 (A) color preferences only take effect after reload - see how to make them more dynamic +Bug
-(A) create note saving in ~/.vscode/<todo>/. folder rathr than same folder as current file +Bug
+(A) creates note saving in ~/.vscode/<todo>/. folder rather than same folder as current file +Bug
 (A) reformat tasks failed +Bug
 move from inbox.txt to to a project file or create a Project.md +File
 iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?
