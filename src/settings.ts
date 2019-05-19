@@ -17,55 +17,55 @@ export namespace Settings {
     export const SomedayFilename:string = 'incubate.txt'
     export const WaitingFilename:string = 'waiting.txt'
     
-    export const Message:string = getSetting("message");
-    export const SortCompletedTasksToEnd:boolean = getSetting("sortCompletedTasksToEnd", false);
-    export const CommandFilePattern:string = getSetting("commandFilePattern");
-    export const ExcludeDecorationsFilePattern:string = getSetting("excludeDecorationsFilePattern");
-    export const SectionDelimiterPattern:string = getSetting("sectionDelimiterPattern");
+    export const Message:string = getSetting<string>("message");
+    export const SortCompletedTasksToEnd:boolean = getSetting<boolean>("sortCompletedTasksToEnd");
+    export const CommandFilePattern:string = getSetting<string>("commandFilePattern");
+    export const ExcludeDecorationsFilePattern:string = getSetting<string>("excludeDecorationsFilePattern");
+    export const SectionDelimiterPattern:string = getSetting<string>("sectionDelimiterPattern");
 
     export const ContextStyle = {
-        light: { color: getSetting("contextStyle.light.color", "rgb(40, 161, 86)") },
-        dark: { color: getSetting("contextStyle.dark.color", "rgb(40, 161, 86)") }
+        light: { color: getSetting<string>("contextStyle.light.color") },
+        dark: { color: getSetting<string>("contextStyle.dark.color") }
     }
     export const HighPriorityStyle = {
-        light: { color: getSetting("highPriorityStyle.light.color", "rgb(230, 216, 25)") },
-        dark: { color: getSetting("highPriorityStyle.dark.color", "rgb(230, 216, 25)") }
+        light: { color: getSetting<string>("highPriorityStyle.light.color") },
+        dark: { color: getSetting<string>("highPriorityStyle.dark.color") }
     }
     export const MediumPriorityStyle = {
-        light: { color: getSetting("mediumPriorityStyle.light.color", "rgb(167, 157, 28)") },
-        dark: { color: getSetting("mediumPriorityStyle.dark.color", "rgb(167, 157, 28)") }
+        light: { color: getSetting<string>("mediumPriorityStyle.light.color") },
+        dark: { color: getSetting<string>("mediumPriorityStyle.dark.color") }
     }
     export const LowPriorityStyle = {
-        light: { color: getSetting("lowPriorityStyle.light.color", "rgb(100, 95, 16)") },
-        dark: { color: getSetting("lowPriorityStyle.dark.color", "rgb(100, 95, 16)") }
+        light: { color: getSetting<string>("lowPriorityStyle.light.color") },
+        dark: { color: getSetting<string>("lowPriorityStyle.dark.color") }
     }
     export const ProjectStyle = {
-        light: { color: getSetting("projectStyle.light.color", "rgb(25, 172, 230)") },
-        dark: { color: getSetting("projectStyle.dark.color", "rgb(25, 172, 230)") }
+        light: { color: getSetting<string>("projectStyle.light.color") },
+        dark: { color: getSetting<string>("projectStyle.dark.color") }
     }
     export const TagStyle = {
-        light: { color: getSetting("tagStyle.light.color", "rgb(179, 58, 172)") },
-        dark: { color: getSetting("tagStyle.dark.color", "rgb(179, 58, 172)") }
+        light: { color: getSetting<string>("tagStyle.light.color") },
+        dark: { color: getSetting<string>("tagStyle.dark.color") }
     }
     export const PastDateStyle = {
-        light: { color: getSetting("pastDateStyle.light.color", "rgb(177, 58, 28)") },
-        dark: { color: getSetting("pastDateStyle.dark.color", "rgb(177, 58, 28)") }
+        light: { color: getSetting<string>("pastDateStyle.light.color") },
+        dark: { color: getSetting<string>("pastDateStyle.dark.color") }
     }
     export const PresentDateStyle = {
-        light: { color: getSetting("presentDateStyle.light.color", "rgb(219, 216, 26)") },
-        dark: { color: getSetting("presentDateStyle.dark.color", "rgb(219, 216, 26)") }
+        light: { color: getSetting<string>("presentDateStyle.light.color") },
+        dark: { color: getSetting<string>("presentDateStyle.dark.color") }
     }
     export const FutureDateStyle = {
-        light: { color: getSetting("futureDateStyle.light.color", "rgb(118, 194, 31)") },
-        dark: { color: getSetting("futureDateStyle.dark.color", "rgb(118, 194, 31)") }
+        light: { color: getSetting<string>("futureDateStyle.light.color") },
+        dark: { color: getSetting<string>("futureDateStyle.dark.color") }
     }
     export const CompletedStyle = {
-        textDecoration: "line-through",
-        opacity: "0.5"
+        textDecoration: getSetting<string>("completedStyle.textDecoration"),
+        opacity: getSetting<string>("completedStyle.opacity")
     };
 
-    function getSetting<T>(field:string, defaultValue?: T): T | undefined {
-        return vscode.workspace.getConfiguration("todotxtmode").get(field, defaultValue);
+    function getSetting<T>(field:string): T | undefined {
+        return vscode.workspace.getConfiguration("todotxtmode").get<T>(field);
     }
 
 }

@@ -6,6 +6,7 @@ import { Helpers } from './helpers';
 import { Patterns } from './patterns';
 import { Settings } from './settings';
 import { Sorting } from './sorting';
+import * as extension from './extension';
 import * as fs from 'fs';
 
 export function ActivateCommands(context: vscode.ExtensionContext) {
@@ -130,7 +131,7 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
             const result = await vscode.window.showInputBox({
                 prompt: 'Project file:'
             });
-            vscode.window.showInformationMessage(`Got: ${result}`);
+            // vscode.window.showInformationMessage(`Got: ${result}`);
         }
         showInputBox();
 
@@ -151,6 +152,21 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
         });
     });
 
+    // not working and not sure if it's because settings are const and cached? maybe if I 
+    // just make sure they always go back to configuration.get() then I don't even need
+    // a "reactivate" function...
+    context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
+        extension.deactivate();
+        for (const sub of context.subscriptions) {
+            try {
+                sub.dispose();
+            } catch (e) {
+                console.error(e);
+            }
+        }
+        extension.activate(context);
+    }));
+
     // add to list of disposables so they will be cleaned up when deactivated
     context.subscriptions.push(toggleCompletion);
     context.subscriptions.push(sortByContext);
@@ -164,5 +180,6 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     context.subscriptions.push(moveTasksToWaiting);
     context.subscriptions.push(moveTasksToSomeday);
     context.subscriptions.push(moveTasksToProject);
+    context.subscriptions.push(removePriorities);
     context.subscriptions.push(createTaskNote);
 }

@@ -9,6 +9,11 @@ import { Helpers } from './helpers';
 import * as fs from 'fs';
 import * as path from 'path';
 
+// deactivate
+//   clear? all context.subscriptions (commands)
+//   remove onDidChange for decoration?
+//   remove hover provider?
+
 export function activate(context: vscode.ExtensionContext) {
 	let decorator = new Decorator();
 	Commands.ActivateCommands(context);
@@ -23,12 +28,12 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.languages.registerHoverProvider('plaintext', {
 		provideHover(document, position, token) {
 			const word = document.getText(document.getWordRangeAtPosition(position, Patterns.TagRegex));
-            vscode.window.showInformationMessage(`word: ${word}`);
+            // vscode.window.showInformationMessage(`word: ${word}`);
 			if (Helpers.isNoteTag(word)) {
 				let bits = word.split(':');
 				let fname = bits[1];
 				let folder = path.normalize(path.dirname(vscode.window.activeTextEditor.document.fileName));
-				vscode.window.showInformationMessage(`path: ${folder}`);
+				// vscode.window.showInformationMessage(`path: ${folder}`);
 				try {
 					let notepath:string = path.join(folder, fname);
 					let note = fs.readFileSync(notepath);

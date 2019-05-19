@@ -163,10 +163,14 @@ export default class Decorator {
                 let lastLine = Helpers.getLastTodoLineInDocument();
                 for (var i = 0; i <= lastLine; i++) {
                     let line = editor.document.lineAt(i);
+                    let seenMatches = new Set();
                     this.decorations.forEach(decoration => {
                         let matches = this.findMatchingPatterns(decoration.regex, line);
                         for (var match of matches) {
-                            decoration.addMatch(match);
+                            if (! seenMatches.has(match['value'])) {
+                                decoration.addMatch(match);
+                                seenMatches.add(match['value']);
+                            }
                         }
                     })
                 }

@@ -1,0 +1,15 @@
+(A) finally this task has it all @context tag:value +Project
+(A) and another task with a priority and a metadata tag tag:vale
+(B) a task with a note tag that can be previewed when hovered note:demo.md 
+(C) and a task with the lowest priority
+(D) or below are decorated the same
+like +Project this one
+x 2019-05-19 and some with +Todo a different
+project name +Todo can be grouped together
+this is a task
+this is a task with a @context
+x 2019-05-19 tasks with dates due:2018-05-19 are a special case
+and have separate due:2019-05-19 styles for past, present
+and due:2020-05-19 dates in the future note:Demo-Note-20190519-075919.md
+
+--

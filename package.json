@@ -149,32 +149,32 @@
 				"todotxtmode.highPriorityStyle.light.color": {
 					"type": "string",
 					"description": "Color of context field in light mode",
-					"default": "rgb(230, 216, 25)"
+					"default": "rgb(240, 226, 25)"
 				},
 				"todotxtmode.highPriorityStyle.dark.color": {
 					"type": "string",
 					"description": "Color of context field in dark mode",
-					"default": "rgb(230, 216, 25)"
+					"default": "rgb(240, 226, 25)"
 				},
 				"todotxtmode.mediumPriorityStyle.light.color": {
 					"type": "string",
 					"description": "Color of context field in light mode",
-					"default": "rgb(100, 95, 16)"
+					"default": "rgb(201, 189, 22)"
 				},
 				"todotxtmode.mediumPriorityStyle.dark.color": {
 					"type": "string",
 					"description": "Color of context field in dark mode",
-					"default": "rgb(100, 95, 16)"
+					"default": "rgb(201, 189, 22)"
 				},
 				"todotxtmode.lowPriorityStyle.light.color": {
 					"type": "string",
 					"description": "Color of context field in light mode",
-					"default": "rgb(0, 255, 0)"
+					"default": "rgb(170, 160, 21)"
 				},
 				"todotxtmode.lowPriorityStyle.dark.color": {
 					"type": "string",
 					"description": "Color of context field in dark mode",
-					"default": "rgb(0, 55, 0)"
+					"default": "rgb(170, 160, 21)"
 				},
 				"todotxtmode.projectStyle.light.color": {
 					"type": "string",
@@ -219,12 +219,12 @@
 				"todotxtmode.futureDateStyle.light.color": {
 					"type": "string",
 					"description": "Color of context field in light mode",
-					"default": "rgb(118, 194, 31"
+					"default": "rgb(118, 194, 31)"
 				},
 				"todotxtmode.futureDateStyle.dark.color": {
 					"type": "string",
 					"description": "Color of context field in dark mode",
-					"default": "rgb(118, 194, 31"
+					"default": "rgb(118, 194, 31)"
 				},
 				"todotxtmode.completedStyle.textDecoration": {
 					"type": "string",

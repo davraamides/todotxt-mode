@@ -78,3 +78,12 @@ I should add keybindings using a chord so something like Ctrl+Shift+T c/p/j/t (c
 - delete lines in file
 - append lines to file
 - open note file
+
+## Hover and Commands
+Example of callling a command in MarkdownString. This one does it for the same extension but I think you can call any Code command, like "open" for a file. But I could also do things like hover over a date and change it.
+https://stackoverflow.com/questions/50221763/visual-studio-code-is-it-possible-to-make-a-decorations-hovermessage-clickable
+https://github.com/serayuzgur/crates/blob/master/src/toml/decorations.ts
+https://code.visualstudio.com/api/references/commands#links
+
+A bit complex but GitLens does LOTS of interesting things as an extension so studying the code will help. Heavy use of Hovers and MarkdownString commands.
+https://github.com/eamodio/vscode-gitlens
