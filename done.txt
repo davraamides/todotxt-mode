@@ -22,3 +22,9 @@ x 2019-05-04 (A) add an option as a section delimiter (eg '^--$') that if set wi
 x 2019-05-10 (B) make configurable (file names, keybindings, colors)
 x 2019-05-12 (B) make note link open file when clicking on it: https://github.com/Jack89ita/vscode-open-file-from-path/blob/master/extension.js
 x 2019-05-12 search command to find all tasks with high priority (A/B) or overdue or due within next 5 days (Cmd-Shift-F)
+x 2019-05-19 (C) flush all changes to Git (maybe not necessary if I have the job)
+x 2019-05-19 (B) create a couple of screenshots of it +Publish
+x 2019-05-19 (C) test locally +Publish
+x 2019-05-19 (B) write a better README.md file +Publish
+x 2019-05-14 (A) colors for priorities are off
+x 2019-05-19 make test file from official format document +Test

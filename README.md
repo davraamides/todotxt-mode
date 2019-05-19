@@ -40,19 +40,97 @@ There are a number of commands in the extension to support a GTD-like workflow.
 The extension also includes a few enhancements that, while not part of the todo.txt spec, can be useful.
 - Optional delimiter to break file into tasks section and notes section
 - Save selection to a note and add to a task as a `note:<file>` metadata tag, with preview
-- Optional delimiters in Markdown files for task section
 
 ![Create Note](https://raw.githubusercontent.com/davraamides/todotxt-mode/master/images/create-note.gif)
 ![Preview Note](https://raw.githubusercontent.com/davraamides/todotxt-mode/master/images/preview-note.gif)
 
 ## Extension Settings
 
-## Release Notes
+### Commands
 
-Users appreciate release notes as you update your extension.
+| Command                           | Description                                                       |
+| --------------------------------- | ----------------------------------------------------------------- |
+| `todotxt-mode.toggleCompletion`   | Toggle a task as complete                                         |
+| `todotxt-mode.sortByContext`      | Sort all/selected tasks by context - `@label`                     |
+| `todotxt-mode.sortByPriority`     | Sort all/selected tasks by priority - `(A)`                       |
+| `todotxt-mode.sortByProject`      | Sort all/selected tasks by project - `+label`                     |
+| `todotxt-mode.sortByTag`          | Sort all/selected tasks by metadata tag - `key:value`             |
+| `todotxt-mode.sortByDueDate`      | Sort all/selected tasks by due date - `due:YYYY-MM-DD`            |
+| `todotxt-mode.formatTasks`        | Format tasks with all tags in consistent order at end of the line |
+| `todotxt-mode.archiveTasks`       | Move completed tasks to the *Done* file                           |
+| `todotxt-mode.moveTasksToTodo`    | Move selected tasks to the *Todo* file                            |
+| `todotxt-mode.moveTasksToWaiting` | Move selected tasks to the *Waiting* file                         |
+| `todotxt-mode.moveTasksToSomeday` | Move selected tasks to the *Deferred* file                        |
+| `todotxt-mode.moveTasksToProject` | Move selected tasks to a Markdown project file                    |
+| `todotxt-mode.createTaskNote`     | Create a Markdown note file from the selected note text           |
+| `todotxt-mode.removePriorities`   | Remove all priorities from tasks                                  |
+
+### Styles
+
+| Setting                                     | Description                          | Default                                                         |
+| ------------------------------------------- | ------------------------------------ | --------------------------------------------------------------- |
+| `todotxtmode.contextStyle.light.color`        | Color of context field in light mode | <span style="color:rgb(40, 161, 86);">rgb(40, 161, 86)</span>   |
+| `todotxtmode.contextStyle.dark.color`         | Color of context field in dark mode  | <span style="color:rgb(40, 161, 86);">rgb(40, 161, 86)</span>   |
+| `todotxtmode.highPriorityStyle.light.color`   | Color of context field in light mode | <span style="color:rgb(240, 226, 25);">rgb(240, 226, 25)</span> |
+| `todotxtmode.highPriorityStyle.dark.color`    | Color of context field in dark mode  | <span style="color:rgb(240, 226, 25);">rgb(240, 226, 25)</span> |
+| `todotxtmode.mediumPriorityStyle.light.color` | Color of context field in light mode | <span style="color:rgb(201, 189, 22);">rgb(201, 189, 22)</span> |
+| `todotxtmode.mediumPriorityStyle.dark.color`  | Color of context field in dark mode  | <span style="color:rgb(201, 189, 22);">rgb(201, 189, 22)</span> |
+| `todotxtmode.lowPriorityStyle.light.color`    | Color of context field in light mode | <span style="color:rgb(170, 160, 21);">rgb(170, 160, 21)</span> |
+| `todotxtmode.lowPriorityStyle.dark.color`     | Color of context field in dark mode  | <span style="color:rgb(170, 160, 21);">rgb(170, 160, 21)</span> |
+| `todotxtmode.projectStyle.light.color`        | Color of context field in light mode | <span style="color:rgb(25, 172, 230);">rgb(25, 172, 230)</span> |
+| `todotxtmode.projectStyle.dark.color`         | Color of context field in dark mode  | <span style="color:rgb(25, 172, 230);">rgb(25, 172, 230)</span> |
+| `todotxtmode.tagStyle.light.color`            | Color of context field in light mode | <span style="color:rgb(179, 58, 172);">rgb(179, 58, 172)</span> |
+| `todotxtmode.tagStyle.dark.color`             | Color of context field in dark mode  | <span style="color:rgb(179, 58, 172);">rgb(179, 58, 172)</span> |
+| `todotxtmode.pastDateStyle.light.color`       | Color of context field in light mode | <span style="color:rgb(177, 58, 28);">rgb(177, 58, 28)</span>   |
+| `todotxtmode.pastDateStyle.dark.color`        | Color of context field in dark mode  | <span style="color:rgb(177, 58, 28);">rgb(177, 58, 28)</span>   |
+| `todotxtmode.presentDateStyle.light.color`    | Color of context field in light mode | <span style="color:rgb(219, 216, 26);">rgb(219, 216, 26)</span> |
+| `todotxtmode.presentDateStyle.dark.color`     | Color of context field in dark mode  | <span style="color:rgb(219, 216, 26);">rgb(219, 216, 26)</span> |
+| `todotxtmode.futureDateStyle.light.color`     | Color of context field in light mode | <span style="color:rgb(118, 194, 31);">rgb(118, 194, 31)</span> |
+| `todotxtmode.futureDateStyle.dark.color`      | Color of context field in dark mode  | <span style="color:rgb(118, 194, 31);">rgb(118, 194, 31)</span> |
+| `todotxtmode.completedStyle.textDecoration`   | Text decoration for completed tasks  | <span style="text-decoration:line-through;">line-through</span>                                                    |
+| `todotxtmode.completedStyle.opacity`          | Opacity for completed tasks          | <span style="opacity:0.5;">0.5</span>                                                             |
+
+### Files
+
+There are a few special files identifed for certain commands
+
+| Setting                       | Description                              | Default       |
+| ----------------------------- | ---------------------------------------- | ------------- |
+| `todotxtmode.todoFilename`    | Name of main todo text file              | `todo.txt`    |
+| `todotxtmode.doneFilename`    | Name of archive file for completed tasks | `done.txt`    |
+| `todotxtmode.somedayFilename` | Name of file for someday/maybe tasks     | `someday.txt` |
+| `todotxtmode.waitingFilename` | Name of file for deferred/waiting tasks  | `waiting.txt` |
+
+### Keybindings
+
+The extension ships with only one keybinding assigned but any of the commands can be bound to keyboard shortcuts in the usual manner with VS Code.
+
+| Command                      | Default Keybinding |
+| ---------------------------- | ------------------ |
+| `extension.toggleCompletion` | `ctrl+shift+x`     |
+
+### Other Settings
+
+The remaining settings define various behavior of the extension including which files should have this extension activate.
+
+| Setting                                     | Descripiton                                                              | Default        |
+| ------------------------------------------- | ------------------------------------------------------------------------ | -------------- |
+| `todotxtmode.sortCompletedTasksToEnd`       | Alwasy place completed tasks at end of list when sorting                 | `true`         |
+| `todotxtmode.sectionDelimiterPattern`       | Regex pattern to delimit todo tasks section from other parts of the file | `^--$`         |
+| `todotxtmode.commandFilePattern`            | Regex pattern of filenames to apply todotxt-mode commands                | `^.*\\.txt$`   |
+| `todotxtmode.excludeDecorationsFilePattern` | Regex pattern of filenames to exclude todotxt-mode decorations           | `^done\\.txt$` |
+
+
+## Release Notes
 
 ### 1.0.0
 
-Initial release of todotxt-mode
+Initial release of todotxt-mode with basic formatting and task management commands.
 
 ## Future Plans
+
+- Optional delimiters in Markdown files for task section
+- Move tasks from `inbox.txt` to to a new or existing Markdown project file
+- Move tasks from a Markdown project file to `todo.txt` file
+- Collect `@next` tasks from all project files into `todo.txt` file
+- More comprehensive style setting support

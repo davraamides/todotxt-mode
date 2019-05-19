@@ -1,15 +1,11 @@
+(A) color preferences only take effect after reload - see how to make them more dynamic +Bug
+(A) create note saving in ~/.vscode/<todo>/. folder rathr than same folder as current file +Bug
+(A) reformat tasks failed +Bug
+(C) learn about publishing here https://code.visualstudio.com/api/working-with-extensions/publishing-extension +Publish
+(C) get a personal access token +Publish
+(C) create a publisher +Publish
 move from inbox.txt to to a project file or create a Project.md +File
 iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?
-make test file from official format document +Test
 write test cases for decorators (how?) +Test
 write test cases for line commands +Test
 write test cases for file commands +Test
-(C) flush all changes to Git (maybe not necessary if I have the job)
-(C) learn about publishing here https://code.visualstudio.com/api/working-with-extensions/publishing-extension +Publish
-(C) get a personal access token +Publish
-(B) create a couple of screenshots of it +Publish
-(C) create a publisher +Publish
-(C) test locally +Publish
-(B) write a better README.md file +Publish
-(A) color preferences only take effect after reload - see how to make them more dynamic +Bug
-x 2019-05-14 (A) colors for priorities are off
