@@ -35,10 +35,10 @@ export function activate(context: vscode.ExtensionContext) {
 				let folder = path.normalize(path.dirname(vscode.window.activeTextEditor.document.fileName));
 				// vscode.window.showInformationMessage(`path: ${folder}`);
 				try {
-					let notepath:string = path.join(folder, fname);
-					let note = fs.readFileSync(notepath);
+					let notePath:string = path.join(folder, fname);
+					let note = fs.readFileSync(notePath);
 					// this link fails on windows - it probably needs the leading \ but then needs them converted to / or something
-					let message = new vscode.MarkdownString(`[Open note](file://${notepath})\n\n${note}` );
+					let message = new vscode.MarkdownString(`[Open note](file://${notePath})\n\n${note}` );
 					return new vscode.Hover(message);
 				} catch (err) {
 					vscode.window.showInformationMessage(`err: ${err}`);

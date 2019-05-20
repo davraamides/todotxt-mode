@@ -112,15 +112,9 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
             value: "[Task]-Note-" + date.replace(/-/g, '') + "-" + time.replace(/:/g, '') + ".md",
             valueSelection: [0, 6]
         }).then((noteFile:string) => {
-            let notePath = __dirname + path.sep + noteFile;
+            let folder = path.normalize(path.dirname(vscode.window.activeTextEditor.document.fileName));
+            let notePath: string = path.join(folder, noteFile);
             fs.writeFileSync(notePath, selectedText, 'utf8');
-            /* This loads it into a tab but not sure I want that to happen so I commented it out for now
-            vscode.workspace.openTextDocument(vscode.Uri.file(notePath)).then((document: vscode.TextDocument) => {
-                vscode.window.showTextDocument(document);
-            }, (error: any) => {
-                console.error(error);
-            });
-            */
             vscode.env.clipboard.writeText("note:" + noteFile);
             vscode.window.showInformationMessage("Paste the new note tag into the appropriate task");
         });

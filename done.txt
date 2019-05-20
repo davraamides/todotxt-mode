@@ -31,3 +31,5 @@ x 2019-05-19 make test file from official format document +Test
 x 2019-05-19 (C) learn about publishing here https://code.visualstudio.com/api/working-with-extensions/publishing-extension +Publish
 x 2019-05-19 (C) get a personal access token +Publish
 x 2019-05-19 (C) create a publisher +Publish
+x 2019-05-19 (A) creates note saving in ~/.vscode/<todo>/. folder rather than same folder as current file +Bug
+x 2019-05-19 (A) reformat tasks failed +Bug

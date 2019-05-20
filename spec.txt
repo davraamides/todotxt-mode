@@ -1,7 +1,7 @@
 (A) Call Mom +HasPriority
 Really gotta call Mom (A) @phone @someday +NoPriority
 (b) Get back to the boss +NoPriority
-(B)->Submit TPS report +NoPriority (NOTE THIS IS WRONG - FORMAT SHOULD NOT COLOR PRIORITY)
+(B)->Submit TPS report +NoPriority
 (A) Call Mom +Family +PeaceLoveAndHappiness @iphone @phone +HasContext +HasProject
 Email SoAndSo at soandso@example.com +NoContext
 Learn how to add 2+2 +NoProject

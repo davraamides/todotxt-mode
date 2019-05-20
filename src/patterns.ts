@@ -17,7 +17,7 @@ export namespace Patterns {
     // begin with non-word chars (+@). The tag pattern is prefixed with a word bounday (\b)
     // as tags begin with a word char.
     export const ContextRegex = /\B@\S+\b/g;
-    export const PriorityRegex = /^[(][A-Z][)]\B/g;
+    export const PriorityRegex = /^[(][A-Z][)]\s/g;
     export const ProjectRegex = /\B\+\S+\b/g;
     export const TagRegex = /\b\w+:[^\s]+\b/g;
 
