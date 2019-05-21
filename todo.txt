@@ -4,3 +4,8 @@ iterate through all projects for reviewing (and other files). Maybe something in
 write test cases for decorators (how?) +Test
 write test cases for line commands +Test
 write test cases for file commands +Test
+allow archive to work from any of the files +File
+Add option for a notes folder to put task notes in (and hover will look locally at that folder, too) +Note
+add support for project .md files with begin/end regex for region (or one complete one) and file pattern for project files +Decorate
+when I moved a task to waiting file it appended to the last line because the file wasn't terminated with an EOL @bug +TodoTxt
+
