@@ -4,6 +4,8 @@ import { Patterns } from './patterns';
 
 export namespace Helpers {
 
+    export const EOL = vscode.window.activeTextEditor.document.eol == vscode.EndOfLine.CRLF ? '\r\n' : '\n';
+
     // get currente date/time as [yyyy-mm-dd, hh:mm:ss] strings
     export function getDateTimeParts(dt: Date = undefined) {
         if (! dt) {
@@ -29,7 +31,7 @@ export namespace Helpers {
     }
 
     export function isCompleted(text: string): boolean {
-        return text.startsWith("x ");        
+        return text.startsWith(Settings.CompletedTaskPrefix);
     }
     export function isTodoTypeFile(filename: string): boolean {
         return filename.match(Settings.CommandFilePattern) != null;

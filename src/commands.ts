@@ -31,7 +31,7 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
             } else {
                 editor.edit(builder => {
                     let today = Helpers.getDateTimeParts()[0];
-                    builder.insert(new vscode.Position(i, 0), "x " + today + " ");
+                    builder.insert(new vscode.Position(i, 0), Settings.CompletedTaskPrefix + today + " ");
                 })
             }
         }

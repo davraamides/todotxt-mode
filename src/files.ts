@@ -21,12 +21,16 @@ export namespace Files {
         }
 
         if (window.activeTextEditor != undefined) {
-            let eol = vscode.window.activeTextEditor.document.eol == vscode.EndOfLine.CRLF ? '\r\n' : '\n';
+            ensureEndsWithEOL(destinationPathName);
+            let text = fs.readFileSync(destinationPathName);
+            if (! text.toString().endsWith(Helpers.EOL)) {
+                fs.appendFileSync(destinationPathName, Helpers.EOL);
+            }
             let lastLine = Helpers.getLastTodoLineInDocument();
             for (var i = 0; i <= lastLine; i++) {
                 let lineObject = window.activeTextEditor.document.lineAt(i);
-                if (currDoc.lineAt(i).text.startsWith("x ")) {
-                    fs.appendFileSync(destinationPathName, lineObject.text + eol);
+                if (Helpers.isCompleted(currDoc.lineAt(i).text)) {
+                    fs.appendFileSync(destinationPathName, lineObject.text + Helpers.EOL);
                     lineDeletes.push(i);
                 }
             }
@@ -41,11 +45,15 @@ export namespace Files {
         let destinationPathName = path.dirname(currDoc.fileName) + path.sep + destinationFileName;
 
         if (window.activeTextEditor != undefined) {
-            let eol = vscode.window.activeTextEditor.document.eol == vscode.EndOfLine.CRLF ? '\r\n' : '\n';
+            ensureEndsWithEOL(destinationFileName);
+            let text = fs.readFileSync(destinationPathName);
+            if (!text.toString().endsWith(Helpers.EOL)) {
+                fs.appendFileSync(destinationPathName, Helpers.EOL);
+            }
             let [startLine, endLine] = Helpers.getSelectedLineRange(false);
             for (var i = startLine; i <= endLine; i++) {
                 let lineObject = window.activeTextEditor.document.lineAt(i);
-                fs.appendFileSync(destinationPathName, lineObject.text + eol);
+                fs.appendFileSync(destinationPathName, lineObject.text + Helpers.EOL);
                 lineDeletes.push(i);
             }
             deleteLines(lineDeletes, editor, currDoc);
@@ -62,5 +70,12 @@ export namespace Files {
             }).then(() => { });
         }
         Helpers.triggerSelectionChange();
+    }
+
+    function ensureEndsWithEOL(fileName: string) {
+        let text = fs.readFileSync(fileName);
+        if (!text.toString().endsWith(Helpers.EOL)) {
+            fs.appendFileSync(fileName, Helpers.EOL);
+        }
     }
 };

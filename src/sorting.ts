@@ -28,7 +28,7 @@ export namespace Sorting {
         for (var i = startLine; i <= endLine; i++) {
             let text = doc.lineAt(i).text;
             let value = "";
-            if (Settings.SortCompletedTasksToEnd && text.startsWith("x ")) {
+            if (Settings.SortCompletedTasksToEnd && Helpers.isCompleted(text)) {
                 // force to very bottom, include date for sorting
                 value = "z " + text.substr(2, 10);
             } else {

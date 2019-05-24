@@ -183,24 +183,12 @@ export default class Decorator {
         }
     }
 
-    private parseRegex(regex: RegExp, decorationOptions: vscode.DecorationOptions[], line: vscode.TextLine) {
-        let result: RegExpExecArray;
-        while (result = regex.exec(line.text)) {
-            let begPos = new vscode.Position(line.range.start.line, line.firstNonWhitespaceCharacterIndex + result.index);
-            let endPos = new vscode.Position(line.range.start.line, line.firstNonWhitespaceCharacterIndex + result.index + result[0].length);
-            let decoration = { range: new Range(begPos, endPos) };
-            decorationOptions.push(decoration);
-        }
-    }
-
     private findMatchingPatterns(regex: RegExp, line: vscode.TextLine): object[] {
         let matches: object[] = [];
         let result: RegExpExecArray;
         while (result = regex.exec(line.text)) {
             let begPos = new vscode.Position(line.range.start.line, line.firstNonWhitespaceCharacterIndex + result.index);
             let endPos = new vscode.Position(line.range.start.line, line.firstNonWhitespaceCharacterIndex + result.index + result[0].length);
-            //let decoration = { range: new Range(begPos, endPos) };
-            //decorationOptions.push(decoration);
             matches.push({ range: new Range(begPos, endPos), value: result[0]})
         }
         return matches;
