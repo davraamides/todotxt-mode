@@ -1,9 +1,22 @@
 # Change Log
 
-All notable changes to the "todotxt-mode" extension will be documented in this file.
+## 1.4.3 - 2019-05-25
+- Support decoration in sections of Markdown files bracketed by `markdownDecorationBeginPattern` and `markdownDecorationEndPattern`
+- Renamed `commandFilePattern` setting to `todoFilePattern`
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+## 1.4.2 - 2019-05-22
+- Fix for [priority highlighting issue](https://github.com/davraamides/todotxt-mode/issues/1)
 
-## [Unreleased]
+## 1.4.0
+- Added support for note files and hover preview of the link (e.g. `note:<file.md>`)
+- Added styles for different priority levels
+- Added styles for past, present and future due dates
 
-- Initial release
+## 1.3.0
+- Added all settings and styles to package.json to support as User Preferences
+- Added commands to move tasks between files
+- Wrote README.md documentation file
+
+## 1.0.0
+- Initial release with basic decoration functionality
+

@@ -159,9 +159,9 @@ export default class Decorator {
         });
 
         if (editor != undefined) {
-            if (Helpers.isTodoTypeFile(fileName)) {
-                let lastLine = Helpers.getLastTodoLineInDocument();
-                for (var i = 0; i <= lastLine; i++) {
+            if (Helpers.isDecoratedFile(fileName)) {
+                let [begLine, endLine] = Helpers.getDecoratedLineRange(fileName);
+                for (var i = begLine; i <= endLine; i++) {
                     let line = editor.document.lineAt(i);
                     let seenMatches = new Set();
                     this.decorations.forEach(decoration => {

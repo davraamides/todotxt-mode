@@ -22,7 +22,8 @@
 		"task"
 	],
 	"activationEvents": [
-		"onLanguage:plaintext"
+		"onLanguage:plaintext",
+		"onLanguage:markdown"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -126,15 +127,30 @@
 					"description": "Regex pattern to delimit todo tasks section from other parts of the file",
 					"default": "^--$"
 				},
-				"todotxtmode.commandFilePattern": {
+				"todotxtmode.todoFilePattern": {
 					"type": "string",
 					"decription": "Regex pattern of filenames to apply todotxt-mode commands",
 					"default": "^.*\\.txt$"
+				},
+				"todotxtmode.markdownFilePattern": {
+					"type": "string",
+					"decription": "Regex pattern of Markdown filenames to apply todotxt-mode commands using markdownDecorationBeginPattern and markdownDecorationEndPattern",
+					"default": "^.*\\.(md|markdown)$"
 				},
 				"todotxtmode.excludeDecorationsFilePattern": {
 					"type": "string",
 					"description": "Regex pattern of filenames to exclude todotxt-mode decorations",
 					"default": "^done\\.txt$"
+				},
+				"todotxtmode.markdownDecorationBeginPattern": {
+					"type": "string",
+					"description": "Regex pattern of rane in Markdown files to decorate",
+					"default": "^#+\\s+Tasks\\s*$"
+				},
+				"todotxtmode.markdownDecorationEndPattern": {
+					"type": "string",
+					"description": "Regex pattern of rane in Markdown files to decorate",
+					"default": "^$"
 				},
 				"todotxtmode.contextStyle.light.color": {
 					"type": "string",

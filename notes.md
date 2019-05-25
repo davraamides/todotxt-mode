@@ -87,3 +87,12 @@ https://code.visualstudio.com/api/references/commands#links
 
 A bit complex but GitLens does LOTS of interesting things as an extension so studying the code will help. Heavy use of Hovers and MarkdownString commands.
 https://github.com/eamodio/vscode-gitlens
+
+## Tasks
+one @here 
+two due:now 
+three +Project
+(A) four
+five
+
+not here +Project

@@ -25,7 +25,8 @@ export function activate(context: vscode.ExtensionContext) {
 		decorator.decorateDocument();
 	});
 
-	vscode.languages.registerHoverProvider('plaintext', {
+	// TODO can I do this for all commands and then make the language dynamic so I can include Markdown only if it's in the settings?
+	vscode.languages.registerHoverProvider({scheme: 'file', language: 'plaintext'}, {
 		provideHover(document, position, token) {
 			const word = document.getText(document.getWordRangeAtPosition(position, Patterns.TagRegex));
             // vscode.window.showInformationMessage(`word: ${word}`);

@@ -20,9 +20,12 @@ export namespace Settings {
     
     export const Message:string = getSetting<string>("message");
     export const SortCompletedTasksToEnd:boolean = getSetting<boolean>("sortCompletedTasksToEnd");
-    export const CommandFilePattern:string = getSetting<string>("commandFilePattern");
+    export const TodoFilePattern:string = getSetting<string>("todoFilePattern");
     export const ExcludeDecorationsFilePattern:string = getSetting<string>("excludeDecorationsFilePattern");
     export const SectionDelimiterPattern:string = getSetting<string>("sectionDelimiterPattern");
+    export const MarkdownFilePattern:string = getSetting<string>("markdownFilePattern");
+    export const MarkdownDecorationBeginPattern:string = getSetting<string>("markdownDecorationBeginPattern");
+    export const MarkdownDecorationEndPattern:string = getSetting<string>("markdownDecorationEndPattern");
 
     export const ContextStyle = {
         light: { color: getSetting<string>("contextStyle.light.color") },

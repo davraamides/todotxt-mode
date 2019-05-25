@@ -25,3 +25,6 @@ a 3
 next
 more
 
+I think packag.json activationEvents onLanguage defines what files will activate the extension
+while DocumentSelector (in registerHoverProvider for example) defines which buffers the hover will be applied.
+not sure if DcoumentSelector has an analogy in registerCommand?

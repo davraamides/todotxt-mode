@@ -33,8 +33,14 @@ export namespace Helpers {
     export function isCompleted(text: string): boolean {
         return text.startsWith(Settings.CompletedTaskPrefix);
     }
-    export function isTodoTypeFile(filename: string): boolean {
-        return filename.match(Settings.CommandFilePattern) != null;
+    export function isDecoratedFile(filename: string): boolean {
+        if (filename.match(Settings.TodoFilePattern) != null) {
+            return true;
+        }
+        if (filename.match(Settings.MarkdownFilePattern) != null && Settings.MarkdownDecorationBeginPattern) {
+                return true
+        }
+        return false;
     }
     export function isNoteTag(text: string): boolean {
         if (text.match(Patterns.TagRegex)) {
@@ -57,6 +63,45 @@ export namespace Helpers {
             }
         }
         return document.lineCount - 1;
+    }
+    export function getDecoratedLineRange(filename: string): number[] {
+        // todo files go from the beginning to the end or the optional section delimiter pattern
+        if (filename.match(Settings.TodoFilePattern)) {
+            return [0, getLastTodoLineInDocument()];
+        }
+        // markdown files go from the beginning to the end of the range patterns, if found
+        if (filename.match(Settings.MarkdownFilePattern)) {
+            let editor = vscode.window.activeTextEditor;
+            let reBeg = RegExp(Settings.MarkdownDecorationBeginPattern);
+            let reEnd = RegExp(Settings.MarkdownDecorationEndPattern);
+            let begLine = -1, endLine = -1;
+
+            let i = 0;
+            // find the line of the begin pattern
+            while (i < editor.document.lineCount) {
+                if (reBeg.test(editor.document.lineAt(i).text)) {
+                    begLine = i + 1;
+                    break;
+                }
+                i++;
+            }
+            // continue searching down to find the line of the end pattern
+            while (i < editor.document.lineCount) {
+                if (reEnd.test(editor.document.lineAt(i).text)) {
+                    endLine = i - 1;
+                    break;
+                }
+                i++;
+            }
+            if (begLine != -1) {
+                if (endLine == -1) {
+                    // go to the end of the file if the end pattern was never found
+                    endLine = editor.document.lineCount - 1;
+                }
+                return [begLine, endLine];
+            }
+        }
+        return [0, -1]; // invalid range so no lines are decorated
     }
 
     // trigger redecoration of the document by forcing the selection to change
