@@ -22,10 +22,6 @@ export namespace Files {
 
         if (window.activeTextEditor != undefined) {
             ensureEndsWithEOL(destinationPathName);
-            let text = fs.readFileSync(destinationPathName);
-            if (! text.toString().endsWith(Helpers.EOL())) {
-                fs.appendFileSync(destinationPathName, Helpers.EOL());
-            }
             let lastLine = Helpers.getLastTodoLineInDocument();
             for (var i = 0; i <= lastLine; i++) {
                 let lineObject = window.activeTextEditor.document.lineAt(i);
