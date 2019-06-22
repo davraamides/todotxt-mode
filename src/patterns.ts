@@ -22,7 +22,7 @@ export namespace Patterns {
     export const TagRegex = /\b\w+:[^\s]+\b/g;
 
     export const TagValueRegex = /\b(\w+):(\w+)\b/g;
-    export const TagDateRegex = /\b(\w+):(\d{4}-\d{2}-\d{2})\b/g;
+    export const TagDateRegexString = "\\b(#TAG#):(\\d{4}-\\d{2}-\\d{2})\\b";
     export const CompletedRegex = /^x .*$/g;
 
     // put them in a map so sorting by any field is consistent

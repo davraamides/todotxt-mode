@@ -1,7 +1,6 @@
 (B) allow archive to work from any of the files +File
 (B) Add option for a notes folder to put task notes in (and hover will look locally at that folder, too) +Note
-(B) add support for project .md files with begin/end regex for region (or one complete one) and file pattern for project files +Decorate
-x 2019-05-22 (B) when I moved a task to waiting file it appended to the last line because the file wasn't terminated with an EOL @bug +TodoTxt
+(B) add support for project .md files wiath begin/end regex for region (or one complete one) and file pattern for project files +Decorate
 color preferences only take effect after reload - see how to make them more dynamic +Bug
 move from inbox.txt to to a project file or create a Project.md +File
 iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?

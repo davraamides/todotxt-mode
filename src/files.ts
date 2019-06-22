@@ -15,11 +15,6 @@ export namespace Files {
         let destinationPathName = path.dirname(currDoc.fileName) + path.sep + Settings.DoneFilename;
         let lineDeletes = [];
 
-        if (path.basename(currDoc.fileName) != Settings.TodoFilename) {
-            vscode.window.showInformationMessage("Archive only available for the " + Settings.TodoFilename + " file");
-            return;
-        }
-
         if (window.activeTextEditor != undefined) {
             ensureEndsWithEOL(destinationPathName);
             let lastLine = Helpers.getLastTodoLineInDocument();
