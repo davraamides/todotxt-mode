@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.4.5 - 2019-06-22
+- Fixed date decoration bug where only worked if tag was `due`
+- Allow archive tasks from any todo text file, not just the main `todo.txt` one
+
+## 1.4.4 - 2019-06-03
+- Remove redundant code
+- Handle no file in `ensureEndsWithEOL`
+
 ## 1.4.3 - 2019-05-25
 - Support decoration in sections of Markdown files bracketed by `markdownDecorationBeginPattern` and `markdownDecorationEndPattern`
 - Renamed `commandFilePattern` setting to `todoFilePattern`
