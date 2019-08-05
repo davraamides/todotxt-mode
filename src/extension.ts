@@ -8,6 +8,7 @@ import { Helpers } from './helpers';
 //import { fstat } from 'fs';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as os from 'os';
 
 // deactivate
 //   clear? all context.subscriptions (commands)
@@ -39,7 +40,11 @@ export function activate(context: vscode.ExtensionContext) {
 					let notePath:string = path.join(folder, fname);
 					let note = fs.readFileSync(notePath);
 					// this link fails on windows - it probably needs the leading \ but then needs them converted to / or something
-					let message = new vscode.MarkdownString(`[Open note](file://${notePath})\n\n${note}` );
+					let prefix = 'file://';
+					if (os.platform() == 'win32') {
+						prefix = 'file:///';
+					}
+					let message = new vscode.MarkdownString(`[Open note](${prefix}${notePath})\n\n${note}` );
 					return new vscode.Hover(message);
 				} catch (err) {
 					vscode.window.showInformationMessage(`err: ${err}`);
