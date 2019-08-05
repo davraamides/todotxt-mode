@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.4.6 - 2019-08-05
+- Fixed "Open Note" link in `note:xxx` tag to work properly on Windows
+
 ## 1.4.5 - 2019-06-22
 - Fixed date decoration bug where only worked if tag was `due`
 - Allow archive tasks from any todo text file, not just the main `todo.txt` one
