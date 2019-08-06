@@ -44,7 +44,8 @@ export function activate(context: vscode.ExtensionContext) {
 					if (os.platform() == 'win32') {
 						prefix = 'file:///';
 					}
-					let message = new vscode.MarkdownString(`[Open note](${prefix}${notePath})\n\n${note}` );
+					let encPath = encodeURI(`${prefix}${notePath}`);
+					let message = new vscode.MarkdownString(`[Open note](${encPath})\n\n${note}` );
 					return new vscode.Hover(message);
 				} catch (err) {
 					vscode.window.showInformationMessage(`err: ${err}`);

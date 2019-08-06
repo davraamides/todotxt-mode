@@ -1,7 +1,10 @@
 # Change Log
 
+## 1.4.7 - 2019-08-06
+- Fix for ["Open note" link not properly rendered](https://github.com/davraamides/todotxt-mode/issues/2). Thanks to @xgid
+
 ## 1.4.6 - 2019-08-05
-- Fixed "Open Note" link in `note:xxx` tag to work properly on Windows
+- Fix for [Unable to open 'file': File is a directory](https://github.com/davraamides/todotxt-mode/issues/3). Thanks to @jdckr
 
 ## 1.4.5 - 2019-06-22
 - Fixed date decoration bug where only worked if tag was `due`
@@ -16,7 +19,7 @@
 - Renamed `commandFilePattern` setting to `todoFilePattern`
 
 ## 1.4.2 - 2019-05-22
-- Fix for [priority highlighting issue](https://github.com/davraamides/todotxt-mode/issues/1)
+- Fix for [priority highlighting issue](https://github.com/davraamides/todotxt-mode/issues/1). Thanks to @jgoulet1994
 
 ## 1.4.0
 - Added support for note files and hover preview of the link (e.g. `note:<file.md>`)

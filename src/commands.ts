@@ -114,9 +114,13 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
         }).then((noteFile:string) => {
             let folder = path.normalize(path.dirname(vscode.window.activeTextEditor.document.fileName));
             let notePath: string = path.join(folder, noteFile);
-            fs.writeFileSync(notePath, selectedText, 'utf8');
-            vscode.env.clipboard.writeText("note:" + noteFile);
-            vscode.window.showInformationMessage("Paste the new note tag into the appropriate task");
+            try {
+                fs.writeFileSync(notePath, selectedText, 'utf8');
+                vscode.env.clipboard.writeText("note:" + noteFile);
+                vscode.window.showInformationMessage("Paste the new note tag into the appropriate task");
+            } catch(e) {
+                vscode.window.showErrorMessage(`Failed to create note file: ${notePath}`);
+            }
         });
     });
     // TODO finish implementation
