@@ -7,6 +7,7 @@ iterate through all projects for reviewing (and other files). Maybe something in
 write test cases for decorators (how?) +Test
 write test cases for line commands +Test
 write test cases for file commands +Test
+replace use of Node.js 'fs' namespace with new extension vscode.workspace.fs API: https://github.com/microsoft/vscode-extension-samples/tree/master/fsconsumer-sample
 --
 for project .md file section decoration need to do two things
 - apply this to markdown as well as plaintext (in package.json)
