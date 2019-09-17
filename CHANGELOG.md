@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.4.8 - 2019-09-17
+- Added two new commands `incrementPriority` and `decrementPriority` bond to `Ctrl+Shift+A` and `Ctrl+Shift+Z`, by default, to increment or decrement the priority on a task. If the task has no priority, it is initially set to `(A)`.
+
 ## 1.4.7 - 2019-08-06
 - Fix for ["Open note" link not properly rendered](https://github.com/davraamides/todotxt-mode/issues/2). Thanks to @xgid
 

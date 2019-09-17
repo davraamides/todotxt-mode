@@ -5,8 +5,6 @@ import * as path from 'path';
 import { Helpers } from './helpers';
 import { Patterns } from './patterns';
 import { Settings } from './settings';
-import { finished } from 'stream';
-import { createSecurePair } from 'tls';
 
 interface IDecoration {
     regex: RegExp;

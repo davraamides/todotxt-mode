@@ -41,7 +41,7 @@ export namespace Patterns {
         let newLines = [];
         for (var i = startLine; i <= endLine; i++) {
             let oldText = vscode.window.activeTextEditor.document.lineAt(i).text;
-            // BUG fails for completed task with priority as it resorts and puts priorit in fron of "x yyyy-mm-dd"
+            // BUG fails for completed task with priority as it resorts and puts priority in fron of "x yyyy-mm-dd"
             let taskObj = parseTask(oldText);
             let newText = spellTask(taskObj);
             newLines.push(newText);

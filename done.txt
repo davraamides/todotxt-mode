@@ -36,3 +36,5 @@ x 2019-05-19 (A) reformat tasks failed +Bug
 x 2019-06-22 (A) allow archiving from any todo.txt file and even project files (pain to copy back to todo.txt just to archive) +Todo
 x 2019-06-22 (A) tag highlighting didn't work for multiple tags like when they were dates dt:2019-06-14 dt:2019-06-14 +Todo
 x 2019-05-22 (B) when I moved a task to waiting file it appended to the last line because the file wasn't terminated with an EOL @bug +TodoTxt
+x 2019-09-16 (B) allow archive to work from any of the files +File
+x 2019-09-16 (B) add support for project .md files with begin/end regex for region (or one complete one) and file pattern for project files +Decorate

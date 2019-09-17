@@ -81,6 +81,14 @@
 				"title": "todotxt-mode: Create note for task"
 			},
 			{
+				"command": "extension.incrementPriority",
+				"title": "todotxt-mode: Increment task priority"
+			},
+			{
+				"command": "extension.decrementPriority",
+				"title": "todotxt-mode: Decrement task priority"
+			},
+			{
 				"command": "extension.removePriorities",
 				"title": "todotxt-mode: Remove task priorities"
 			}
@@ -90,6 +98,18 @@
 				"command": "extension.toggleCompletion",
 				"key": "ctrl+shift+x",
 				"mac": "ctrl+shift+x",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "extension.incrementPriority",
+				"key": "ctrl+shift+a",
+				"mac": "ctrl+shift+a",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "extension.decrementPriority",
+				"key": "ctrl+shift+z",
+				"mac": "ctrl+shift+z",
 				"when": "editorTextFocus"
 			}
 		],
