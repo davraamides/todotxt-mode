@@ -1,29 +1,8 @@
-(B) allow archive to work from any of the files +File
-(B) Add option for a notes folder to put task notes in (and hover will look locally at that folder, too) +Note
-(B) add support for project .md files wiath begin/end regex for region (or one complete one) and file pattern for project files +Decorate
+Add option for a notes folder to put task notes in (and hover will look locally at that folder, too) +Note
 color preferences only take effect after reload - see how to make them more dynamic +Bug
 move from inbox.txt to to a project file or create a Project.md +File
 iterate through all projects for reviewing (and other files). Maybe something in project files where I use MD meta data at the top to show last reviewed so the review process can just show me what needs to be reviewed?
 write test cases for decorators (how?) +Test
 write test cases for line commands +Test
 write test cases for file commands +Test
---
-for project .md file section decoration need to do two things
-- apply this to markdown as well as plaintext (in package.json)
-- limit to a range in Markdown file (in decorator)
-- but ideally I don't want to have to change both a package.json setting and code. i'd prefer to just have
-  a setting that was markdownDecorationRangeRegex = 
-  var re = /^#+\s+Tasks\s*\n(.*?)\n\n/sm;
-  but how to manage language programatically?
-
-## Tasks
-a 1
-a 2
-a 3
-
-next
-more
-
-I think packag.json activationEvents onLanguage defines what files will activate the extension
-while DocumentSelector (in registerHoverProvider for example) defines which buffers the hover will be applied.
-not sure if DcoumentSelector has an analogy in registerCommand?
+replace use of Node.js 'fs' namespace with new extension vscode.workspace.fs API: https://github.com/microsoft/vscode-extension-samples/tree/master/fsconsumer-sample

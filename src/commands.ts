@@ -4,38 +4,18 @@ import * as path from 'path';
 import { Files } from './files';
 import { Helpers } from './helpers';
 import { Patterns } from './patterns';
+import { Priority } from './priority';
 import { Settings } from './settings';
 import { Sorting } from './sorting';
 import * as extension from './extension';
 import * as fs from 'fs';
+import { Completion } from './completion';
+import { Note } from './note';
 
 export function ActivateCommands(context: vscode.ExtensionContext) {
 
-    // TODO move the implementation to commands.ts or somewhere else
     let toggleCompletion = vscode.commands.registerCommand('extension.toggleCompletion', () => {
-        const editor = vscode.window.activeTextEditor;
-        let [startLine, endLine] = Helpers.getSelectedLineRange(false);
-        for (var i = startLine; i <= endLine; i++) {
-            let text = editor.document.lineAt(i).text;
-            if (Helpers.isCompleted(text)) {
-                editor.edit(builder => {
-                    builder.delete(
-                        new vscode.Range(new vscode.Position(i, 0),
-                        new vscode.Position(i, Settings.CompletedTagLength))
-                    );
-                    editor.selection = new vscode.Selection(
-                        new vscode.Position(i, Settings.CompletedTagLength + 1), 
-                        new vscode.Position(i, Settings.CompletedTagLength + 1)
-                    );
-                })
-            } else {
-                editor.edit(builder => {
-                    let today = Helpers.getDateTimeParts()[0];
-                    builder.insert(new vscode.Position(i, 0), Settings.CompletedTaskPrefix + today + " ");
-                })
-            }
-        }
-        Helpers.triggerSelectionChange();
+        Completion.toggleCompletion();
     });
     let sortByContext = vscode.commands.registerCommand('extension.sortByContext', () => {
         Sorting.sortLinesByField("context");
@@ -67,61 +47,17 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     let moveTasksToSomeday = vscode.commands.registerCommand('extension.moveTasksToSomeday', () => {
         Files.moveTasks(Settings.SomedayFilename);
     });
-    // TODO move the implementation to commands.ts or somewhere else
-    let removePriorities = vscode.commands.registerCommand('extension.removePriorities', () => {
-        const editor = vscode.window.activeTextEditor;
-        let [startLine, endLine] = Helpers.getSelectedLineRange(true);
-        let linesWithPriority:number[] = [];
-        for (var i = startLine; i <= endLine; i++) {
-            let text = editor.document.lineAt(i).text;
-            if (! Helpers.isCompleted(text)) {
-                let taskObj = Patterns.parseTask(text);
-                if (taskObj[Patterns.PriorityField] != undefined) {
-                    linesWithPriority.push(i);
-                }
-            }
-        }
-        editor.edit(builder => {
-            linesWithPriority.forEach(i => {
-                builder.delete(
-                    new vscode.Range(new vscode.Position(i, 0),
-                    new vscode.Position(i, Settings.PriorityTagLength))
-                );
-            })
-        }).then(() => { });
-        Helpers.triggerSelectionChange();
+    let incrementPriority = vscode.commands.registerCommand('extension.incrementPriority', () => {
+        Priority.changePriority(true);
     });
-
-    // TODO move to commands.ts
+    let decrementPriority = vscode.commands.registerCommand('extension.decrementPriority', () => {
+        Priority.changePriority(false);
+    });
+    let removePriorities = vscode.commands.registerCommand('extension.removePriorities', () => {
+        Priority.removePriorities();
+    });
     let createTaskNote = vscode.commands.registerCommand('extension.createTaskNote', () => {
-        const activeEditor = vscode.window.activeTextEditor;
-        const selection = activeEditor.selection;
-        if (selection.isEmpty) {
-            vscode.window.showInformationMessage("No text selected for note");
-            return;
-        }
-        const selectedText = activeEditor.document.getText(selection);
-        // move this so only happens if the save below succeeds?
-        activeEditor.edit(builder => {
-            builder.delete(selection);
-        });
- 
-        let [date, time] = Helpers.getDateTimeParts();
-        vscode.window.showInputBox({
-            prompt: 'Note file:',
-            value: "[Task]-Note-" + date.replace(/-/g, '') + "-" + time.replace(/:/g, '') + ".md",
-            valueSelection: [0, 6]
-        }).then((noteFile:string) => {
-            let folder = path.normalize(path.dirname(vscode.window.activeTextEditor.document.fileName));
-            let notePath: string = path.join(folder, noteFile);
-            try {
-                fs.writeFileSync(notePath, selectedText, 'utf8');
-                vscode.env.clipboard.writeText("note:" + noteFile);
-                vscode.window.showInformationMessage("Paste the new note tag into the appropriate task");
-            } catch(e) {
-                vscode.window.showErrorMessage(`Failed to create note file: ${notePath}`);
-            }
-        });
+        Note.createTaskNote();
     });
     // TODO finish implementation
     let moveTasksToProject = vscode.commands.registerCommand('extension.moveTasksToProject', () => {
@@ -178,6 +114,8 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     context.subscriptions.push(moveTasksToWaiting);
     context.subscriptions.push(moveTasksToSomeday);
     context.subscriptions.push(moveTasksToProject);
+    context.subscriptions.push(incrementPriority);
+    context.subscriptions.push(decrementPriority);
     context.subscriptions.push(removePriorities);
     context.subscriptions.push(createTaskNote);
 }

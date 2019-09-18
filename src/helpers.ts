@@ -115,4 +115,25 @@ export namespace Helpers {
         editor.selection = new vscode.Selection(new vscode.Position(curLine, curLineLength), new vscode.Position(curLine, curLineLength));
         editor.selection = new vscode.Selection(new vscode.Position(curLine, 0), new vscode.Position(curLine, 0));
     }
+
+    export function nextPriority(text: string, increment: boolean): [string, string] {
+        const editor = vscode.window.activeTextEditor;
+        let oldPriority = '';
+        let newPriority = '(A)';
+        let priorityChar = '';
+        let match = text.match(Patterns.PriorityRegex);
+        if (match) {
+            oldPriority = match[0];
+            priorityChar = oldPriority[1];
+            if (priorityChar == 'A' && increment) {
+                priorityChar = 'Z';
+            } else if (priorityChar == 'Z' && ! increment) {
+                priorityChar = 'A';
+            } else {
+                priorityChar = String.fromCharCode(priorityChar.charCodeAt(0) + (increment ? -1 : 1));
+            }
+            newPriority = '(' + priorityChar + ')';
+        }
+        return [oldPriority, newPriority];
+    }
 }
