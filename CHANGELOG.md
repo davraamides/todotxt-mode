@@ -1,6 +1,6 @@
 # Change Log
 
-## 1.4.8 - 2019-09-17
+## 1.4.9 - 2019-09-18
 - Added two new commands `incrementPriority` and `decrementPriority` bond to `Ctrl+Shift+A` and `Ctrl+Shift+Z`, by default, to increment or decrement the priority on a task. If the task has no priority, it is initially set to `(A)`.
 
 ## 1.4.7 - 2019-08-06
