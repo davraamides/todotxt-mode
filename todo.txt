@@ -6,3 +6,5 @@ write test cases for decorators (how?) +Test
 write test cases for line commands +Test
 write test cases for file commands +Test
 replace use of Node.js 'fs' namespace with new extension vscode.workspace.fs API: https://github.com/microsoft/vscode-extension-samples/tree/master/fsconsumer-sample
+learn how to bundle extension: https://aka.ms/vscode-bundle-extension
+learn how to exclude unnecessary files: https://aka.ms/vscode-vscodeignore
