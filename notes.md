@@ -49,6 +49,16 @@ You can install the extension with
 I had to restart VS code to see the effect. You can uninstall it from the UI or
 using `code --uninstall-extension`.
 
+## Publishing Updates
+
+You can publish new versions with `vsce publish` and auto-increment the version with one of the additional args: `major`, `minor` or `patch` to increment the three pats of the releasve version x.y.z, respectively.
+
+I typically use
+
+    vsce publish patch
+
+to increment the patch portion (i.e. 1.2.3 -> 1.2.4). Make sure you udpate everything including `CHANGELOG.md` and check everything in and push first.
+
 ## Handling Waiting tasks
 Need to decide if waiting is a tag or presence in a file. Choices:
 
@@ -62,7 +72,7 @@ I think I'm going to start with a `waiting.txt` file because I want to keep `tod
 I should also think about adding a context for the person I'm waiting on but for now can just add that to the task before running the moveToWaiting command.
 
 ## Handling Deferred tasks
-Similar to *waiting* tasks, I could use presence in a file (`incubate.txt` or `deferred.tx`), a context, a tag or a priority for deferred tasks. But these are not the same as *waiting* tasks because it's a decision I'm making to punt them for a while. It's more about priority but without the tediousness of modifying the priority. These are more like things you plan to do in the next few weeks, just not this week.
+Similar to *waiting* tasks, I could use presence in a file (`incubate.txt` or `deferred.txt`), a context, a tag or a priority for deferred tasks. But these are not the same as *waiting* tasks because it's a decision I'm making to punt them for a while. It's more about priority but without the tediousness of modifying the priority. These are more like things you plan to do in the next few weeks, just not this week.
 
 The one potential difference here is that there may be a date that is relevant to them, such as an upcoming presentation or meeting. So something like "prep for July R&C meeting" might be something I want to defer, but want to make sure I have my sights on it at least a week before the meeting. So then I may want to put a `due:<date>` (or `remind:<date>`?) to get my attention with time to complete it. But that isn't required for all deferred tasks. Maybe I will have a command where when I defer something it will prompt for how many days and then I can just enter something like "2d" or "1w" and it will add a `remind:<date>` (or `defer:<date>`) to that date so my scan process will note those.
 

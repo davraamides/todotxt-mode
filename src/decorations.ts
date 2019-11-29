@@ -168,9 +168,9 @@ export default class Decorator {
                             if (! seenMatches.has(match['value'])) {
                                 decoration.addMatch(match);
                                 seenMatches.add(match['value']);
-                                console.log("added match for value=" + match["value"]);
+                                //console.log("added match for value=" + match["value"]);
                             } else {
-                                console.log("skipping seen match for value=" + match["value"]);
+                                //console.log("skipping seen match for value=" + match["value"]);
                             }
                         }
                     })
@@ -187,12 +187,12 @@ export default class Decorator {
     private findMatchingPatterns(regex: RegExp, line: vscode.TextLine): object[] {
         let matches: object[] = [];
         let result: RegExpExecArray;
-        console.log("finding matches for " + regex);
+        //console.log("finding matches for " + regex);
         while (result = regex.exec(line.text)) {
             let begPos = new vscode.Position(line.range.start.line, line.firstNonWhitespaceCharacterIndex + result.index);
             let endPos = new vscode.Position(line.range.start.line, line.firstNonWhitespaceCharacterIndex + result.index + result[0].length);
             matches.push({ range: new Range(begPos, endPos), value: result[0]})
-            console.log("pushed match at begPos=" + begPos + " endPos=" + endPos + " value=" + result[0]);
+            //console.log("pushed match at begPos=" + begPos + " endPos=" + endPos + " value=" + result[0]);
         }
         return matches;
     }

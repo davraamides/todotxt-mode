@@ -19,9 +19,9 @@ export namespace Patterns {
     export const ContextRegex = /\B@\S+\b/g;
     export const PriorityRegex = /^[(][A-Z][)]\B/g;
     export const ProjectRegex = /\B\+\S+\b/g;
-    export const TagRegex = /\b\w+:[^\s]+\b/g;
+    export const TagRegex = /\b[^\s:]+:[^\s]+\b/g;
 
-    export const TagValueRegex = /\b(\w+):(\w+)\b/g;
+    export const TagValueRegex = /\b([^\s:]+):(\S+)\b/g;
     export const TagDateRegexString = "\\b(#TAG#):(\\d{4}-\\d{2}-\\d{2})\\b";
     export const CompletedRegex = /^x .*$/g;
 

@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.4.10 - 2019-11-29
+- Fix for [Task completion format is wrong when used with priority](https://github.com/davraamides/todotxt-mode/issues/6).
+- Fix for [Sort by due date doesn't sort](https://github.com/davraamides/todotxt-mode/issues/10)
+
 ## 1.4.9 - 2019-09-18
 - Added two new commands `incrementPriority` and `decrementPriority` bond to `Ctrl+Shift+A` and `Ctrl+Shift+Z`, by default, to increment or decrement the priority on a task. If the task has no priority, it is initially set to `(A)`.
 
