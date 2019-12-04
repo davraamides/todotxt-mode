@@ -71,6 +71,10 @@ The extension also includes a few enhancements that, while not part of the todo.
 
 ### Styles
 
+> NOTE: Github Markdown will not render the colors but if you preview this file in VS Code, you will see the actual colors in the Default column. An image of this in VS Code is included below.
+
+![Styles](https://raw.githubusercontent.com/davraamides/todotxt-mode/master/images/styles.png)
+
 | Setting                                       | Description                          | Default                                                         |
 | --------------------------------------------- | ------------------------------------ | --------------------------------------------------------------- |
 | `todotxtmode.contextStyle.light.color`        | Color of context field in light mode | <span style="color:rgb(40, 161, 86);">rgb(40, 161, 86)</span>   |
