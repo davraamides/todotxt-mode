@@ -21,7 +21,7 @@ The extension uses decorators to highlight tags of task items.
 Commands that help manage the task list include
 - Mark tasks as complete
 - Sort tasks by project, priority, context, due date or metadata tag
-- Stable sort so task without the sort key are not effected
+- Stable sort so tasks without the sort key are not affected
 - Reformat task tags to a consistent sequence
 
 ![Manage Tsks](https://raw.githubusercontent.com/davraamides/todotxt-mode/master/images/sort-complete.gif)
@@ -31,7 +31,7 @@ There are a number of commands in the extension to support a GTD-like workflow.
 
 - Move tasks from any file to the main *Todo* file (used when processing the *Inbox* file)
 - Move tasks to the *Waiting* file
-- Move tasks to the *Deferred* file
+- Move tasks to the *Someday* file
 - Move completed tasks to the *Archive* file
 
 ![Manage Tsks](https://raw.githubusercontent.com/davraamides/todotxt-mode/master/images/move-tasks.gif)
@@ -64,15 +64,15 @@ The extension also includes a few enhancements that, while not part of the todo.
 | `todotxt-mode.archiveTasks`       | Move completed tasks to the *Done* file                           |
 | `todotxt-mode.moveTasksToTodo`    | Move selected tasks to the *Todo* file                            |
 | `todotxt-mode.moveTasksToWaiting` | Move selected tasks to the *Waiting* file                         |
-| `todotxt-mode.moveTasksToSomeday` | Move selected tasks to the *Deferred* file                        |
+| `todotxt-mode.moveTasksToSomeday` | Move selected tasks to the *Someday* file                         |
 | `todotxt-mode.moveTasksToProject` | Move selected tasks to a Markdown project file                    |
 | `todotxt-mode.createTaskNote`     | Create a Markdown note file from the selected note text           |
 | `todotxt-mode.removePriorities`   | Remove all priorities from tasks                                  |
 
 ### Styles
 
-| Setting                                     | Description                          | Default                                                         |
-| ------------------------------------------- | ------------------------------------ | --------------------------------------------------------------- |
+| Setting                                       | Description                          | Default                                                         |
+| --------------------------------------------- | ------------------------------------ | --------------------------------------------------------------- |
 | `todotxtmode.contextStyle.light.color`        | Color of context field in light mode | <span style="color:rgb(40, 161, 86);">rgb(40, 161, 86)</span>   |
 | `todotxtmode.contextStyle.dark.color`         | Color of context field in dark mode  | <span style="color:rgb(40, 161, 86);">rgb(40, 161, 86)</span>   |
 | `todotxtmode.highPriorityStyle.light.color`   | Color of context field in light mode | <span style="color:rgb(240, 226, 25);">rgb(240, 226, 25)</span> |
@@ -91,8 +91,8 @@ The extension also includes a few enhancements that, while not part of the todo.
 | `todotxtmode.presentDateStyle.dark.color`     | Color of context field in dark mode  | <span style="color:rgb(219, 216, 26);">rgb(219, 216, 26)</span> |
 | `todotxtmode.futureDateStyle.light.color`     | Color of context field in light mode | <span style="color:rgb(118, 194, 31);">rgb(118, 194, 31)</span> |
 | `todotxtmode.futureDateStyle.dark.color`      | Color of context field in dark mode  | <span style="color:rgb(118, 194, 31);">rgb(118, 194, 31)</span> |
-| `todotxtmode.completedStyle.textDecoration`   | Text decoration for completed tasks  | <span style="text-decoration:line-through;">line-through</span>                                                    |
-| `todotxtmode.completedStyle.opacity`          | Opacity for completed tasks          | <span style="opacity:0.5;">0.5</span>                                                             |
+| `todotxtmode.completedStyle.textDecoration`   | Text decoration for completed tasks  | <span style="text-decoration:line-through;">line-through</span> |
+| `todotxtmode.completedStyle.opacity`          | Opacity for completed tasks          | <span style="opacity:0.5;">0.5</span>                           |
 
 ### Files
 
@@ -103,7 +103,7 @@ There are a few special files identifed for certain commands
 | `todotxtmode.todoFilename`    | Name of main todo text file              | `todo.txt`    |
 | `todotxtmode.doneFilename`    | Name of archive file for completed tasks | `done.txt`    |
 | `todotxtmode.somedayFilename` | Name of file for someday/maybe tasks     | `someday.txt` |
-| `todotxtmode.waitingFilename` | Name of file for deferred/waiting tasks  | `waiting.txt` |
+| `todotxtmode.waitingFilename` | Name of file for waiting tasks           | `waiting.txt` |
 
 ### Keybindings
 
@@ -117,15 +117,15 @@ The extension ships with only one keybinding assigned but any of the commands ca
 
 The remaining settings define various behavior of the extension including which files should have this extension activate.
 
-| Setting                                      | Descripiton                                                                                                                                  | Default                |
-| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `todotxtmode.sortCompletedTasksToEnd`        | Alwasy place completed tasks at end of list when sorting                                                                                     | `true`                 |
-| `todotxtmode.sectionDelimiterPattern`        | Regex pattern to delimit todo tasks section from other parts of the file                                                                     | `^--$`                 |
-| `todotxtmode.todoFilePattern`                | Regex pattern of filenames to apply todotxt-mode commands                                                                                    | `^.*\\.txt$`           |
-| `todotxtmode.excludeDecorationsFilePattern`  | Regex pattern of filenames to exclude todotxt-mode decorations                                                                               | `^done\\.txt$`         |
-| `todotxtmode.markdownFilePattern`            | Regex pattern of Markdown filenames to apply todotxt-mode commands using `markdownDecorationBeginPattern` and `markdownDecorationEndPattern` | `^.*\\.(md|markdown)$` |
-| `todotxtmode.markdownDecorationBeginPattern` | Regex pattern of rane in Markdown files to decorate                                                                                          | `^#+\\s+Tasks\\s*$`    |
-| `todotxtmode.markdownDecorationEndPattern`   | Regex pattern of rane in Markdown files to decorate                                                                                          | `^$`                   |
+| Setting                                      | Descripiton                                                                                                                                  | Default                            |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `todotxtmode.sortCompletedTasksToEnd`        | Alwasy place completed tasks at end of list when sorting                                                                                     | `true`                             |
+| `todotxtmode.sectionDelimiterPattern`        | Regex pattern to delimit todo tasks section from other parts of the file                                                                     | `^--$`                             |
+| `todotxtmode.todoFilePattern`                | Regex pattern of filenames to apply todotxt-mode commands                                                                                    | `^.*\\.txt$`                       |
+| `todotxtmode.excludeDecorationsFilePattern`  | Regex pattern of filenames to exclude todotxt-mode decorations                                                                               | `^done\\.txt$`                     |
+| `todotxtmode.markdownFilePattern`            | Regex pattern of Markdown filenames to apply todotxt-mode commands using `markdownDecorationBeginPattern` and `markdownDecorationEndPattern` | <code>^.*\\.(md\|markdown)$</code> |
+| `todotxtmode.markdownDecorationBeginPattern` | Regex pattern of rane in Markdown files to decorate                                                                                          | `^#+\\s+Tasks\\s*$`                |
+| `todotxtmode.markdownDecorationEndPattern`   | Regex pattern of rane in Markdown files to decorate                                                                                          | `^$`                               |
 
 ## Release Notes
 
@@ -133,7 +133,7 @@ See [CHANGELOG](https://github.com/davraamides/todotxt-mode/blob/master/CHANGELO
 
 ## Future Plans
 
-- Move tasks from `inbox.txt` to to a new or existing Markdown project file
+- Move tasks from `inbox.txt` to a new or existing Markdown project file
 - Move tasks from a Markdown project file to `todo.txt` file
 - Collect `@next` tasks from all project files into `todo.txt` file
 - More comprehensive style setting support
