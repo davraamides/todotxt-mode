@@ -6,6 +6,20 @@ import { Helpers } from './helpers';
 import { Patterns } from './patterns';
 import { Settings } from './settings';
 
+// Classes to manage decorations for various types of fields or task states.
+// VS Code decorations consist of two parts: a decoration type and decoration options.
+// A decoration type is like a style that is applied to the relevant text to change its
+// visual appearance (similar to a CSS style definition, but not quite as powerful).
+// Decoration options dictate what ranges of text will have a specific decoration type
+// applied to. The decorations are then applied to the editor by calling setDecorations
+// and passing in a type and an array of options, i.e. a formatting style and an array
+// of ranges to apply that style to. This is because you'll typically apply the same
+// style to many locations (e.g. a @context field on many taks lines).
+// Below I define a set of classes to manage this for different types of decorations.
+// Most of them simply use the general Decoration class which uses a regular expression
+// to find matches for the ranges. There are special classes for priority and a date
+// tag as their style is dependent on the value of the field.
+
 interface IDecoration {
     regex: RegExp;
     addMatch(match: object): void;
@@ -53,7 +67,8 @@ class PriorityDecoration implements IDecoration {
     }
 
     addMatch(match: object) {
-        // since we allow leading whitespace, need to strip it off here
+        // since we allow leading whitespace and the regex matches it, we need to strip it off here so it will
+        // properly index into the dicts
         let priority = match['value'].trim();
         if (! this.decorationOptionsMap[priority]) {
             this.decorationOptionsMap[priority] = [];
