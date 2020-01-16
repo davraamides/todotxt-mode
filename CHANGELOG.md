@@ -1,6 +1,6 @@
 # Change Log
 
-## 1.4.11 - 2020-01-15
+## 1.4.12 - 2020-01-15
 - Add support for leading whitespace in tasks. Addresses [Whitespace at beginning of line throws of syntax highlighting](https://github.com/davraamides/todotxt-mode/issues/11) although I'm not sure if this is valid `todo.txt` syntax. But it could be useful at times.
 
 ## 1.4.10 - 2019-11-29
