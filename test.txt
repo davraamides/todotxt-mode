@@ -1,0 +1,19 @@
+task +Project
+(A) task with priorit and due:2020-01-10
+   (A) task with priorit and due:2020-01-10
+   task
+x 2020-01-15 completed task
+(B) task with +Project @waiting @tom a:b due:2020-01-01
+  x completed task
+  (B) task +Project with @waiting @tom
+  x 2020-01-15 test decorations
+x 2020-01-15 test increment priority
+x 2020-01-15 test decrement priority
+x 2020-01-15 test sort by priority - works except indented completed not sorting to bottom
+x 2020-01-15 test sort by context
+x 2020-01-15 test sort by project
+x 2020-01-15 test sort by tag
+x 2020-01-15 test sort by date - F doesn't seem to recognize date
+x 2020-01-15 test format fields - F doesn't preserve leading whitespace
+x 2020-01-15 test toggle completion - F doesn't recognize completed task with leading space
+x 2020-01-15 test remove priorities - F doesn't handle leading whitespace

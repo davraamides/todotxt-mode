@@ -30,7 +30,7 @@ export namespace Sorting {
             let value = "";
             if (Settings.SortCompletedTasksToEnd && Helpers.isCompleted(text)) {
                 // force to very bottom, include date for sorting
-                value = "z " + text.substr(2, 10);
+                value = text.replace(Patterns.CompletedRegex, "z ");
             } else {
                 value = fieldParser(text, fieldOrTagName, regex);
             }
@@ -52,17 +52,16 @@ export namespace Sorting {
     }
 
     function parseTagValue(line: string, tagName: string, regex: RegExp): string {
-        let response = regex.exec(line);
-        if (response != null) {
-            regex.lastIndex = 0;
-            if (response.length > 2) {
-                if (tagName == response[1]) {
-                    return response[2];
+        let value: string = "y"; // default forcing to bottom if not found
+        let result: RegExpExecArray;
+        while (result = regex.exec(line)) {
+            if (result.length > 2) {
+                if (tagName == result[1]) {
+                    value = result[2];
                 }
             }
         }
-        // force to bottom
-        return "y";
+        return value;
     }
 
     function sort(lineObjects: object[], startLine, endLine) {

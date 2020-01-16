@@ -17,18 +17,21 @@ export namespace Patterns {
     // begin with non-word chars (+@). The tag pattern is prefixed with a word bounday (\b)
     // as tags begin with a word char.
     export const ContextRegex = /\B@\S+\b/g;
-    export const PriorityRegex = /^[(][A-Z][)]\B/g;
+    export const PriorityWithLeadingSpaceRegex = /^\s*[(][A-Z][)]\B/g;
+    export const PriorityWithTrailingSpaceRegex = /[(][A-Z][)]\s/;
+    export const PriorityOnlyRegex = /[(][A-Z][)]\B/g;
     export const ProjectRegex = /\B\+\S+\b/g;
     export const TagRegex = /\b[^\s:]+:[^\s]+\b/g;
 
     export const TagValueRegex = /\b([^\s:]+):(\S+)\b/g;
     export const TagDateRegexString = "\\b(#TAG#):(\\d{4}-\\d{2}-\\d{2})\\b";
-    export const CompletedRegex = /^x .*$/g;
+    export const CompletedGlobalRegex = /^\s*x .*$/g;
+    export const CompletedRegex = /^\s*x\s/;
 
     // put them in a map so sorting by any field is consistent
     export const FieldRegex = {
         'context': ContextRegex,
-        'priority': PriorityRegex,
+        'priority': PriorityOnlyRegex,
         'project': ProjectRegex,
         'tag': TagRegex,
     }
@@ -61,9 +64,10 @@ export namespace Patterns {
     // parse a task into an object so it's easy to process individual fields
     // ignore completed status since just part of task text
     export function parseTask(line: string): object {
-        let taskObj = {line: line, context: [], priority: undefined, project: [], tag: []};
+        let taskObj = {line: line, context: [], priority: undefined, project: [], tag: [], lead: ''};
         let task = [];
-        let words = line.split(/\s+/);
+        taskObj['lead'] = line.match(/^\s*/)[0];
+        let words = line.replace(/^\s*/, '').split(/\s+/);
         for (const word of words) {
             let matched = false;
             for (const fieldName of [ContextField, ProjectField, TagField]) {
@@ -89,6 +93,13 @@ export namespace Patterns {
         return taskObj;
     }
 
+    function parseField(line: string, fieldName: string): object {
+        if (line.match(FieldRegex[fieldName])) {
+            var value = '';
+            return {line: line.replace(FieldRegex[fieldName], ''), field: value}
+        }
+        return { line, field: '' }
+    }
     // convert a task object back to a string using the specified order for the fields
     function spellTask(taskObj: object, fieldOrder: string = "tcp"): string {
         // build a task line back from its parts using the specified order
@@ -103,6 +114,6 @@ export namespace Patterns {
                 words.push(taskObj[orderMap[ch]].sort().join(' '));
             }
         }
-        return words.join(' ');
+        return taskObj['lead'] + words.join(' ');
     }
 };

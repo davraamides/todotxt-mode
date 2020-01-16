@@ -33,7 +33,7 @@ export namespace Helpers {
     }
 
     export function isCompleted(text: string): boolean {
-        return text.startsWith(Settings.CompletedTaskPrefix);
+        return Patterns.CompletedRegex.test(text);
     }
     export function isDecoratedFile(filename: string): boolean {
         if (filename.match(Settings.TodoFilePattern) != null) {
@@ -121,10 +121,10 @@ export namespace Helpers {
         let oldPriority = '';
         let newPriority = '(A)';
         let priorityChar = '';
-        let match = text.match(Patterns.PriorityRegex);
+        let match = text.match(Patterns.PriorityWithLeadingSpaceRegex);
         if (match) {
             oldPriority = match[0];
-            priorityChar = oldPriority[1];
+            priorityChar = oldPriority[oldPriority.length - 2]; // since there could be leading space
             if (priorityChar == 'A' && increment) {
                 priorityChar = 'Z';
             } else if (priorityChar == 'Z' && ! increment) {

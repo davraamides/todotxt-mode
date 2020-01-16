@@ -45,7 +45,7 @@ class PriorityDecoration implements IDecoration {
     constructor(
         styleMap: { [priority: string]: vscode.DecorationRenderOptions },
         defaultStyle: vscode.DecorationRenderOptions) {
-        this.regex = Patterns.PriorityRegex;
+        this.regex = Patterns.PriorityWithLeadingSpaceRegex;
         this.defaultDecorationType = vscode.window.createTextEditorDecorationType(defaultStyle);
         for (var priority in styleMap) {
             this.decorationTypeMap[priority] = vscode.window.createTextEditorDecorationType(styleMap[priority]);
@@ -53,10 +53,12 @@ class PriorityDecoration implements IDecoration {
     }
 
     addMatch(match: object) {
-        if (! this.decorationOptionsMap[match['value']]) {
-            this.decorationOptionsMap[match['value']] = [];
+        // since we allow leading whitespace, need to strip it off here
+        let priority = match['value'].trim();
+        if (! this.decorationOptionsMap[priority]) {
+            this.decorationOptionsMap[priority] = [];
         }
-        this.decorationOptionsMap[match['value']].push({ range: match['range'] });
+        this.decorationOptionsMap[priority].push({ range: match['range'] });
     }
 
     clear() {
@@ -128,7 +130,7 @@ export default class Decorator {
     decorations: IDecoration[] = [
         new Decoration(Patterns.ContextRegex, Settings.ContextStyle),
         new Decoration(Patterns.ProjectRegex, Settings.ProjectStyle),
-        new Decoration(Patterns.CompletedRegex, Settings.CompletedStyle),
+        new Decoration(Patterns.CompletedGlobalRegex, Settings.CompletedStyle),
         new PriorityDecoration({
             '(A)': Settings.HighPriorityStyle,
             '(B)': Settings.MediumPriorityStyle,
@@ -161,6 +163,7 @@ export default class Decorator {
                 let [begLine, endLine] = Helpers.getDecoratedLineRange(fileName);
                 for (var i = begLine; i <= endLine; i++) {
                     let line = editor.document.lineAt(i);
+                    //console.log("*** decorating line: " + line.text);
                     let seenMatches = new Set();
                     this.decorations.forEach(decoration => {
                         let matches = this.findMatchingPatterns(decoration.regex, line);
@@ -189,10 +192,10 @@ export default class Decorator {
         let result: RegExpExecArray;
         //console.log("finding matches for " + regex);
         while (result = regex.exec(line.text)) {
-            let begPos = new vscode.Position(line.range.start.line, line.firstNonWhitespaceCharacterIndex + result.index);
-            let endPos = new vscode.Position(line.range.start.line, line.firstNonWhitespaceCharacterIndex + result.index + result[0].length);
+            let begPos = new vscode.Position(line.range.start.line,  result.index);
+            let endPos = new vscode.Position(line.range.start.line,  result.index + result[0].length);
             matches.push({ range: new Range(begPos, endPos), value: result[0]})
-            //console.log("pushed match at begPos=" + begPos + " endPos=" + endPos + " value=" + result[0]);
+            //console.log("pushed match at begPos=" + begPos.character + " endPos=" + endPos.character + " value=" + result[0]);
         }
         return matches;
     }

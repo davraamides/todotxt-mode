@@ -3,6 +3,7 @@ parse/spell tasks to test out logic
 """
 import re
 import datetime
+import pprint
 
 TESTS = """\
 a simple task
@@ -10,6 +11,7 @@ a task with a +ProjectA +ProjectB
 a task with @context in it @multiple times
 a task with a:tag and due:2020-01-01
 (A) task with a priority
+(C) a task with everything @now due:2020-01-01 +Project @later +Work
 x completed task and @context
 x (A) 2020-01-01 completed task with priority and completed date
 """.splitlines()
@@ -26,10 +28,13 @@ PRIORITY_PATTERN = r'\([A-Z]\)' # problem is this should only match at beginning
 #const TaskCompletionRegEx = /^(x )?(\([A-Z]\) )?(\d{4}-\d{2}-\d{2} )?(.*)$/;
 def main():
     for line in TESTS:
-        newline = toggleCompletion(line)
-        print(f'removePriority:\n  old: "{line}"\n  new: "{newline}"')
-        #parseTask(line)
+        #newline = toggleCompletion(line)
+        #taskObj = parseTask(line)
+        newline = formatTask(line)
+        #pprint.pprint(taskObj)
+        print(f'test:\n  old: "{line}"\n  new: "{newline}"')
 
+    print('\n'.join(sortLines(TESTS, 'priority')))
 # mutators
 #   change priority - could just replace using span/range or line = line.replace(/\([A-Z]\)\s/, "")
 #    var res = str.replace(/\([A-Z]\)\s/, function (x) {
@@ -63,6 +68,9 @@ def parseTask(line):
     if match:
         taskObj['prefix'] = match.group()
         taskObj['offset'] = len(taskObj['prefix'])
+
+    # TODO need to split into words and then do word by word saving bits like in typescript version
+
     # and now do I strip that off line before I continue??? if so, the ranges are all off by the length of the prefix
     for field, pattern in FIELD_PATTERNS.items():
         for match in re.finditer(pattern, line):
@@ -72,8 +80,7 @@ def parseTask(line):
     match = re.search(PRIORITY_PATTERN, line)
     if match:
         taskObj['priority'] = {'match': match.group(), 'range': match.span()}
-    import pprint
-    pprint.pprint(taskObj)
+    return taskObj
 
 def spellTask(taskObj, fieldOrder):
     # should only need this for reformat and then fieldOrder is required
@@ -81,10 +88,11 @@ def spellTask(taskObj, fieldOrder):
     if taskObj['prefix']:
         parts.append(taskObj['prefix'])
     if taskObj['priority']:
-        parts.append(taskObj['priority'])
-    taskObj.extend(taskObj['bits'])
+        parts.append(taskObj['priority']['match'])
+    parts.extend(taskObj['bits'])
     for field in fieldOrder:
-        parts.extend(taskObj[field])
+        for d in taskObj[field]:
+            parts.append(d['match'])
     return ' '.join(parts)
 
 # works    
@@ -123,14 +131,47 @@ def toggleCompletion(line):
         line = (m.group(1) or '') + 'x ' + (m.group(3) or '') + datetime.date.today().strftime('%Y-%m-%d ') + (m.group(5) or '')
     return line
 
-def formatTask(taskObj):
+# works except for getting all occurrences of a field
+def formatTask(line):
+    #return spellTask(taskObj, fieldOrder=('context', 'tag', 'project'))
+    fields, newline = parseFields(line, ('context', 'tag', 'project'))
+    return appendFields(newline, fields, ('context', 'tag', 'project'))
     # this is the one where parsing off the fields is important
-    pass
 
-def sortLines(taskObjs, byField):
-    # the way I'm doig tihs now is by using a regex to parse out the field or tag value from each line then sorting on that value, so again, I don't really need the taskObj
-    # although it helps if I already have it
-    pass
+# these patterns are used for parsing a field out of the line thus they include the bounding whitespace
+# (leading for all fields except priority)
+PATTERNS = {
+    'context': r'\s@\S+\b',
+    'project': r'\s\+\S+\b',
+    'tag': r'\s[^\s:]+:[^\s]+\b',
+    'priority': r'\B\([A-Z]\)\s'
+}
+
+def parseFields(line, fields):
+    fldvals = {}
+    for field in fields:
+        fldval, line = parseField(line, PATTERNS[field])
+        fldvals[field] = fldval
+    return fldvals, line
+
+def parseField(line, pattern):
+    # TODO figure out how to sub all
+    m = re.search(pattern, line)
+    if m:
+        return m.group(), re.sub(pattern, '', line)
+    else:
+        return '', line
+
+def appendFields(line, fields, order):
+    return line + ''.join([fields[f] for f in order])
+
+# works for fields
+def sortLines(lines, byField):
+    data = []
+    for i, line in enumerate(lines):
+        data.append({'line': line, 'i': i, 'value': parseField(line, PATTERNS[byField])[0]})
+    data.sort(key=lambda x: (x['value'] or 'z', x['i']))
+    return [_['line'] for _ in data]
 
 def decorateLines(taskObjs):
     # this is helpful to have because in decoration.ts right now I'm essentially reparsing all this to get the ranges
