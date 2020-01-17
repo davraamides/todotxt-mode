@@ -1,8 +1,8 @@
 //
 // Configuration settings and constants.
 //
-// This contains all the settings that are in the package.json file that
-// can be customized by the user.
+// This contains all the settings that are in the package.json file that can be
+// customized by the user.
 //
 import * as vscode from 'vscode';
 
