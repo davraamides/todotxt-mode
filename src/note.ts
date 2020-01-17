@@ -8,8 +8,8 @@ import { Helpers } from './helpers';
 //
 // This is not really part of the todo.txt spec but the spec does allow
 // for extension via tags so this implements a note file for tags with
-// 'note:filename'. createTaskNote uses the current selection, save it in
-// new note file (prompting for the filename) and then placing the note tag with
+// 'note:filename'. createTaskNote uses the current selection, saves it in
+// new note file (prompting for the filename) and then places the note tag with
 // filename in the clipboard so it can be easily copied to the relevant todo line.
 //
 export namespace Note {

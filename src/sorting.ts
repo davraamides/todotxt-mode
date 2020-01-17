@@ -87,7 +87,7 @@ export namespace Sorting {
             if (obja["value"] < objb["value"]) {
                 return -1;
             }
-            // for lines with equal field values, use the line number to make the sort stable
+            // for lines with equal or missing field values, use the line number to make the sort stable
             return obja["line"] - objb["line"];
         })
         let sortedLines: string[] = [];
