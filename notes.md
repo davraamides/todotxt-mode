@@ -1,26 +1,5 @@
 # notes
 
-Things to document
-- different forms of regexes and why necessary (global, with or without bounding whitespace)
-- issue with global regexes, looping and state in lastIndex which will screw up subsequent tests if don't reset it or don't go through entire loop
-- how priority is different from other fields (tags, context and priority) as there can only be one and needs to be at beginning (of incomplete)
-- leading whitespace
-x- decorations and how they work in VS code
-- sorting approach - extracting field and using it as sort key buy falling back to line number if key same or not available such that line order remains same (stable)
-- any other confusing things in VS code extensions that I have to remind myself about
-- classes to document:
-  x commands.ts
-  x completion.ts
-  x decoration.ts
-  extension.ts
-  files.ts
-  helpers.ts
-  note.ts
-  patterns.ts
-  priority.ts
-  settings.ts
-  sorting.ts
-
 ## references
 https://vscode.rocks/decorations/
 https://vscode.rocks/testing/

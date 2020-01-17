@@ -12,6 +12,9 @@ import * as fs from 'fs';
 import { Completion } from './completion';
 import { Note } from './note';
 
+//
+// Registers all the extension commands
+//
 export function ActivateCommands(context: vscode.ExtensionContext) {
 
     let toggleCompletion = vscode.commands.registerCommand('extension.toggleCompletion', () => {

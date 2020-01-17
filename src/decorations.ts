@@ -5,8 +5,9 @@ import * as path from 'path';
 import { Helpers } from './helpers';
 import { Patterns } from './patterns';
 import { Settings } from './settings';
-
+//
 // Classes to manage decorations for various types of fields or task states.
+//
 // VS Code decorations consist of two parts: a decoration type and decoration options.
 // A decoration type is like a style that is applied to the relevant text to change its
 // visual appearance (similar to a CSS style definition, but not quite as powerful).
@@ -19,7 +20,7 @@ import { Settings } from './settings';
 // Most of them simply use the general Decoration class which uses a regular expression
 // to find matches for the ranges. There are special classes for priority and a date
 // tag as their style is dependent on the value of the field.
-
+//
 interface IDecoration {
     regex: RegExp;
     addMatch(match: object): void;

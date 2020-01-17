@@ -1,9 +1,9 @@
-/*
- * Configuration settings and constants
- *
- * Manage them in the same place so it's easy to factor constants into the configuration
- * file without impacting a lot of code
- */
+//
+// Configuration settings and constants.
+//
+// This contains all the settings that are in the package.json file that
+// can be customized by the user.
+//
 import * as vscode from 'vscode';
 
 export namespace Settings {

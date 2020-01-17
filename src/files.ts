@@ -4,7 +4,9 @@ import * as path from 'path';
 
 import { Helpers } from './helpers';
 import { Settings } from './settings';
-
+//
+// Manage movement of tasks to other task files.
+//
 export namespace Files {
 
     export function archiveTasks() {
@@ -47,6 +49,8 @@ export namespace Files {
         }
     }
 
+    // Delete the lines at the specified line numbers. Do so in reverse
+    // order as deleting line n will change the line numbers of all lines > n
     function deleteLines(lines: Number[], editor: vscode.TextEditor, document: vscode.TextDocument) {
         if (lines.length > 0) {
             lines = lines.reverse();

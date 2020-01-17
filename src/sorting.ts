@@ -3,7 +3,17 @@ import * as vscode from 'vscode';
 import { Patterns } from './patterns';
 import { Settings } from './settings';
 import { Helpers } from './helpers';
-
+//
+// Sorting functions
+//
+// Tasks are sorted by one of the fields: priority, context, project or tag.
+// In the special case of a tag, they can also be sorted by the value of the tag.
+// (This is currently only exposed for the due: tag to sort by due date).
+// The getLineObjects routine extracts the appropriate value of the field for each
+// line and then sorting is performed on that field, defaulting to the line number
+// if the field is absent. This preserves the existing line order for lines without
+// the tag which is what you would expect (the sort is stable).
+//
 export namespace Sorting {
 
     export function sortLinesByField(fieldName: string) {

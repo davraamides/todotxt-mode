@@ -5,16 +5,12 @@ import Decorator from './decorations';
 import { Settings } from './settings';
 import { Patterns } from './patterns';
 import { Helpers } from './helpers';
-//import { fstat } from 'fs';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
-
-// deactivate
-//   clear? all context.subscriptions (commands)
-//   remove onDidChange for decoration?
-//   remove hover provider?
-
+//
+// Setup and activate the extension
+//
 export function activate(context: vscode.ExtensionContext) {
 	let decorator = new Decorator();
 	Commands.ActivateCommands(context);
@@ -26,7 +22,13 @@ export function activate(context: vscode.ExtensionContext) {
 		decorator.decorateDocument();
 	});
 
-	// TODO can I do this for all commands and then make the language dynamic so I can include Markdown only if it's in the settings?
+	// Register a hover provider for the note:xxx tag which reads the
+	// note file and displays in a hover message with a link to the file.
+	// I've had some issues with note files that are in different paths
+	// as the behavior seems to be OS-dependent. Also, note filenames
+	// cannot contain spaces since the tag note:xxx is delimited at the
+	// end by a space.
+
 	vscode.languages.registerHoverProvider({scheme: 'file', language: 'plaintext'}, {
 		provideHover(document, position, token) {
 			const word = document.getText(document.getWordRangeAtPosition(position, Patterns.TagRegex));

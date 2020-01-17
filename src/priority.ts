@@ -3,7 +3,9 @@ import * as vscode from 'vscode';
 import { Helpers } from './helpers';
 import { Patterns } from './patterns';
 import { Settings } from './settings';
-
+//
+// Manipulate the priority field
+//
 export namespace Priority {
 
     export function changePriority(increment: boolean) {
