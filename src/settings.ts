@@ -13,10 +13,10 @@ export namespace Settings {
     export const PriorityTagLength = "(A) ".length;
 
     // move to configuration
-    export const TodoFilename:string = 'todo.txt'
-    export const DoneFilename:string = 'done.txt'
-    export const SomedayFilename:string = 'incubate.txt'
-    export const WaitingFilename:string = 'waiting.txt'
+    export const TodoFilename:string = getSetting<string>("todoFilename");
+    export const DoneFilename: string = getSetting<string>("doneFilename");
+    export const SomedayFilename: string = getSetting<string>("somedayFilename");
+    export const WaitingFilename: string = getSetting<string>("waitingFilename");
     
     export const Message:string = getSetting<string>("message");
     export const SortCompletedTasksToEnd:boolean = getSetting<boolean>("sortCompletedTasksToEnd");
