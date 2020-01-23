@@ -9,8 +9,8 @@ import { Settings } from './settings';
 //
 export namespace Files {
 
+    // Move any completed tasks to the "done" file
     export function archiveTasks() {
-
         const editor = vscode.window.activeTextEditor;
         let window = vscode.window;
         let currDoc = editor.document;
@@ -30,6 +30,9 @@ export namespace Files {
             deleteLines(lineDeletes, editor, currDoc);
         }
     }
+
+    // Move any selected tasks to the destination file. This is similar to archiveTasks above
+    // but different in how tasks are selected, thus it requires a separate function
     export function moveTasks(destinationFileName: string) {
         const editor = vscode.window.activeTextEditor;
         let window = vscode.window;
@@ -63,6 +66,8 @@ export namespace Files {
         Helpers.triggerSelectionChange();
     }
 
+    // Adds an EOL to a file if missing so that when we add a task
+    // it doesn't get appended to the end of an existing task
     function ensureEndsWithEOL(fileName: string) {
         if (fs.existsSync(fileName)) {
             let text = fs.readFileSync(fileName);
