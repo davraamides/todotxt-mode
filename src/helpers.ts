@@ -28,7 +28,7 @@ export namespace Helpers {
             return [selection.start.line, selection.end.line];
         }
         if (defaultToAll) {
-            return [0, getLastTodoLineInDocument()];
+            return [0, getLastTodoLineInDocument(vscode.window.activeTextEditor.document)];
         }
         // selection is empty but defaultToAll is false so just return the current line
         return [selection.start.line, selection.start.line];
@@ -38,13 +38,17 @@ export namespace Helpers {
         return Patterns.CompletedRegex.test(text);
     }
     export function isDecoratedFile(filename: string): boolean {
+        return isTodoFile(filename) || isProjectFile(filename);
+    }
+    export function isTodoFile(filename: string): boolean {
         if (filename.match(Settings.TodoFilePattern) != null) {
             return true;
         }
+    }
+    export function isProjectFile(filename: string): boolean {
         if (filename.match(Settings.MarkdownFilePattern) != null && Settings.MarkdownDecorationBeginPattern) {
-                return true
+            return true
         }
-        return false;
     }
     export function isNoteTag(text: string): boolean {
         if (text.match(Patterns.TagRegex)) {
@@ -56,9 +60,9 @@ export namespace Helpers {
         return filename.match(Settings.ExcludeDecorationsFilePattern) != null;
     }
 
-    export function getLastTodoLineInDocument(): number {
+    export function getLastTodoLineInDocument(document: vscode.TextDocument): number {
         // if the sectionDelimiterPattern setting has been set, find the first matching line
-        let document = vscode.window.activeTextEditor.document;
+        //let document = vscode.window.activeTextEditor.document;
         if (Settings.SectionDelimiterPattern != undefined && Settings.SectionDelimiterPattern.length > 0) {
             for (var i = 0; i < document.lineCount; i++) {
                 if (document.lineAt(i).text.match(Settings.SectionDelimiterPattern)) {
@@ -68,30 +72,29 @@ export namespace Helpers {
         }
         return document.lineCount - 1;
     }
-    export function getDecoratedLineRange(filename: string): number[] {
+    export function getDecoratedLineRange(document: vscode.TextDocument): number[] {
         // todo files go from the beginning to the end or the optional section delimiter pattern
-        if (filename.match(Settings.TodoFilePattern)) {
-            return [0, getLastTodoLineInDocument()];
+        if (document.fileName.match(Settings.TodoFilePattern)) {
+            return [0, getLastTodoLineInDocument(document)];
         }
         // markdown files go from the beginning to the end of the range patterns, if found
-        if (filename.match(Settings.MarkdownFilePattern)) {
-            let editor = vscode.window.activeTextEditor;
+        if (document.fileName.match(Settings.MarkdownFilePattern)) {
             let reBeg = RegExp(Settings.MarkdownDecorationBeginPattern);
             let reEnd = RegExp(Settings.MarkdownDecorationEndPattern);
             let begLine = -1, endLine = -1;
 
             let i = 0;
             // find the line of the begin pattern
-            while (i < editor.document.lineCount) {
-                if (reBeg.test(editor.document.lineAt(i).text)) {
+            while (i < document.lineCount) {
+                if (reBeg.test(document.lineAt(i).text)) {
                     begLine = i + 1;
                     break;
                 }
                 i++;
             }
             // continue searching down to find the line of the end pattern
-            while (i < editor.document.lineCount) {
-                if (reEnd.test(editor.document.lineAt(i).text)) {
+            while (i < document.lineCount) {
+                if (reEnd.test(document.lineAt(i).text)) {
                     endLine = i - 1;
                     break;
                 }
@@ -100,7 +103,7 @@ export namespace Helpers {
             if (begLine != -1) {
                 if (endLine == -1) {
                     // go to the end of the file if the end pattern was never found
-                    endLine = editor.document.lineCount - 1;
+                    endLine = document.lineCount - 1;
                 }
                 return [begLine, endLine];
             }

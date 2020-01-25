@@ -50,6 +50,9 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     let moveTasksToSomeday = vscode.commands.registerCommand('extension.moveTasksToSomeday', () => {
         Files.moveTasks(Settings.SomedayFilename);
     });
+    let moveTasksToProject = vscode.commands.registerCommand('extension.moveTasksToProject', () => {
+        Files.moveTasksToProject();
+    });
     let incrementPriority = vscode.commands.registerCommand('extension.incrementPriority', () => {
         Priority.changePriority(true);
     });
@@ -62,71 +65,6 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     let createTaskNote = vscode.commands.registerCommand('extension.createTaskNote', () => {
         Note.createTaskNote();
     });
-    // TODO finish implementation
-    /*
-    Behavior:
-      if the active file is a task file (code:Helper?)
-        if the task has a project field (code:Pattern)
-          try to find a matching project.md file as actual project or lowercase (code:TBD)
-          if an exact match is found
-            move task to project file (code:below/Files)
-            show notification (code:Helper?)
-            return
-          else
-            default filename = best match, if any
-        prompt for file defaulting to best match if any (code:below in existing moveTasksToProject)
-        if file selected
-          move task to project file (code:below/Files)
-          show notification (code:Helper)
-      else if the active file is a project file (code:Helper?)
-        prompt for file defaulting to todo.txt file (code:below in existing moveTaksToProject)
-        if file selected
-          move task to todo file (code:below/Files)
-          show notification (code:Helper)
-
-    move task to project file
-      if file does not exist
-        create <project>.md and add ## Tasks\n to it
-      look for tasks tag (code:Pattern)
-      if not found
-        append \n## Tasks\n to file
-      find end of tasks block in file (code:Pattern/Decorations)
-      append task to project file (code:File)
-      delete task from current file (code:File)
-
-    move task to todo file
-      if file does not exist
-        create <todo>.txt with nothing in it
-      append task to todo file
-      delete task from current file
-    
-    */
-    let moveTasksToProject = vscode.commands.registerCommand('extension.moveTasksToProject', () => {
-        async function showInputBox() {
-            const result = await vscode.window.showInputBox({
-                prompt: 'Project file:'
-            });
-            // vscode.window.showInformationMessage(`Got: ${result}`);
-        }
-        showInputBox();
-
-        const options: vscode.OpenDialogOptions = {
-            canSelectMany: false,
-            openLabel: 'Open',
-            filters: {
-                'Markdown files': ['md'],
-                'Text files': ['txt'],
-                'All files': ['*']
-            }
-        };
-
-        vscode.window.showOpenDialog(options).then(fileUri => {
-            if (fileUri && fileUri[0]) {
-                console.log('Selected file: ' + fileUri[0].fsPath);
-            }
-        });
-    });
-
     // not working and not sure if it's because settings are const and cached? maybe if I 
     // just make sure they always go back to configuration.get() then I don't even need
     // a "reactivate" function...

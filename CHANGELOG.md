@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.4.14 - 2020-01-25
+- Fix ['Unable to figure out functionality of moveTasksToProject'](https://github.com/davraamides/todotxt-mode/issues/7).
+    This feature was never fully implemented but is now complete. The behavior is as follows:
+    - If the current task is in a `todo` task file, the task will be removed from the current file and inserted into the appropriate project file.
+    - If the task has a project tag and that tag is an *exact* match for a project file (excluding the       leading `+` character and adding in the `.md` extension), the task will be moved without prompting       the user for a file. Case is sensitive so a tag of `+Foo` will match the file `Foo.md` but not `foo.md`.
+    - If the task does not have a project or the project tag is not an exact match with a filename, the user will be prompted to select a file.
+    - A side effect of this process is that the project file will be opened in VS Code. The project tab become active for a second because the VS Code API does not currently allow loading a document without making it active.
+    - The changes to both files are *not* saved. Thus if you make a mistake, you can easily undo both edits.
+    - Multiple tasks are not supported right now as prompting for a file in a loop is not ideal, but it's also not clear if assuming all the tasks should be moved to the same project file is the right behavior.
+
 ## 1.4.13 - 2020-01-17
 - Fix ['move tasks to Someday file' moves tasks to incubate.txt instead](https://github.com/davraamides/todotxt-mode/issues/13). Changing any of the filenames requires restarting the extension, though.
 

@@ -177,7 +177,7 @@ export default class Decorator {
 
         if (editor != undefined) {
             if (Helpers.isDecoratedFile(fileName)) {
-                let [begLine, endLine] = Helpers.getDecoratedLineRange(fileName);
+                let [begLine, endLine] = Helpers.getDecoratedLineRange(editor.document);
                 for (var i = begLine; i <= endLine; i++) {
                     let line = editor.document.lineAt(i);
                     //console.log("*** decorating line: " + line.text);
