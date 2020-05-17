@@ -164,12 +164,12 @@
 				},
 				"todotxtmode.markdownDecorationBeginPattern": {
 					"type": "string",
-					"description": "Regex pattern of rane in Markdown files to decorate",
+					"description": "Regex pattern of range in Markdown files to decorate",
 					"default": "^#+\\s+Tasks\\s*$"
 				},
 				"todotxtmode.markdownDecorationEndPattern": {
 					"type": "string",
-					"description": "Regex pattern of rane in Markdown files to decorate",
+					"description": "Regex pattern of range in Markdown files to decorate",
 					"default": "^$"
 				},
 				"todotxtmode.contextStyle.light.color": {
