@@ -32,6 +32,9 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     let sortByTag = vscode.commands.registerCommand('extension.sortByTag', () => {
         Sorting.sortLinesByField("tag");
     });
+    let sortByCreationDate = vscode.commands.registerCommand('extension.sortByCreationDate', () => {
+        Sorting.sortLinesByField("creationDate");
+    });
     let sortByDueDate = vscode.commands.registerCommand('extension.sortByDueDate', () => {
         Sorting.sortLinesByTagValue("due");
     });
@@ -86,6 +89,7 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     context.subscriptions.push(sortByPriority);
     context.subscriptions.push(sortByProject);
     context.subscriptions.push(sortByTag);
+    context.subscriptions.push(sortByCreationDate);
     context.subscriptions.push(sortByDueDate);
     context.subscriptions.push(formatTasks);
     context.subscriptions.push(archiveTasks);

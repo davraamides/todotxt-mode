@@ -39,6 +39,7 @@ export namespace Patterns {
     export const PriorityField = 'priority';
     export const ProjectField = 'project';
     export const TagField = 'tag';
+    export const CreationDateField = 'creationDate';
 
     // The context and project patterns are prefixed with non-word boundary (\B) as they
     // begin with non-word chars (+@). The tag pattern is prefixed with a word bounday (\b)
@@ -49,7 +50,7 @@ export namespace Patterns {
     export const PriorityOnlyRegex = /[(][A-Z][)]\B/g;
     export const ProjectRegex = /\B\+\S+\b/g;
     export const TagRegex = /\b[^\s:]+:[^\s]+\b/g;
-
+    export const CreationDateRegex = /^(?:[(][A-Z][)] )?\s*(\d{4}-\d{2}-\d{2})\s/g;
     export const TagValueRegex = /\b([^\s:]+):(\S+)\b/g;
     export const TagDateRegexString = "\\b(#TAG#):(\\d{4}-\\d{2}-\\d{2})\\b";
     export const CompletedGlobalRegex = /^\s*x .*$/g;
@@ -61,6 +62,7 @@ export namespace Patterns {
         'priority': PriorityOnlyRegex,
         'project': ProjectRegex,
         'tag': TagRegex,
+        'creationDate': CreationDateRegex,
     }
 
     export function formatSelectedTasks() {

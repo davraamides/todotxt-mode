@@ -12,7 +12,7 @@ import { Settings } from './settings';
 // ?, because it will match zero or more leading spaces. Thus even if there is
 // no leading space, it will return the empty string.)
 //
-const TaskCompletionRegEx = /^(\s*)(x )?(\([A-Z]\) )?(\d{4}-\d{2}-\d{2} )?(.*)$/;
+const TaskCompletionRegEx = /^(\s*)(x )?(\([A-Z]\) )?(\d{4}-\d{2}-\d{2} )?(\d{4}-\d{2}-\d{2} )?(.*)$/;
 
 export namespace Completion {
 
@@ -21,15 +21,20 @@ export namespace Completion {
         let [startLine, endLine] = Helpers.getSelectedLineRange(false);
         for (var i = startLine; i <= endLine; i++) {
             let text = editor.document.lineAt(i).text;
-            var lead, completed, priority, date, task, _t, newTask;
-            [_t, lead, completed, priority, date, task] = text.match(TaskCompletionRegEx);
+            var lead, completed, priority, completionDate, creationDate, task, _t, newTask;
+            [_t, lead, completed, priority, completionDate, creationDate, task] = text.match(TaskCompletionRegEx);
+            // regex with one date will match the completionDate first regardless so need to fix that here
+            if (!completed && completionDate && !creationDate) {
+                creationDate = completionDate;
+                completionDate = undefined;
+            }
             if (completed) {
                 // toggle back to incomplete by leaving off the completed flag and date fields
-                newTask = lead + (priority || "") + task;
+                newTask = lead + (priority || "") + (creationDate || "") + task;
             } else {
                 // toggle to completed by adding in the completed flag and date fields
                 let today = Helpers.getDateTimeParts()[0];
-                newTask = lead + Settings.CompletedTaskPrefix + (priority || "") + today + ' ' + task;
+                newTask = lead + Settings.CompletedTaskPrefix + (priority || "") + today + ' ' + (creationDate || "") + task;
             }
             // replace the old line with the new, toggled line
             editor.edit(builder => {

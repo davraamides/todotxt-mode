@@ -9,7 +9,7 @@ This extension was inspired by the [todo-txt](https://marketplace.visualstudio.c
 ### Highlighting
 The extension uses decorators to highlight tags of task items.
 
-- Syntax highlighting of task priority (`(A)`), context (`@label`) and project (`+label`) tags
+- Syntax highlighting of task priority (`(A)`), creation date, context (`@label`) and project (`+label`) tags
 - Priority format can vary among A, B and C-Z levels
 - Syntax higlighting of metadata tags (`key:value1`)
 - Additional formatting for `due:YYYY-MM-DD` date for past, present and future dates
@@ -20,7 +20,7 @@ The extension uses decorators to highlight tags of task items.
 ### Task Management
 Commands that help manage the task list include
 - Mark tasks as complete
-- Sort tasks by project, priority, context, due date or metadata tag
+- Sort tasks by project, priority, context, creation date, due date or metadata tag
 - Stable sort so tasks without the sort key are not affected
 - Reformat task tags to a consistent sequence
 
@@ -59,6 +59,7 @@ The extension also includes a few enhancements that, while not part of the todo.
 | `todotxt-mode.sortByPriority`     | Sort all/selected tasks by priority - `(A)`                       |
 | `todotxt-mode.sortByProject`      | Sort all/selected tasks by project - `+label`                     |
 | `todotxt-mode.sortByTag`          | Sort all/selected tasks by metadata tag - `key:value`             |
+| `todotxt-mode.sortByCreationDate` | Sort all/selected tasks by creation date                          |
 | `todotxt-mode.sortByDueDate`      | Sort all/selected tasks by due date - `due:YYYY-MM-DD`            |
 | `todotxt-mode.formatTasks`        | Format tasks with all tags in consistent order at end of the line |
 | `todotxt-mode.archiveTasks`       | Move completed tasks to the *Done* file                           |
@@ -71,32 +72,31 @@ The extension also includes a few enhancements that, while not part of the todo.
 
 ### Styles
 
-> NOTE: Github Markdown will not render the colors but if you preview this file in VS Code, you will see the actual colors in the Default column. An image of this in VS Code is included below.
-
-![Styles](https://raw.githubusercontent.com/davraamides/todotxt-mode/master/images/styles.png)
-
-| Setting                                       | Description                          | Default                                                         |
-| --------------------------------------------- | ------------------------------------ | --------------------------------------------------------------- |
-| `todotxtmode.contextStyle.light.color`        | Color of context field in light mode | <span style="color:rgb(40, 161, 86);">rgb(40, 161, 86)</span>   |
-| `todotxtmode.contextStyle.dark.color`         | Color of context field in dark mode  | <span style="color:rgb(40, 161, 86);">rgb(40, 161, 86)</span>   |
-| `todotxtmode.highPriorityStyle.light.color`   | Color of context field in light mode | <span style="color:rgb(240, 226, 25);">rgb(240, 226, 25)</span> |
-| `todotxtmode.highPriorityStyle.dark.color`    | Color of context field in dark mode  | <span style="color:rgb(240, 226, 25);">rgb(240, 226, 25)</span> |
-| `todotxtmode.mediumPriorityStyle.light.color` | Color of context field in light mode | <span style="color:rgb(201, 189, 22);">rgb(201, 189, 22)</span> |
-| `todotxtmode.mediumPriorityStyle.dark.color`  | Color of context field in dark mode  | <span style="color:rgb(201, 189, 22);">rgb(201, 189, 22)</span> |
-| `todotxtmode.lowPriorityStyle.light.color`    | Color of context field in light mode | <span style="color:rgb(170, 160, 21);">rgb(170, 160, 21)</span> |
-| `todotxtmode.lowPriorityStyle.dark.color`     | Color of context field in dark mode  | <span style="color:rgb(170, 160, 21);">rgb(170, 160, 21)</span> |
-| `todotxtmode.projectStyle.light.color`        | Color of context field in light mode | <span style="color:rgb(25, 172, 230);">rgb(25, 172, 230)</span> |
-| `todotxtmode.projectStyle.dark.color`         | Color of context field in dark mode  | <span style="color:rgb(25, 172, 230);">rgb(25, 172, 230)</span> |
-| `todotxtmode.tagStyle.light.color`            | Color of context field in light mode | <span style="color:rgb(179, 58, 172);">rgb(179, 58, 172)</span> |
-| `todotxtmode.tagStyle.dark.color`             | Color of context field in dark mode  | <span style="color:rgb(179, 58, 172);">rgb(179, 58, 172)</span> |
-| `todotxtmode.pastDateStyle.light.color`       | Color of context field in light mode | <span style="color:rgb(177, 58, 28);">rgb(177, 58, 28)</span>   |
-| `todotxtmode.pastDateStyle.dark.color`        | Color of context field in dark mode  | <span style="color:rgb(177, 58, 28);">rgb(177, 58, 28)</span>   |
-| `todotxtmode.presentDateStyle.light.color`    | Color of context field in light mode | <span style="color:rgb(219, 216, 26);">rgb(219, 216, 26)</span> |
-| `todotxtmode.presentDateStyle.dark.color`     | Color of context field in dark mode  | <span style="color:rgb(219, 216, 26);">rgb(219, 216, 26)</span> |
-| `todotxtmode.futureDateStyle.light.color`     | Color of context field in light mode | <span style="color:rgb(118, 194, 31);">rgb(118, 194, 31)</span> |
-| `todotxtmode.futureDateStyle.dark.color`      | Color of context field in dark mode  | <span style="color:rgb(118, 194, 31);">rgb(118, 194, 31)</span> |
-| `todotxtmode.completedStyle.textDecoration`   | Text decoration for completed tasks  | <span style="text-decoration:line-through;">line-through</span> |
-| `todotxtmode.completedStyle.opacity`          | Opacity for completed tasks          | <span style="opacity:0.5;">0.5</span>                           |
+| Setting                                       | Description                                   | Default                                                         |
+| --------------------------------------------- | --------------------------------------------- | --------------------------------------------------------------- |
+| `todotxtmode.contextStyle.light.color`        | Color of context field in light mode          | <span style="color:rgb(40, 161, 86);">rgb(40, 161, 86)</span>   |
+| `todotxtmode.contextStyle.dark.color`         | Color of context field in dark mode           | <span style="color:rgb(40, 161, 86);">rgb(40, 161, 86)</span>   |
+| `todotxtmode.highPriorityStyle.light.color`   | Color of high priority field in light mode    | <span style="color:rgb(240, 226, 25);">rgb(240, 226, 25)</span> |
+| `todotxtmode.highPriorityStyle.dark.color`    | Color of high priority field in dark mode     | <span style="color:rgb(240, 226, 25);">rgb(240, 226, 25)</span> |
+| `todotxtmode.mediumPriorityStyle.light.color` | Color of medium priority field in light mode  | <span style="color:rgb(201, 189, 22);">rgb(201, 189, 22)</span> |
+| `todotxtmode.mediumPriorityStyle.dark.color`  | Color of medium priority field in dark mode   | <span style="color:rgb(201, 189, 22);">rgb(201, 189, 22)</span> |
+| `todotxtmode.lowPriorityStyle.light.color`    | Color of low priority field in light mode     | <span style="color:rgb(170, 160, 21);">rgb(170, 160, 21)</span> |
+| `todotxtmode.lowPriorityStyle.dark.color`     | Color of low priority field in dark mode      | <span style="color:rgb(170, 160, 21);">rgb(170, 160, 21)</span> |
+| `todotxtmode.projectStyle.light.color`        | Color of project field in light mode          | <span style="color:rgb(25, 172, 230);">rgb(25, 172, 230)</span> |
+| `todotxtmode.projectStyle.dark.color`         | Color of project field in dark mode           | <span style="color:rgb(25, 172, 230);">rgb(25, 172, 230)</span> |
+| `todotxtmode.tagStyle.light.color`            | Color of tag field in light mode              | <span style="color:rgb(179, 58, 172);">rgb(179, 58, 172)</span> |
+| `todotxtmode.tagStyle.dark.color`             | Color of tag field in dark mode               | <span style="color:rgb(179, 58, 172);">rgb(179, 58, 172)</span> |
+| `todotxtmode.creationDateStyle.light.color`   | Color of creation date field in light mode    | <span style="color:rgb(200, 130, 0);">rgb(200, 130, 0)</span>   |
+| `todotxtmode.creationDateStyle.dark.color`   | Color of creation date field in light mode    | <span style="color:rgb(200, 130, 0);">rgb(200, 130, 0)</span>   |
+| `todotxtmode.pastDateStyle.dark.color`        | Color of creation date field in dark mode     | <span style="color:rgb(177, 58, 28);">rgb(177, 58, 28)</span>   |
+| `todotxtmode.pastDateStyle.light.color`       | Color of past due date field in light mode    | <span style="color:rgb(177, 58, 28);">rgb(177, 58, 28)</span>   |
+| `todotxtmode.pastDateStyle.dark.color`        | Color of past due date field in dark mode     | <span style="color:rgb(177, 58, 28);">rgb(177, 58, 28)</span>   |
+| `todotxtmode.presentDateStyle.light.color`    | Color of present due date field in light mode | <span style="color:rgb(219, 216, 26);">rgb(219, 216, 26)</span> |
+| `todotxtmode.presentDateStyle.dark.color`     | Color of present due date field in dark mode  | <span style="color:rgb(219, 216, 26);">rgb(219, 216, 26)</span> |
+| `todotxtmode.futureDateStyle.light.color`     | Color of future due date field in light mode  | <span style="color:rgb(118, 194, 31);">rgb(118, 194, 31)</span> |
+| `todotxtmode.futureDateStyle.dark.color`      | Color of future due date field in dark mode   | <span style="color:rgb(118, 194, 31);">rgb(118, 194, 31)</span> |
+| `todotxtmode.completedStyle.textDecoration`   | Text decoration for completed tasks           | <span style="text-decoration:line-through;">line-through</span> |
+| `todotxtmode.completedStyle.opacity`          | Opacity for completed tasks                   | <span style="opacity:0.5;">0.5</span>                           |
 
 ### Files
 
@@ -113,9 +113,12 @@ There are a few special files identifed for certain commands
 
 The extension ships with only one keybinding assigned but any of the commands can be bound to keyboard shortcuts in the usual manner with VS Code.
 
-| Command                      | Default Keybinding |
-| ---------------------------- | ------------------ |
-| `extension.toggleCompletion` | `ctrl+shift+x`     |
+| Command                       | Default Keybinding |
+| ----------------------------- | ------------------ |
+| `extension.toggleCompletion`  | `ctrl+shift+x`     |
+| `extension.incrementPriority` | `ctrl+shift+a`     |
+| `extension.decrementPriority` | `ctrl+shift+z`     |
+
 
 ### Other Settings
 
@@ -135,9 +138,3 @@ The remaining settings define various behavior of the extension including which 
 
 See [CHANGELOG](https://github.com/davraamides/todotxt-mode/blob/master/CHANGELOG.md)
 
-## Future Plans
-
-- Move tasks from `inbox.txt` to a new or existing Markdown project file
-- Move tasks from a Markdown project file to `todo.txt` file
-- Collect `@next` tasks from all project files into `todo.txt` file
-- More comprehensive style setting support

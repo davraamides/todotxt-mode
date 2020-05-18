@@ -53,6 +53,16 @@ class Decoration implements IDecoration {
     }
 }
 
+class CreationDateDecoration extends Decoration {
+    addMatch(match: object) {
+        //adjust range so it's just the last 10 chars so ignore leading priority
+        var range = match['range'];
+        let endPos = new vscode.Position(range.end.line, range.end.character);
+        let begPos = new vscode.Position(range.start.line, range.end.character - 11);
+        this.decorationOptions.push({ range: new Range(begPos, endPos) })
+    }
+}
+
 class PriorityDecoration implements IDecoration {
     regex: RegExp;
     decorationOptionsMap: { [priority: string]: vscode.DecorationOptions[] } = {};
@@ -147,6 +157,7 @@ export default class Decorator {
     decorations: IDecoration[] = [
         new Decoration(Patterns.ContextRegex, Settings.ContextStyle),
         new Decoration(Patterns.ProjectRegex, Settings.ProjectStyle),
+        new CreationDateDecoration(Patterns.CreationDateRegex, Settings.CreationDateStyle),
         new Decoration(Patterns.CompletedGlobalRegex, Settings.CompletedStyle),
         new PriorityDecoration({
             '(A)': Settings.HighPriorityStyle,

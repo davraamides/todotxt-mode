@@ -9,7 +9,6 @@ import * as vscode from 'vscode';
 export namespace Settings {
 
     export const CompletedTaskPrefix = "x ";
-    export const CompletedTagLength = "x yyyy-mm-dd ".length;
     export const PriorityTagLength = "(A) ".length;
 
     // move to configuration
@@ -50,6 +49,10 @@ export namespace Settings {
     export const TagStyle = {
         light: { color: getSetting<string>("tagStyle.light.color") },
         dark: { color: getSetting<string>("tagStyle.dark.color") }
+    }
+    export const CreationDateStyle = {
+        light: { color: getSetting<string>("creationDateStyle.light.color") },
+        dark: { color: getSetting<string>("creationDateStyle.dark.color") }
     }
     export const PastDateStyle = {
         light: { color: getSetting<string>("pastDateStyle.light.color") },
