@@ -313,7 +313,7 @@
 		"vscode": "^1.1.28"
 	},
 	"dependencies": {
-		"lodash": "^4.17.15",
+		"lodash": "^4.17.19",
 		"vsce": "^1.59.0"
 	}
 }
