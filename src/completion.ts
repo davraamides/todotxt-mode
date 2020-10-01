@@ -1,3 +1,4 @@
+import { settings } from 'cluster';
 import * as vscode from 'vscode';
 
 import { Helpers } from './helpers';
@@ -6,8 +7,8 @@ import { Settings } from './settings';
 // Logic to toggle a task completed
 //
 // Match completed flag, priority and completed date optionally along with rest
-// of task. Because this regex is four optional fields (leading space,
-// completion flag, completed date and rest of task line) it is guaranteed to
+// of task. Because this regex is mad of all optional fields (leading space, completed flag,
+// priority, completed date, creation date and rest of task line) it is guaranteed to
 // match any line. (The leading space part, \s*, doesn't need the optional flag,
 // ?, because it will match zero or more leading spaces. Thus even if there is
 // no leading space, it will return the empty string.)
@@ -34,6 +35,14 @@ export namespace Completion {
             } else {
                 // toggle to completed by adding in the completed flag and date fields
                 let today = Helpers.getDateTimeParts()[0];
+                if (Settings.RemovePriorityFromCompletedTasks) {
+                    // NOTE if I wanted to preserve the priority like they suggest in the spec,
+                    // I could do this, but don't love it
+                    // if (priority) {
+                    //     task += " pri:" + priority[1];
+                    // }
+                    priority = "";
+                }
                 newTask = lead + Settings.CompletedTaskPrefix + (priority || "") + today + ' ' + (creationDate || "") + task;
             }
             // replace the old line with the new, toggled line

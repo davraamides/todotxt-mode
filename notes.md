@@ -48,3 +48,7 @@ I typically use
     vsce publish patch
 
 to increment the patch portion (i.e. 1.2.3 -> 1.2.4). Make sure you udpate everything including `CHANGELOG.md` and check everything in and push first.
+
+I've also started publishing to OVSX, described here: https://www.gitpod.io/blog/open-vsx/
+
+    npx ovsx publish -p <token>

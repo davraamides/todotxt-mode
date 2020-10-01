@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.4.16 - 2020-10-01
+
+- Added option to [remove priority indicator from completed tasks](https://github.com/davraamides/todotxt-mode/issues/20)
+    The spec suggests this to allow sorting completed tasks by date. I made an option
+    in the extension settings so as not to change behavior in the past. The default
+    is false/off. See `todotxtmode.removePriorityFromCompletedTasks`.
+
+- Added feature to [hover project file contents and link to file](https://github.com/davraamides/todotxt-mode/issues/17)
+    This behaves like the `note:xxx` tag field but for `+project` tags. If there is a file
+    named `project.md` for the corresponding `+project` field, the contents will be displayed when hovering over the project field and a link to open it is display in the hover box.
+
 ## 1.4.15 - 2020-05-17
 
 - Fix [todotxt-mode.toggleCompletion should not overwrite creation date with completion date](https://github.com/davraamides/todotxt-mode/issues/15)

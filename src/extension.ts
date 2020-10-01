@@ -40,22 +40,50 @@ export function activate(context: vscode.ExtensionContext) {
 				// vscode.window.showInformationMessage(`path: ${folder}`);
 				try {
 					let notePath:string = path.join(folder, fname);
-					let note = fs.readFileSync(notePath);
-					// this link fails on windows - it probably needs the leading \ but then needs them converted to / or something
-					let prefix = 'file://';
-					if (os.platform() == 'win32') {
-						prefix = 'file:///';
+					if (fs.existsSync(notePath)) {
+						let note = fs.readFileSync(notePath);
+						// this link fails on windows - it probably needs the leading \ but then needs them converted to / or something
+						let prefix = 'file://';
+						if (os.platform() == 'win32') {
+							prefix = 'file:///';
+						}
+						let encPath = encodeURI(`${prefix}${notePath}`);
+						let message = new vscode.MarkdownString(`[Open note](${encPath})\n\n${note}` );
+						return new vscode.Hover(message);
 					}
-					let encPath = encodeURI(`${prefix}${notePath}`);
-					let message = new vscode.MarkdownString(`[Open note](${encPath})\n\n${note}` );
-					return new vscode.Hover(message);
 				} catch (err) {
 					vscode.window.showInformationMessage(`err: ${err}`);
 					console.log(err);					
 				}
-			} else {
-				return null;
 			}
+			return null;
+		}
+	});
+	vscode.languages.registerHoverProvider({scheme: 'file', language: 'plaintext'}, {
+		provideHover(document, position, token) {
+			const word = document.getText(document.getWordRangeAtPosition(position, Patterns.ProjectRegex));
+            // vscode.window.showInformationMessage(`word: ${word}`);
+			let fname = word.substring(1) + '.md';
+			let folder = path.normalize(path.dirname(vscode.window.activeTextEditor.document.fileName));
+			// vscode.window.showInformationMessage(`path: ${folder}`);
+			try {
+				let projectPath:string = path.join(folder, fname);
+				if (fs.existsSync(projectPath)) {
+					let project = fs.readFileSync(projectPath);
+					// this link fails on windows - it probably needs the leading \ but then needs them converted to / or something
+					let prefix = 'file://';
+					if (os.platform() === 'win32') {
+						prefix = 'file:///';
+					}
+					let encPath = encodeURI(`${prefix}${projectPath}`);
+					let message = new vscode.MarkdownString(`[Open project](${encPath})\n\n${project}` );
+					return new vscode.Hover(message);
+				}
+			} catch (err) {
+				vscode.window.showInformationMessage(`err: ${err}`);
+				console.log(err);					
+			}
+			return null;
 		}
 	});
 	// decorate initially on activation

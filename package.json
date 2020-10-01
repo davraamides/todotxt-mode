@@ -144,7 +144,12 @@
 				"todotxtmode.sortCompletedTasksToEnd": {
 					"type": "boolean",
 					"default": true,
-					"description": "Alwasy place completed tasks at end of list when sorting"
+					"description": "Always place completed tasks at end of list when sorting"
+				},
+				"todotxtmode.removePriorityFromCompletedTasks": {
+					"type": "boolean",
+					"default": false,
+					"description": "Remove the priority tag from completed tasks"
 				},
 				"todotxtmode.sectionDelimiterPattern": {
 					"type": "string",
@@ -307,13 +312,14 @@
 	"devDependencies": {
 		"@types/mocha": "^2.2.42",
 		"@types/node": "^10.17.13",
+		"graceful-fs": "^4.2.4",
 		"minimist": ">=0.2.1",
-		"tslint": "^5.12.1",
+		"tslint": "^5.20.1",
 		"typescript": "^3.3.1",
 		"vscode": "^1.1.28"
 	},
 	"dependencies": {
-		"lodash": "^4.17.15",
+		"lodash": "^4.17.20",
 		"vsce": "^1.59.0"
 	}
 }

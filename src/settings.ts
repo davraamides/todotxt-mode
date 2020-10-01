@@ -19,6 +19,7 @@ export namespace Settings {
     
     export const Message:string = getSetting<string>("message");
     export const SortCompletedTasksToEnd:boolean = getSetting<boolean>("sortCompletedTasksToEnd");
+    export const RemovePriorityFromCompletedTasks:boolean = getSetting<boolean>("removePriorityFromCompletedTasks");
     export const TodoFilePattern:string = getSetting<string>("todoFilePattern");
     export const ExcludeDecorationsFilePattern:string = getSetting<string>("excludeDecorationsFilePattern");
     export const SectionDelimiterPattern:string = getSetting<string>("sectionDelimiterPattern");
