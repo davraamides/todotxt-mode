@@ -59,7 +59,7 @@ export function strftime(sFormat: string, date: Date) {
               target.setMonth(0, 1);
               var nJan1 = target.getDay();
               if (nJan1!==4) target.setMonth(0, 1 + ((4-nJan1)+7)%7);
-              return zeroPad(1 + Math.ceil((n1stThu-target)/604800000), 2);
+              return zeroPad(1 + Math.ceil((n1stThu-target.valueOf())/604800000), 2);
             })(),
       '%w': nDay,
       '%x': date.toLocaleDateString(),
