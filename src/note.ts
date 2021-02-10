@@ -2,7 +2,9 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 
-import { Helpers } from './helpers';
+import { Settings } from './settings';
+import { strftime } from './strftime';
+
 //
 // Manage task notes
 //
@@ -28,11 +30,19 @@ export namespace Note {
             builder.delete(selection);
         });
  
-        let [date, time] = Helpers.getDateTimeParts();
+        let noteFilename = strftime(Settings.NoteFilenameFormat, new Date());
+        let selStart = noteFilename.indexOf("[");
+        let selEnd = noteFilename.indexOf("]");
+        if (selStart == -1 || selEnd == -1) {
+            selStart = selEnd = noteFilename.length;
+        } else {
+            selEnd += 1;
+        }
+
         vscode.window.showInputBox({
             prompt: 'Note file:',
-            value: "[Task]-Note-" + date.replace(/-/g, '') + "-" + time.replace(/:/g, '') + ".md",
-            valueSelection: [0, 6]
+            value: noteFilename,
+            valueSelection: [selStart, selEnd]
         }).then((noteFile:string) => {
             let folder = path.normalize(path.dirname(vscode.window.activeTextEditor.document.fileName));
             let notePath: string = path.join(folder, noteFile);

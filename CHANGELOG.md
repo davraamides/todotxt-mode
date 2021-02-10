@@ -1,5 +1,10 @@
 # Change Log
 
+## 1.4.19 - 2021-02-10
+
+- Added new extension setting to [make the note filename pattern customizable](https://github.com/davraamides/todotxt-mode/issues/25).
+    The new settings, `noteFilenameFormat`, specifies the format for new note filenames when using the `createTaskNote` command ("Create note for task"). The format can include `strftime`-style format specifiers and uses the [strftime](https://thdoan.github.io/strftime/) JavaScript port of the C library function. The filename format can also contain the string `[Task]` which will be selected in the prompt. The default format is `[Task]-Note-%Y%m%d-%H%M%S.md` to be consistent with previous versions.
+
 ## 1.4.16 - 2020-10-01
 
 - Added option to [remove priority indicator from completed tasks](https://github.com/davraamides/todotxt-mode/issues/20)

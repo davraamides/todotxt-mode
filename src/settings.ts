@@ -26,6 +26,7 @@ export namespace Settings {
     export const MarkdownFilePattern:string = getSetting<string>("markdownFilePattern");
     export const MarkdownDecorationBeginPattern:string = getSetting<string>("markdownDecorationBeginPattern");
     export const MarkdownDecorationEndPattern:string = getSetting<string>("markdownDecorationEndPattern");
+    export const NoteFilenameFormat:string = getSetting<string>("noteFilenameFormat");
 
     export const ContextStyle = {
         light: { color: getSetting<string>("contextStyle.light.color") },

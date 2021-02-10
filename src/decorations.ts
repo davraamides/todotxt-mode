@@ -59,7 +59,7 @@ class CreationDateDecoration extends Decoration {
         var range = match['range'];
         let endPos = new vscode.Position(range.end.line, range.end.character);
         let begPos = new vscode.Position(range.start.line, range.end.character - 11);
-        this.decorationOptions.push({ range: new Range(begPos, endPos) })
+        this.decorationOptions.push({ range: new Range(begPos, endPos) });
     }
 }
 
@@ -85,6 +85,7 @@ class PriorityDecoration implements IDecoration {
         if (! this.decorationOptionsMap[priority]) {
             this.decorationOptionsMap[priority] = [];
         }
+        //console.log("adding priority match: prority=" + priority);
         this.decorationOptionsMap[priority].push({ range: match['range'] });
     }
 
@@ -97,8 +98,10 @@ class PriorityDecoration implements IDecoration {
     apply(editor: vscode.TextEditor) {
         for (var priority in this.decorationOptionsMap) {
             if (priority in this.decorationTypeMap) {
+                //console.log("applying priority decoration: priority=" + priority + " type=priority map");
                 editor.setDecorations(this.decorationTypeMap[priority], this.decorationOptionsMap[priority]);
             } else {
+                //console.log("applying priority decoration: priority=" + priority + " type=default");
                 editor.setDecorations(this.defaultDecorationType, this.decorationOptionsMap[priority]);
             }
         }
@@ -125,7 +128,7 @@ class DateDecoration implements IDecoration {
 
     addMatch(match: object) {
         let bits = match['value'].split(':');
-        if (bits[0] != this.tag) {
+        if (bits[0] !== this.tag) {
             return;
         }
         let date: string = bits[1];
@@ -170,7 +173,7 @@ export default class Decorator {
             Settings.FutureDateStyle),
         // first decoration wins so put the general tag one after the specific priority one
         new Decoration(Patterns.TagRegex, Settings.TagStyle)
-    ]
+    ];
 
     public decorateDocument() {
         let editor = vscode.window.activeTextEditor;
@@ -186,7 +189,7 @@ export default class Decorator {
             decoration.clear();
         });
 
-        if (editor != undefined) {
+        if (editor !== undefined) {
             if (Helpers.isDecoratedFile(fileName)) {
                 let [begLine, endLine] = Helpers.getDecoratedLineRange(editor.document);
                 for (var i = begLine; i <= endLine; i++) {
@@ -204,7 +207,7 @@ export default class Decorator {
                                 //console.log("skipping seen match for value=" + match["value"]);
                             }
                         }
-                    })
+                    });
                 }
             }
 
@@ -222,9 +225,10 @@ export default class Decorator {
         while (result = regex.exec(line.text)) {
             let begPos = new vscode.Position(line.range.start.line,  result.index);
             let endPos = new vscode.Position(line.range.start.line,  result.index + result[0].length);
-            matches.push({ range: new Range(begPos, endPos), value: result[0]})
+            matches.push({ range: new Range(begPos, endPos), value: result[0]});
             //console.log("pushed match at begPos=" + begPos.character + " endPos=" + endPos.character + " value=" + result[0]);
         }
+        //console.log("matches: " + matches);
         return matches;
     }
 }

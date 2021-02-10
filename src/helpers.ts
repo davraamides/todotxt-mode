@@ -7,7 +7,7 @@ import { Patterns } from './patterns';
 export namespace Helpers {
 
     export function EOL() {
-        return vscode.window.activeTextEditor.document.eol == vscode.EndOfLine.CRLF ? '\r\n' : '\n';
+        return vscode.window.activeTextEditor.document.eol === vscode.EndOfLine.CRLF ? '\r\n' : '\n';
     }
 
     // get current date/time as [yyyy-mm-dd, hh:mm:ss] strings
@@ -41,32 +41,32 @@ export namespace Helpers {
         return isTodoFile(filename) || isProjectFile(filename);
     }
     export function isTodoFile(filename: string): boolean {
-        if (filename.match(Settings.TodoFilePattern) != null) {
+        if (filename.match(Settings.TodoFilePattern) !== null) {
             return true;
         }
     }
     export function isProjectFile(filename: string): boolean {
-        if (filename.match(Settings.MarkdownFilePattern) != null && Settings.MarkdownDecorationBeginPattern) {
-            return true
+        if (filename.match(Settings.MarkdownFilePattern) !== null && Settings.MarkdownDecorationBeginPattern) {
+            return true;
         }
     }
     export function isNoteTag(text: string): boolean {
         if (text.match(Patterns.TagRegex)) {
-            return text.split(':')[0] == 'note';
+            return text.split(':')[0] === 'note';
         }
         return false;
     }
     export function excludeDecorations(filename: string): boolean {
-        return filename.match(Settings.ExcludeDecorationsFilePattern) != null;
+        return filename.match(Settings.ExcludeDecorationsFilePattern) !== null;
     }
 
     export function getLastTodoLineInDocument(document: vscode.TextDocument): number {
         // if the sectionDelimiterPattern setting has been set, find the first matching line
         //let document = vscode.window.activeTextEditor.document;
-        if (Settings.SectionDelimiterPattern != undefined && Settings.SectionDelimiterPattern.length > 0) {
+        if (Settings.SectionDelimiterPattern !== undefined && Settings.SectionDelimiterPattern.length > 0) {
             for (var i = 0; i < document.lineCount; i++) {
                 if (document.lineAt(i).text.match(Settings.SectionDelimiterPattern)) {
-                    return i == 0 ? 0 : i - 1; // return the previous line unless the first line has the delimiter
+                    return i === 0 ? 0 : i - 1; // return the previous line unless the first line has the delimiter
                 }
             }
         }
@@ -100,8 +100,8 @@ export namespace Helpers {
                 }
                 i++;
             }
-            if (begLine != -1) {
-                if (endLine == -1) {
+            if (begLine !== -1) {
+                if (endLine === -1) {
                     // go to the end of the file if the end pattern was never found
                     endLine = document.lineCount - 1;
                 }
@@ -133,9 +133,9 @@ export namespace Helpers {
         if (match) {
             oldPriority = match[0];
             priorityChar = oldPriority[oldPriority.length - 2]; // since there could be leading space
-            if (priorityChar == 'A' && increment) {
+            if (priorityChar === 'A' && increment) {
                 priorityChar = 'Z';
-            } else if (priorityChar == 'Z' && ! increment) {
+            } else if (priorityChar === 'Z' && ! increment) {
                 priorityChar = 'A';
             } else {
                 priorityChar = String.fromCharCode(priorityChar.charCodeAt(0) + (increment ? -1 : 1));
