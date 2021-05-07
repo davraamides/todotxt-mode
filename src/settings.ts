@@ -11,7 +11,6 @@ export namespace Settings {
     export const CompletedTaskPrefix = "x ";
     export const PriorityTagLength = "(A) ".length;
 
-    // move to configuration
     export const TodoFilename:string = getSetting<string>("todoFilename");
     export const DoneFilename: string = getSetting<string>("doneFilename");
     export const SomedayFilename: string = getSetting<string>("somedayFilename");
@@ -27,6 +26,7 @@ export namespace Settings {
     export const MarkdownDecorationBeginPattern:string = getSetting<string>("markdownDecorationBeginPattern");
     export const MarkdownDecorationEndPattern:string = getSetting<string>("markdownDecorationEndPattern");
     export const NoteFilenameFormat:string = getSetting<string>("noteFilenameFormat");
+    export const ReplaceNoteTextWithNoteTag:boolean = getSetting<boolean>("replaceNoteTextWithNoteTag");
 
     export const ContextStyle = {
         light: { color: getSetting<string>("contextStyle.light.color") },

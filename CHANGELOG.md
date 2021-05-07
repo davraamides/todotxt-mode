@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.4.21 - 2021-05-07
+
+- Added option to automatically [replace note text with the resulting note tag](https://github.com/davraamides/todotxt-mode/issues/27) when creating a note for a task. The new setting, `replaceNoteTextWithNoteTag`, defaults to `false` so the old behavior remains the same (the text is just deleted).
+
 ## 1.4.19 - 2021-02-10
 
 - Added new extension setting to [make the note filename pattern customizable](https://github.com/davraamides/todotxt-mode/issues/25).

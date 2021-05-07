@@ -186,6 +186,11 @@
 					"decription": "Format for new note filenames. Can contain strftime-style format specifiers. The string '[Todo]', if used, will be selected.",
 					"default": "[Todo]-Note-%Y%m%d-%H%M%S.md"
 				},
+				"todotxtmode.replaceNoteTextWithNoteTag": {
+					"type": "boolean",
+					"default": false,
+					"description": "Automatically replace note text with the note tag when creating a note for a task"
+				},
 				"todotxtmode.contextStyle.light.color": {
 					"type": "string",
 					"description": "Color of context field in light mode",

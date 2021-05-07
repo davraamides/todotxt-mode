@@ -4,6 +4,7 @@ import * as fs from 'fs';
 
 import { Settings } from './settings';
 import { strftime } from './strftime';
+import { settings } from 'cluster';
 
 //
 // Manage task notes
@@ -25,10 +26,6 @@ export namespace Note {
             return;
         }
         const selectedText = activeEditor.document.getText(selection);
-        // move this so only happens if the save below succeeds?
-        activeEditor.edit(builder => {
-            builder.delete(selection);
-        });
  
         let noteFilename = strftime(Settings.NoteFilenameFormat, new Date());
         let selStart = noteFilename.indexOf("[");
@@ -48,8 +45,18 @@ export namespace Note {
             let notePath: string = path.join(folder, noteFile);
             try {
                 fs.writeFileSync(notePath, selectedText, 'utf8');
-                vscode.env.clipboard.writeText("note:" + noteFile);
-                vscode.window.showInformationMessage("Paste the new note tag into the appropriate task");
+                let noteTag = "note:" + noteFile;
+                vscode.env.clipboard.writeText(noteTag);
+                if (Settings.ReplaceNoteTextWithNoteTag) {
+                    activeEditor.edit(builder => {
+                        builder.replace(selection, noteTag);
+                    });
+                } else {
+                    activeEditor.edit(builder => {
+                        builder.delete(selection);
+                    });
+                    vscode.window.showInformationMessage("Paste the new note tag into the appropriate task");
+                }
             } catch(e) {
                 vscode.window.showErrorMessage(`Failed to create note file: ${notePath}`);
             }
