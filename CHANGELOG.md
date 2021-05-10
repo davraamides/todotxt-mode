@@ -1,6 +1,6 @@
 # Change Log
 
-## 1.4.22 - 2021-05-10
+## 1.4.23 - 2021-05-10
 - Fixed bug where some multi-task commands like `incrementPriority`, `decrementPriority` and `toggleCompletion` were not working properly. It seems calling `TextEditor.edit` multiple times in a loop no longer works as it used to. This fixes ["Increment/Decrement priority of selected tasks" apply for selected tasks](https://github.com/davraamides/todotxt-mode/issues/30). Updated README.md to include all settings and commands.
 
 ## 1.4.21 - 2021-05-07
