@@ -89,7 +89,7 @@ The extension also includes a few enhancements that, while not part of the todo.
 | `todotxtmode.tagStyle.light.color`            | Color of tag field in light mode              | <span style="color:rgb(179, 58, 172);">rgb(179, 58, 172)</span> |
 | `todotxtmode.tagStyle.dark.color`             | Color of tag field in dark mode               | <span style="color:rgb(179, 58, 172);">rgb(179, 58, 172)</span> |
 | `todotxtmode.creationDateStyle.light.color`   | Color of creation date field in light mode    | <span style="color:rgb(200, 130, 0);">rgb(200, 130, 0)</span>   |
-| `todotxtmode.creationDateStyle.dark.color`   | Color of creation date field in light mode    | <span style="color:rgb(200, 130, 0);">rgb(200, 130, 0)</span>   |
+| `todotxtmode.creationDateStyle.dark.color`    | Color of creation date field in light mode    | <span style="color:rgb(200, 130, 0);">rgb(200, 130, 0)</span>   |
 | `todotxtmode.pastDateStyle.dark.color`        | Color of creation date field in dark mode     | <span style="color:rgb(177, 58, 28);">rgb(177, 58, 28)</span>   |
 | `todotxtmode.pastDateStyle.light.color`       | Color of past due date field in light mode    | <span style="color:rgb(177, 58, 28);">rgb(177, 58, 28)</span>   |
 | `todotxtmode.pastDateStyle.dark.color`        | Color of past due date field in dark mode     | <span style="color:rgb(177, 58, 28);">rgb(177, 58, 28)</span>   |
@@ -133,9 +133,11 @@ The remaining settings define various behavior of the extension including which 
 | `todotxtmode.todoFilePattern`                  | Regex pattern of filenames to apply todotxt-mode commands                                                                                    | `^.*\\.txt$`                       |
 | `todotxtmode.excludeDecorationsFilePattern`    | Regex pattern of filenames to exclude todotxt-mode decorations                                                                               | `^done\\.txt$`                     |
 | `todotxtmode.markdownFilePattern`              | Regex pattern of Markdown filenames to apply todotxt-mode commands using `markdownDecorationBeginPattern` and `markdownDecorationEndPattern` | <code>^.*\\.(md\|markdown)$</code> |
-| `todotxtmode.markdownDecorationBeginPattern`   | Regex pattern of rane in Markdown files to decorate                                                                                          | `^#+\\s+Tasks\\s*$`                |
-| `todotxtmode.markdownDecorationEndPattern`     | Regex pattern of rane in Markdown files to decorate                                                                                          | `^$`                               |
+| `todotxtmode.markdownDecorationBeginPattern`   | Regex pattern of range in Markdown files to decorate                                                                                         | `^#+\\s+Tasks\\s*$`                |
+| `todotxtmode.markdownDecorationEndPattern`     | Regex pattern of range in Markdown files to decorate                                                                                         | `^$`                               |
 | `todotxtmode.removePriorityFromCompletedTasks` | Remove the priority tag from completed tasks                                                                                                 | `false`                            |
+| `todotxtmode.noteFilenameFormat`               | Format for new note filenames. Can contain strftime-style format specifiers. The string '[Todo]', if used, will be selected.                 | `[Todo]-Note-%Y%m%d-%H%M%S.md`     |
+| `todotxtmode.replaceNoteTextWithNoteTag`       | Automatically replace note text with the note tag when creating a note for a task                                                            | `false`                            |
 
 ## Release Notes
 

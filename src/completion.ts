@@ -20,6 +20,7 @@ export namespace Completion {
     export function toggleCompletion() {
         const editor = vscode.window.activeTextEditor;
         let [startLine, endLine] = Helpers.getSelectedLineRange(false);
+        let linesToToggleCompletion: {line, begin, end, newTask}[] = [];
         for (var i = startLine; i <= endLine; i++) {
             let text = editor.document.lineAt(i).text;
             var lead, completed, priority, completionDate, creationDate, task, _t, newTask;
@@ -45,15 +46,23 @@ export namespace Completion {
                 }
                 newTask = lead + Settings.CompletedTaskPrefix + (priority || "") + today + ' ' + (creationDate || "") + task;
             }
-            // replace the old line with the new, toggled line
-            editor.edit(builder => {
-                builder.replace(
-                    new vscode.Range(
-                        new vscode.Position(i, 0),
-                        new vscode.Position(i, text.length)),
-                        newTask);
+            linesToToggleCompletion.push({
+                line: i,
+                begin: 0,
+                end: text.length,
+                newTask: newTask
             });
         }
+        editor.edit(builder => {
+            linesToToggleCompletion.forEach(elt => {
+                builder.replace(
+                    new vscode.Range(new vscode.Position(elt.line, elt.begin),
+                    new vscode.Position(elt.line, elt.end)),
+                    elt.newTask
+                );
+            })
+        }).then(() => { });
+
         Helpers.triggerSelectionChange();
     }
 }
