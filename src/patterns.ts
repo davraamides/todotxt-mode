@@ -44,14 +44,14 @@ export namespace Patterns {
     // The context and project patterns are prefixed with non-word boundary (\B) as they
     // begin with non-word chars (+@). The tag pattern is prefixed with a word bounday (\b)
     // as tags begin with a word char.
-    export const ContextRegex = /\B@\S+\b/g;
+    export const ContextRegex = /\B@\S+/g;
     export const PriorityWithLeadingSpaceRegex = /^\s*[(][A-Z][)]\B/g;
     export const PriorityWithTrailingSpaceRegex = /[(][A-Z][)]\s/;
     export const PriorityOnlyRegex = /[(][A-Z][)]\B/g;
-    export const ProjectRegex = /\B\+\S+\b/g;
-    export const TagRegex = /\b[^\s:]+:[^\s]+\b/g;
+    export const ProjectRegex = /\B\+\S+/g;
+    export const TagRegex = /[^\s:]+:\S+/g;
     export const CreationDateRegex = /^(?:[(][A-Z][)] )?\s*(\d{4}-\d{2}-\d{2})\s/g;
-    export const TagValueRegex = /\b([^\s:]+):(\S+)\b/g;
+    export const TagValueRegex = /([^\s:]+):(\S+)/g;
     export const TagDateRegexString = "\\b(#TAG#):(\\d{4}-\\d{2}-\\d{2})\\b";
     export const CompletedGlobalRegex = /^\s*x .*$/g;
     export const CompletedRegex = /^\s*x\s/;
