@@ -90,7 +90,6 @@ The extension also includes a few enhancements that, while not part of the todo.
 | `todotxtmode.tagStyle.dark.color`             | Color of tag field in dark mode               | <span style="color:rgb(179, 58, 172);">rgb(179, 58, 172)</span> |
 | `todotxtmode.creationDateStyle.light.color`   | Color of creation date field in light mode    | <span style="color:rgb(200, 130, 0);">rgb(200, 130, 0)</span>   |
 | `todotxtmode.creationDateStyle.dark.color`    | Color of creation date field in light mode    | <span style="color:rgb(200, 130, 0);">rgb(200, 130, 0)</span>   |
-| `todotxtmode.pastDateStyle.dark.color`        | Color of creation date field in dark mode     | <span style="color:rgb(177, 58, 28);">rgb(177, 58, 28)</span>   |
 | `todotxtmode.pastDateStyle.light.color`       | Color of past due date field in light mode    | <span style="color:rgb(177, 58, 28);">rgb(177, 58, 28)</span>   |
 | `todotxtmode.pastDateStyle.dark.color`        | Color of past due date field in dark mode     | <span style="color:rgb(177, 58, 28);">rgb(177, 58, 28)</span>   |
 | `todotxtmode.presentDateStyle.light.color`    | Color of present due date field in light mode | <span style="color:rgb(219, 216, 26);">rgb(219, 216, 26)</span> |
