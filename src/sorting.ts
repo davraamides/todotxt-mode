@@ -76,6 +76,7 @@ export namespace Sorting {
 
     function sort(lineObjects: object[], startLine, endLine) {
         let editor = vscode.window.activeTextEditor;
+        const selection = vscode.window.activeTextEditor.selection;
         //let selectionLine = editor.selection.start.line;
 
         // sort the lines by the values of byField. leave lines without a field
@@ -98,7 +99,8 @@ export namespace Sorting {
         editor.edit(editBuilder => {
             const range = new vscode.Range(startLine, 0, endLine, editor.document.lineAt(endLine).text.length);
             editBuilder.replace(range, sortedLines.join('\n'));
+        }).then(() => {
+            editor.selection = selection;
         });
-        Helpers.triggerSelectionChange();
     }
 };

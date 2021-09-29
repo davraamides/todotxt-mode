@@ -68,6 +68,7 @@ export namespace Patterns {
     export function formatSelectedTasks() {
         // Get the current line and find the first 2 characters
         const editor = vscode.window.activeTextEditor;
+        const selection = vscode.window.activeTextEditor.selection;
         let [startLine, endLine] = Helpers.getSelectedLineRange(false);
 
         let newLines = [];
@@ -83,7 +84,9 @@ export namespace Patterns {
             let lastText = vscode.window.activeTextEditor.document.lineAt(endLine).text;
             const range = new vscode.Range(new vscode.Position(startLine, 0), new vscode.Position(endLine, lastText.length));
             builder.replace(range, newLines.join('\n'));
-        })
+        }).then(() => {
+            editor.selection = selection;
+        });
         // put in utils
         let selectedLineLength = editor.document.lineAt(startLine).text.length;
         editor.selection = new vscode.Selection(new vscode.Position(startLine, selectedLineLength), new vscode.Position(startLine, selectedLineLength));

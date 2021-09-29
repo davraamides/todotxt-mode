@@ -11,6 +11,7 @@ export namespace Priority {
 
     export function changePriority(increment: boolean) {
         const editor = vscode.window.activeTextEditor;
+        const selection = vscode.window.activeTextEditor.selection;
         let [startLine, endLine] = Helpers.getSelectedLineRange(false);
         let linesWithPriorityChange: {line, begin, end, newPriority}[] = [];
         for (var i = startLine; i <= endLine; i++) {
@@ -31,12 +32,14 @@ export namespace Priority {
                     elt.newPriority
                 );
             })
-        }).then(() => { });
-        Helpers.triggerSelectionChange();
+        }).then(() => {
+            editor.selection = selection;
+         });
     }
 
     export function removePriorities() {
         const editor = vscode.window.activeTextEditor;
+        const selection = vscode.window.activeTextEditor.selection;
         let [startLine, endLine] = Helpers.getSelectedLineRange(true);
         let linesWithPriority: {line, match}[] = [];
         for (var i = startLine; i <= endLine; i++) {
@@ -55,7 +58,8 @@ export namespace Priority {
                     new vscode.Position(elt.line, elt.match.index + elt.match[0].length))
                 );
             })
-        }).then(() => { });
-        Helpers.triggerSelectionChange();
+        }).then(() => {
+            editor.selection = selection;
+         });
     }
 }

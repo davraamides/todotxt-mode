@@ -1,4 +1,3 @@
-import { settings } from 'cluster';
 import * as vscode from 'vscode';
 
 import { Helpers } from './helpers';

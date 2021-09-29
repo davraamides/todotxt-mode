@@ -4,7 +4,6 @@ import * as fs from 'fs';
 
 import { Settings } from './settings';
 import { strftime } from './strftime';
-import { settings } from 'cluster';
 
 //
 // Manage task notes
