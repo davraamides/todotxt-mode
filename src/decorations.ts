@@ -218,7 +218,7 @@ export default class Decorator {
         }
     }
 
-    private findMatchingPatterns(regex: RegExp, line: vscode.TextLine): object[] {
+    public findMatchingPatterns(regex: RegExp, line: vscode.TextLine): object[] {
         let matches: object[] = [];
         let result: RegExpExecArray;
         //console.log("finding matches for " + regex);
