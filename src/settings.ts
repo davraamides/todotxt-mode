@@ -26,6 +26,7 @@ export namespace Settings {
     export const MarkdownDecorationBeginPattern:string = getSetting<string>("markdownDecorationBeginPattern");
     export const MarkdownDecorationEndPattern:string = getSetting<string>("markdownDecorationEndPattern");
     export const NoteFilenameFormat:string = getSetting<string>("noteFilenameFormat");
+    export const TagDatePattern:string = getSetting<string>("tagDatePattern");
     export const ReplaceNoteTextWithNoteTag:boolean = getSetting<boolean>("replaceNoteTextWithNoteTag");
 
     export const ContextStyle = {

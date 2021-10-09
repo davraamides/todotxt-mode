@@ -3,6 +3,9 @@ import * as vscode from 'vscode';
 import { Patterns } from './patterns';
 import { Settings } from './settings';
 import { Helpers } from './helpers';
+import { strftime } from './strftime';
+import { strptime } from './strptime';
+
 //
 // Sorting functions
 //
@@ -27,6 +30,13 @@ export namespace Sorting {
         let [startLine, endLine] = Helpers.getSelectedLineRange(true);
         let regex = Patterns.TagValueRegex;
         let lineObjects = getLineObjects(vscode.window.activeTextEditor.document, startLine, endLine, tagName, regex, parseTagValue);
+        sort(lineObjects, startLine, endLine);
+    }
+
+    export function sortLinesByDueDate() {
+        let [startLine, endLine] = Helpers.getSelectedLineRange(true);
+        let regex = Patterns.TagValueRegex;
+        let lineObjects = getLineObjects(vscode.window.activeTextEditor.document, startLine, endLine, 'due', regex, parseDueDate);
         sort(lineObjects, startLine, endLine);
     }
 
@@ -68,6 +78,25 @@ export namespace Sorting {
             if (result.length > 2) {
                 if (tagName == result[1]) {
                     value = result[2];
+                }
+            }
+        }
+        return value;
+    }
+
+    function parseDueDate(line: string, tagName: string, regex: RegExp): string {
+        let value: string = "y"; // default forcing to bottom if not found
+        let result: RegExpExecArray;
+        while (result = regex.exec(line)) {
+            if (result.length > 2) {
+                if (tagName == result[1]) {
+                    // parse the date in in the specified format and conver to a sortable format
+                    try {
+                        let date: Date = strptime(result[2], Settings.TagDatePattern);
+                        value = strftime('%Y%m%d', date);
+                    } catch (error) {
+                        value = result[2];                        
+                    }
                 }
             }
         }

@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
 import { Helpers } from './helpers';
+import { Settings } from './settings';
+
 //
 // Regular Expression patterns and related functions
 //
@@ -52,9 +54,18 @@ export namespace Patterns {
     export const TagRegex = /[^\s:]+:\S+/g;
     export const CreationDateRegex = /^(?:[(][A-Z][)] )?\s*(\d{4}-\d{2}-\d{2})\s/g;
     export const TagValueRegex = /([^\s:]+):(\S+)/g;
-    export const TagDateRegexString = "\\b(#TAG#):(\\d{4}-\\d{2}-\\d{2})\\b";
+    //export const TagDateRegexString = "\\b(#TAG#):(\\d{4}-\\d{2}-\\d{2})\\b";
     export const CompletedGlobalRegex = /^\s*x .*$/g;
     export const CompletedRegex = /^\s*x\s/;
+
+    export function TagDateRegexString() {
+        var datePattern = Settings.TagDatePattern
+            .replace('%Y', '\\d{4}')
+            .replace('%m', '\\d{1,2}')
+            .replace('%d', '\\d{1,2}');
+
+        return "\\b(#TAG#):(" + datePattern + ")\\b";
+    }
 
     // put them in a map so sorting by any field is consistent
     export const FieldRegex = {

@@ -5,6 +5,8 @@ import * as path from 'path';
 import { Helpers } from './helpers';
 import { Patterns } from './patterns';
 import { Settings } from './settings';
+import { strptime } from './strptime';
+
 //
 // Classes to manage decorations for various types of fields or task states.
 //
@@ -119,7 +121,7 @@ class DateDecoration implements IDecoration {
 
     constructor(tag: string, pastStyle: vscode.DecorationRenderOptions,
         presentStyle: vscode.DecorationRenderOptions, futureStyle: vscode.DecorationRenderOptions) {
-        this.regex = RegExp(Patterns.TagDateRegexString.replace("#TAG#", tag), "g");
+        this.regex = RegExp(Patterns.TagDateRegexString().replace("#TAG#", tag), "g");
         this.tag = tag;
         this.pastDecorationType = vscode.window.createTextEditorDecorationType(pastStyle);
         this.presentDecorationType = vscode.window.createTextEditorDecorationType(presentStyle);
@@ -131,9 +133,13 @@ class DateDecoration implements IDecoration {
         if (bits[0] !== this.tag) {
             return;
         }
-        let date: string = bits[1];
-        let today: string = Helpers.getDateTimeParts()[0];
-        if (date < today) {
+        let today: Date = new Date(new Date().setHours(0, 0, 0, 0));
+        let date: Date = null;
+        try {
+            date = strptime(bits[1], Settings.TagDatePattern);
+        } catch (error) {
+        }        
+        if (! date || date < today) {
             this.pastDecorationOptions.push({ range: match['range'] });
         } else if (date > today) {
             this.futureDecorationOptions.push({ range: match['range'] });

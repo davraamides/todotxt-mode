@@ -36,7 +36,7 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
         Sorting.sortLinesByField("creationDate");
     });
     let sortByDueDate = vscode.commands.registerCommand('extension.sortByDueDate', () => {
-        Sorting.sortLinesByTagValue("due");
+        Sorting.sortLinesByDueDate();
     });
     let formatTasks = vscode.commands.registerCommand('extension.formatTasks', () => {
         Patterns.formatSelectedTasks();

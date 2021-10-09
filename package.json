@@ -191,6 +191,11 @@
 					"default": false,
 					"description": "Automatically replace note text with the note tag when creating a note for a task"
 				},
+				"todotxtmode.tagDatePattern": {
+					"type": "string",
+					"decription": "Format for dates in due tag. Limited strftime-style format specifiers.",
+					"default": "%Y-%m-%d"
+				},
 				"todotxtmode.contextStyle.light.color": {
 					"type": "string",
 					"description": "Color of context field in light mode",
