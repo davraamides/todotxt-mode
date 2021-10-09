@@ -1,6 +1,10 @@
 # Change Log
 
-## 1.4.26 - 2021-09-28
+## 1.4.28 - 2021-10-09
+
+- Added `tagDatePattern` setting to allow specifying format of dates in `due` tags. Addresses [Extension Setting to Change Date Format](https://github.com/davraamides/todotxt-mode/issues/33).
+
+## 1.4.27 - 2021-09-28
 
 - Fixed issue on ["Increment/Decrement priority of selected tasks" apply for selected tasks](https://github.com/davraamides/todotxt-mode/issues/30) where the selection was lost after a multi-line edit.
 
