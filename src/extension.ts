@@ -22,6 +22,8 @@ export function activate(context: vscode.ExtensionContext) {
 		decorator.decorateDocument();
 	});
 
+	let disposable: vscode.Disposable;
+
 	// Register a hover provider for the note:xxx tag which reads the
 	// note file and displays in a hover message with a link to the file.
 	// I've had some issues with note files that are in different paths
@@ -29,7 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// cannot contain spaces since the tag note:xxx is delimited at the
 	// end by a space.
 
-	vscode.languages.registerHoverProvider({scheme: 'file', language: 'plaintext'}, {
+	disposable = vscode.languages.registerHoverProvider({scheme: 'file', language: 'plaintext'}, {
 		provideHover(document, position, token) {
 			const word = document.getText(document.getWordRangeAtPosition(position, Patterns.TagRegex));
             // vscode.window.showInformationMessage(`word: ${word}`);
@@ -59,7 +61,10 @@ export function activate(context: vscode.ExtensionContext) {
 			return null;
 		}
 	});
-	vscode.languages.registerHoverProvider({scheme: 'file', language: 'plaintext'}, {
+
+	context.subscriptions.push(disposable);
+
+	disposable = vscode.languages.registerHoverProvider({scheme: 'file', language: 'plaintext'}, {
 		provideHover(document, position, token) {
 			const word = document.getText(document.getWordRangeAtPosition(position, Patterns.ProjectRegex));
             // vscode.window.showInformationMessage(`word: ${word}`);
@@ -86,6 +91,9 @@ export function activate(context: vscode.ExtensionContext) {
 			return null;
 		}
 	});
+
+	context.subscriptions.push(disposable);
+
 	// decorate initially on activation
 	decorator.decorateDocument();
 }
