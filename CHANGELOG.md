@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.4.30 - 2021-11-16
+
+- Fixed issue on ["Note tag hover shows note content more than once"](https://github.com/davraamides/todotxt-mode/issues/42) where hovers would show note content more than once.
+
 ## 1.4.28 - 2021-10-09
 
 - Added `tagDatePattern` setting to allow specifying format of dates in `due` tags. Addresses [Extension Setting to Change Date Format](https://github.com/davraamides/todotxt-mode/issues/33).
