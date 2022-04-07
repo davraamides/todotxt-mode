@@ -16,6 +16,7 @@ import { strftime } from './strftime';
 // line.
 //
 export namespace Note {
+    let setting = new Settings();
 
     export function createTaskNote() {
         const activeEditor = vscode.window.activeTextEditor;
@@ -26,7 +27,7 @@ export namespace Note {
         }
         const selectedText = activeEditor.document.getText(selection);
  
-        let noteFilename = strftime(Settings.NoteFilenameFormat, new Date());
+        let noteFilename = strftime(setting.NoteFilenameFormat, new Date());
         let selStart = noteFilename.indexOf("[");
         let selEnd = noteFilename.indexOf("]");
         if (selStart == -1 || selEnd == -1) {
@@ -46,7 +47,7 @@ export namespace Note {
                 fs.writeFileSync(notePath, selectedText, 'utf8');
                 let noteTag = "note:" + noteFile;
                 vscode.env.clipboard.writeText(noteTag);
-                if (Settings.ReplaceNoteTextWithNoteTag) {
+                if (setting.ReplaceNoteTextWithNoteTag) {
                     activeEditor.edit(builder => {
                         builder.replace(selection, noteTag);
                     });

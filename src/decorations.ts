@@ -118,6 +118,7 @@ class DateDecoration implements IDecoration {
     presentDecorationType: vscode.TextEditorDecorationType;
     futureDecorationOptions: vscode.DecorationOptions[];
     futureDecorationType: vscode.TextEditorDecorationType;
+    setting = new Settings();
 
     constructor(tag: string, pastStyle: vscode.DecorationRenderOptions,
         presentStyle: vscode.DecorationRenderOptions, futureStyle: vscode.DecorationRenderOptions) {
@@ -136,7 +137,7 @@ class DateDecoration implements IDecoration {
         let today: Date = new Date(new Date().setHours(0, 0, 0, 0));
         let date: Date = null;
         try {
-            date = strptime(bits[1], Settings.TagDatePattern);
+            date = strptime(bits[1], this.setting.TagDatePattern);
         } catch (error) {
         }        
         if (! date || date < today) {
@@ -162,23 +163,24 @@ class DateDecoration implements IDecoration {
 }
 
 export default class Decorator {
+    setting = new Settings();
 
     decorations: IDecoration[] = [
-        new Decoration(Patterns.ContextRegex, Settings.ContextStyle),
-        new Decoration(Patterns.ProjectRegex, Settings.ProjectStyle),
-        new CreationDateDecoration(Patterns.CreationDateRegex, Settings.CreationDateStyle),
-        new Decoration(Patterns.CompletedGlobalRegex, Settings.CompletedStyle),
+        new Decoration(Patterns.ContextRegex, this.setting.ContextStyle),
+        new Decoration(Patterns.ProjectRegex, this.setting.ProjectStyle),
+        new CreationDateDecoration(Patterns.CreationDateRegex, this.setting.CreationDateStyle),
+        new Decoration(Patterns.CompletedGlobalRegex, this.setting.CompletedStyle),
         new PriorityDecoration({
-            '(A)': Settings.HighPriorityStyle,
-            '(B)': Settings.MediumPriorityStyle,
-            '(C)': Settings.LowPriorityStyle
-        }, Settings.LowPriorityStyle),
+            '(A)': this.setting.HighPriorityStyle,
+            '(B)': this.setting.MediumPriorityStyle,
+            '(C)': this.setting.LowPriorityStyle
+        }, this.setting.LowPriorityStyle),
         new DateDecoration('due',
-            Settings.PastDateStyle,
-            Settings.PresentDateStyle,
-            Settings.FutureDateStyle),
+            this.setting.PastDateStyle,
+            this.setting.PresentDateStyle,
+            this.setting.FutureDateStyle),
         // first decoration wins so put the general tag one after the specific priority one
-        new Decoration(Patterns.TagRegex, Settings.TagStyle)
+        new Decoration(Patterns.TagRegex, this.setting.TagStyle)
     ];
 
     public decorateDocument() {

@@ -1,14 +1,11 @@
 'use strict';
 import * as vscode from 'vscode';
-import * as path from 'path';
 import { Files } from './files';
-import { Helpers } from './helpers';
 import { Patterns } from './patterns';
 import { Priority } from './priority';
 import { Settings } from './settings';
 import { Sorting } from './sorting';
 import * as extension from './extension';
-import * as fs from 'fs';
 import { Completion } from './completion';
 import { Note } from './note';
 
@@ -16,6 +13,7 @@ import { Note } from './note';
 // Registers all the extension commands
 //
 export function ActivateCommands(context: vscode.ExtensionContext) {
+    let setting = new Settings();
 
     let toggleCompletion = vscode.commands.registerCommand('extension.toggleCompletion', () => {
         Completion.toggleCompletion();
@@ -45,13 +43,13 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
         Files.archiveTasks();
     });
     let moveTasksToTodo = vscode.commands.registerCommand('extension.moveTasksToTodo', () => {
-        Files.moveTasks(Settings.TodoFilename);
+        Files.moveTasks(setting.TodoFilename);
     });
     let moveTasksToWaiting = vscode.commands.registerCommand('extension.moveTasksToWaiting', () => {
-        Files.moveTasks(Settings.WaitingFilename);
+        Files.moveTasks(setting.WaitingFilename);
     });
     let moveTasksToSomeday = vscode.commands.registerCommand('extension.moveTasksToSomeday', () => {
-        Files.moveTasks(Settings.SomedayFilename);
+        Files.moveTasks(setting.SomedayFilename);
     });
     let moveTasksToProject = vscode.commands.registerCommand('extension.moveTasksToProject', () => {
         Files.moveTasksToProject();
