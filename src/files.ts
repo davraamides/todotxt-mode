@@ -9,13 +9,14 @@ import { Patterns } from './patterns';
 // Manage movement of tasks to other task files.
 //
 export namespace Files {
+    let setting = new Settings();
 
     // Move any completed tasks to the "done" file
     export function archiveTasks() {
         const editor = vscode.window.activeTextEditor;
         let window = vscode.window;
         let document = editor.document;
-        let destinationPathName = path.dirname(document.fileName) + path.sep + Settings.DoneFilename;
+        let destinationPathName = path.dirname(document.fileName) + path.sep + setting.DoneFilename;
         let lineDeletes = [];
 
         if (window.activeTextEditor != undefined) {

@@ -15,6 +15,7 @@ import { Settings } from './settings';
 const TaskCompletionRegEx = /^(\s*)(x )?(\([A-Z]\) )?(\d{4}-\d{2}-\d{2} )?(\d{4}-\d{2}-\d{2} )?(.*)$/;
 
 export namespace Completion {
+    let setting = new Settings();
 
     export function toggleCompletion() {
         const editor = vscode.window.activeTextEditor;
@@ -35,7 +36,7 @@ export namespace Completion {
             } else {
                 // toggle to completed by adding in the completed flag and date fields
                 let today = Helpers.getDateTimeParts()[0];
-                if (Settings.RemovePriorityFromCompletedTasks) {
+                if (setting.RemovePriorityFromCompletedTasks) {
                     // NOTE if I wanted to preserve the priority like they suggest in the spec,
                     // I could do this, but don't love it
                     // if (priority) {
@@ -43,7 +44,7 @@ export namespace Completion {
                     // }
                     priority = "";
                 }
-                newTask = lead + Settings.CompletedTaskPrefix + (priority || "") + today + ' ' + (creationDate || "") + task;
+                newTask = lead + setting.CompletedTaskPrefix + (priority || "") + today + ' ' + (creationDate || "") + task;
             }
             linesToToggleCompletion.push({
                 line: i,

@@ -13,10 +13,8 @@ async function main() {
 			extensionPath: path.resolve(__dirname, '../../'),
 			testRunnerPath: path.resolve(__dirname, './suite'),
 			testWorkspace: '',
-			vscodeLaunchArgs: [
-				'--extensionDevelopmentPath=' + path.resolve(__dirname, '../'),
-				'--extensionTestsPath=' + path.resolve(__dirname, './suite/index')
-			]
+			extensionDevelopmentPath: path.resolve(__dirname, '../'),
+			extensionTestsPath: path.resolve(__dirname, './suite/index')
 		};
 	  
 		// Download VS Code, unzip it and run the integration test

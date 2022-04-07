@@ -36,6 +36,7 @@ import { Settings } from './settings';
 //   occur at the beginning (i.e. they begin with ^\s*).
 //
 export namespace Patterns {
+    let setting = new Settings();
 
     export const ContextField = 'context';
     export const PriorityField = 'priority';
@@ -59,7 +60,7 @@ export namespace Patterns {
     export const CompletedRegex = /^\s*x\s/;
 
     export function TagDateRegexString() {
-        var datePattern = Settings.TagDatePattern
+        var datePattern = setting.TagDatePattern
             .replace('%Y', '\\d{4}')
             .replace('%m', '\\d{1,2}')
             .replace('%d', '\\d{1,2}');
