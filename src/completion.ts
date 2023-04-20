@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
-import { Helpers } from './helpers';
-import { Settings } from './settings';
+import {Helpers} from './helpers';
+import {Settings} from './settings';
 //
 // Logic to toggle a task completed
 //
@@ -15,6 +15,25 @@ import { Settings } from './settings';
 const TaskCompletionRegEx = /^(\s*)(x )?(\([A-Z]\) )?(\d{4}-\d{2}-\d{2} )?(\d{4}-\d{2}-\d{2} )?(.*)$/;
 
 export namespace Completion {
+
+    /**
+     * Insert the current date of the beginning of the line and move the cursor after
+     */
+    export async function insertCreatedAt() {
+        const editor = vscode.window.activeTextEditor;
+        let [startLine] = Helpers.getSelectedLineRange(false);
+        const line = startLine + 1;
+
+        const [date] = new Date().toISOString().split('T')
+
+        await editor.edit(builder => {
+            builder.insert(new vscode.Position(line, 0), `${date} `);
+        });
+
+        const cursorPos = date.length + 1;
+
+        editor.selection = new vscode.Selection(new vscode.Position(line, cursorPos), new vscode.Position(line, cursorPos));
+    }
 
     export function toggleCompletion() {
         const editor = vscode.window.activeTextEditor;

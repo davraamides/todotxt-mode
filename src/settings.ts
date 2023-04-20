@@ -15,6 +15,8 @@ export namespace Settings {
     export const DoneFilename: string = getSetting<string>("doneFilename");
     export const SomedayFilename: string = getSetting<string>("somedayFilename");
     export const WaitingFilename: string = getSetting<string>("waitingFilename");
+
+    export const AddCreatedAt = getSetting<boolean>("addCreatedAt");
     
     export const Message:string = getSetting<string>("message");
     export const SortCompletedTasksToEnd:boolean = getSetting<boolean>("sortCompletedTasksToEnd");
@@ -74,7 +76,7 @@ export namespace Settings {
         opacity: getSetting<string>("completedStyle.opacity")
     };
 
-    function getSetting<T>(field:string): T | undefined {
+    export function getSetting<T>(field:string): T | undefined {
         return vscode.workspace.getConfiguration("todotxtmode").get<T>(field);
     }
 

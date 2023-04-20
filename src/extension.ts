@@ -1,13 +1,14 @@
 import * as vscode from 'vscode';
 import * as Commands from './commands';
 
-import Decorator from './decorations';
-import { Settings } from './settings';
-import { Patterns } from './patterns';
-import { Helpers } from './helpers';
 import * as fs from 'fs';
-import * as path from 'path';
 import * as os from 'os';
+import * as path from 'path';
+import {Completion} from './completion';
+import Decorator from './decorations';
+import {Helpers} from './helpers';
+import {Patterns} from './patterns';
+import {Settings} from './settings';
 //
 // Setup and activate the extension
 //
@@ -55,7 +56,7 @@ export function activate(context: vscode.ExtensionContext) {
 					}
 				} catch (err) {
 					vscode.window.showInformationMessage(`err: ${err}`);
-					console.log(err);					
+					console.log(err);
 				}
 			}
 			return null;
@@ -63,6 +64,20 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+
+	disposable = vscode.workspace.onDidChangeTextDocument(async (event) => {
+
+		const addCreatedAtEnabled = Settings.getSetting<boolean>("addCreatedAt")
+
+		if (!Helpers.isTodoFile(event.document.fileName) || !addCreatedAtEnabled) return;
+
+    const isEnter = event.contentChanges[0]?.text === '\n';
+
+		if (isEnter) await Completion.insertCreatedAt();
+  });
+
+	context.subscriptions.push(disposable);
+
 
 	disposable = vscode.languages.registerHoverProvider({scheme: 'file', language: 'plaintext'}, {
 		provideHover(document, position, token) {
@@ -86,7 +101,7 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 			} catch (err) {
 				vscode.window.showInformationMessage(`err: ${err}`);
-				console.log(err);					
+				console.log(err);
 			}
 			return null;
 		}

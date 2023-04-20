@@ -141,6 +141,11 @@
 					"default": "waiting.txt",
 					"description": "Name of file for deferred/waiting tasks"
 				},
+				"todotxtmode.addCreatedAt": {
+					"type": "boolean",
+					"default": false,
+					"description": "Add the creation date when creating a task"
+				},
 				"todotxtmode.sortCompletedTasksToEnd": {
 					"type": "boolean",
 					"default": true,
