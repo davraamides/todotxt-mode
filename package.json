@@ -1,342 +1,347 @@
 {
-	"name": "todotxt-mode",
-	"displayName": "todotxt-mode",
-	"description": "Commands and decorators for managing todo.txt files",
-	"version": "1.4.30",
-	"publisher": "davraamides",
-	"engines": {
-		"vscode": ">=1.33.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"icon": "images/todotxt-mode.png",
-	"galleryBanner": {
-		"color": "#474747",
-		"theme": "dark"
-	},
-	"licenes": "MIT",
-	"keywords": [
-		"todotxt",
-		"todo.txt",
-		"task"
-	],
-	"activationEvents": [
-		"onLanguage:plaintext",
-		"onLanguage:markdown"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "extension.toggleCompletion",
-				"title": "todotxt-mode: Toggle Task Completion"
-			},
-			{
-				"command": "extension.sortByContext",
-				"title": "todotxt-mode: Sort by Context"
-			},
-			{
-				"command": "extension.sortByPriority",
-				"title": "todotxt-mode: Sort by Priority"
-			},
-			{
-				"command": "extension.sortByProject",
-				"title": "todotxt-mode: Sort by Project"
-			},
-			{
-				"command": "extension.sortByTag",
-				"title": "todotxt-mode: Sort by Tag"
-			},
-			{
-				"command": "extension.sortByCreationDate",
-				"title": "todotxt-mode: Sort by CreationDate"
-			},
-			{
-				"command": "extension.sortByDueDate",
-				"title": "todotxt-mode: Sort by date of 'due' Tag"
-			},
-			{
-				"command": "extension.formatTasks",
-				"title": "todotxt-mode: Format selected tasks with fields in specified order"
-			},
-			{
-				"command": "extension.archiveTasks",
-				"title": "todotxt-mode: Archive completed tasks"
-			},
-			{
-				"command": "extension.moveTasksToTodo",
-				"title": "todotxt-mode: Move tasks to Todo file"
-			},
-			{
-				"command": "extension.moveTasksToWaiting",
-				"title": "todotxt-mode: Move tasks to Waiting file"
-			},
-			{
-				"command": "extension.moveTasksToSomeday",
-				"title": "todotxt-mode: Move tasks to Someday file"
-			},
-			{
-				"command": "extension.moveTasksToProject",
-				"title": "todotxt-mode: Move tasks to Project Markdown file"
-			},
-			{
-				"command": "extension.createTaskNote",
-				"title": "todotxt-mode: Create note for task"
-			},
-			{
-				"command": "extension.incrementPriority",
-				"title": "todotxt-mode: Increment task priority"
-			},
-			{
-				"command": "extension.decrementPriority",
-				"title": "todotxt-mode: Decrement task priority"
-			},
-			{
-				"command": "extension.removePriorities",
-				"title": "todotxt-mode: Remove task priorities"
-			}
-		],
-		"keybindings": [
-			{
-				"command": "extension.toggleCompletion",
-				"key": "ctrl+shift+x",
-				"mac": "ctrl+shift+x",
-				"when": "editorTextFocus"
-			},
-			{
-				"command": "extension.incrementPriority",
-				"key": "ctrl+shift+a",
-				"mac": "ctrl+shift+a",
-				"when": "editorTextFocus"
-			},
-			{
-				"command": "extension.decrementPriority",
-				"key": "ctrl+shift+z",
-				"mac": "ctrl+shift+z",
-				"when": "editorTextFocus"
-			}
-		],
-		"configuration": {
-			"type": "object",
-			"title": "todotxt-mode configuraton",
-			"properties": {
-				"todotxtmode.todoFilename": {
-					"type": "string",
-					"default": "todo.txt",
-					"description": "Name of main todo text file"
-				},
-				"todotxtmode.doneFilename": {
-					"type": "string",
-					"default": "done.txt",
-					"description": "Name of archive file for completed tasks"
-				},
-				"todotxtmode.somedayFilename": {
-					"type": "string",
-					"default": "someday.txt",
-					"description": "Name of file for someday/maybe tasks"
-				},
-				"todotxtmode.waitingFilename": {
-					"type": "string",
-					"default": "waiting.txt",
-					"description": "Name of file for deferred/waiting tasks"
-				},
-				"todotxtmode.sortCompletedTasksToEnd": {
-					"type": "boolean",
-					"default": true,
-					"description": "Always place completed tasks at end of list when sorting"
-				},
-				"todotxtmode.removePriorityFromCompletedTasks": {
-					"type": "boolean",
-					"default": false,
-					"description": "Remove the priority tag from completed tasks"
-				},
-				"todotxtmode.sectionDelimiterPattern": {
-					"type": "string",
-					"description": "Regex pattern to delimit todo tasks section from other parts of the file",
-					"default": "^--$"
-				},
-				"todotxtmode.todoFilePattern": {
-					"type": "string",
-					"decription": "Regex pattern of filenames to apply todotxt-mode commands",
-					"default": "^.*\\.txt$"
-				},
-				"todotxtmode.markdownFilePattern": {
-					"type": "string",
-					"decription": "Regex pattern of Markdown filenames to apply todotxt-mode commands using markdownDecorationBeginPattern and markdownDecorationEndPattern",
-					"default": "^.*\\.(md|markdown)$"
-				},
-				"todotxtmode.excludeDecorationsFilePattern": {
-					"type": "string",
-					"description": "Regex pattern of filenames to exclude todotxt-mode decorations",
-					"default": "^done\\.txt$"
-				},
-				"todotxtmode.markdownDecorationBeginPattern": {
-					"type": "string",
-					"description": "Regex pattern of range in Markdown files to decorate",
-					"default": "^#+\\s+Tasks\\s*$"
-				},
-				"todotxtmode.markdownDecorationEndPattern": {
-					"type": "string",
-					"description": "Regex pattern of range in Markdown files to decorate",
-					"default": "^$"
-				},
-				"todotxtmode.noteFilenameFormat": {
-					"type": "string",
-					"decription": "Format for new note filenames. Can contain strftime-style format specifiers. The string '[Todo]', if used, will be selected.",
-					"default": "[Todo]-Note-%Y%m%d-%H%M%S.md"
-				},
-				"todotxtmode.replaceNoteTextWithNoteTag": {
-					"type": "boolean",
-					"default": false,
-					"description": "Automatically replace note text with the note tag when creating a note for a task"
-				},
-				"todotxtmode.tagDatePattern": {
-					"type": "string",
-					"decription": "Format for dates in due tag. Limited strftime-style format specifiers.",
-					"default": "%Y-%m-%d"
-				},
-				"todotxtmode.contextStyle.light.color": {
-					"type": "string",
-					"description": "Color of context field in light mode",
-					"default": "rgb(40, 161, 86)"
-				},
-				"todotxtmode.contextStyle.dark.color": {
-					"type": "string",
-					"description": "Color of context field in dark mode",
-					"default": "rgb(40, 161, 86)"
-				},
-				"todotxtmode.highPriorityStyle.light.color": {
-					"type": "string",
-					"description": "Color of context field in light mode",
-					"default": "rgb(240, 226, 25)"
-				},
-				"todotxtmode.highPriorityStyle.dark.color": {
-					"type": "string",
-					"description": "Color of context field in dark mode",
-					"default": "rgb(240, 226, 25)"
-				},
-				"todotxtmode.mediumPriorityStyle.light.color": {
-					"type": "string",
-					"description": "Color of context field in light mode",
-					"default": "rgb(201, 189, 22)"
-				},
-				"todotxtmode.mediumPriorityStyle.dark.color": {
-					"type": "string",
-					"description": "Color of context field in dark mode",
-					"default": "rgb(201, 189, 22)"
-				},
-				"todotxtmode.lowPriorityStyle.light.color": {
-					"type": "string",
-					"description": "Color of priority field in light mode",
-					"default": "rgb(170, 160, 21)"
-				},
-				"todotxtmode.lowPriorityStyle.dark.color": {
-					"type": "string",
-					"description": "Color of priority field in dark mode",
-					"default": "rgb(170, 160, 21)"
-				},
-				"todotxtmode.projectStyle.light.color": {
-					"type": "string",
-					"description": "Color of project field in light mode",
-					"default": "rgb(25, 172, 230)"
-				},
-				"todotxtmode.projectStyle.dark.color": {
-					"type": "string",
-					"description": "Color of project field in dark mode",
-					"default": "rgb(25, 172, 230)"
-				},
-				"todotxtmode.tagStyle.light.color": {
-					"type": "string",
-					"description": "Color of tag field in light mode",
-					"default": "rgb(179, 58, 172)"
-				},
-				"todotxtmode.tagStyle.dark.color": {
-					"type": "string",
-					"description": "Color of tag field in dark mode",
-					"default": "rgb(179, 58, 172)"
-				},
-				"todotxtmode.creationDateStyle.light.color": {
-					"type": "string",
-					"description": "Color of creation date field in light mode",
-					"default": "rgb(200, 130, 0)"
-				},
-				"todotxtmode.creationDateStyle.dark.color": {
-					"type": "string",
-					"description": "Color of creation date field in dark mode",
-					"default": "rgb(200, 130, 0)"
-				},
-				"todotxtmode.pastDateStyle.light.color": {
-					"type": "string",
-					"description": "Color of past due date in light mode",
-					"default": "rgb(177, 58, 28)"
-				},
-				"todotxtmode.pastDateStyle.dark.color": {
-					"type": "string",
-					"description": "Color of past due date in dark mode",
-					"default": "rgb(177, 58, 28)"
-				},
-				"todotxtmode.presentDateStyle.light.color": {
-					"type": "string",
-					"description": "Color of present due date in light mode",
-					"default": "rgb(219, 216, 26)"
-				},
-				"todotxtmode.presentDateStyle.dark.color": {
-					"type": "string",
-					"description": "Color of present due date in dark mode",
-					"default": "rgb(219, 216, 26)"
-				},
-				"todotxtmode.futureDateStyle.light.color": {
-					"type": "string",
-					"description": "Color of future due date in light mode",
-					"default": "rgb(118, 194, 31)"
-				},
-				"todotxtmode.futureDateStyle.dark.color": {
-					"type": "string",
-					"description": "Color of future due date in dark mode",
-					"default": "rgb(118, 194, 31)"
-				},
-				"todotxtmode.completedStyle.textDecoration": {
-					"type": "string",
-					"description": "Text decoration for completed tasks",
-					"default": "line-through"
-				},
-				"todotxtmode.completedStyle.opacity": {
-					"type": "string",
-					"description": "Opacity for completed tasks",
-					"default": "0.5"
-				}
-			}
-		}
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/davraamides/todotxt-mode.git"
-	},
-	"bugs": {
-		"url": "https://github.com/davraamides/todotxt-mode/issues"
-	},
-	"homepage": "https://github.com/davraamides/todotxt-mode/blob/master/README.md",
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
-		"pretest": "npm run compile && npm run lint",
-		"lint": "eslint src --ext ts",
-		"test": "node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/mocha": ">=9.0.0",
-		"@types/node": "^16.10.1",
-		"graceful-fs": ">=4.2.8",
-		"minimist": ">=0.2.1",
-		"tslint": "^6.1.3",
-		"typescript": "^4.4.3",
-		"vscode": ">=1.1.37"
-	},
-	"dependencies": {
-		"lodash": ">=4.17.21",
-		"vsce": ">=1.100.1"
-	}
+    "name": "todotxt-mode",
+    "displayName": "todotxt-mode",
+    "description": "Commands and decorators for managing todo.txt files",
+    "version": "1.4.30",
+    "publisher": "davraamides",
+    "engines": {
+        "vscode": "^1.77.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "icon": "images/todotxt-mode.png",
+    "galleryBanner": {
+        "color": "#474747",
+        "theme": "dark"
+    },
+    "licenes": "MIT",
+    "keywords": [
+        "todotxt",
+        "todo.txt",
+        "task"
+    ],
+    "activationEvents": [
+        "onLanguage:plaintext",
+        "onLanguage:markdown"
+    ],
+    "main": "./dist/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "extension.toggleCompletion",
+                "title": "todotxt-mode: Toggle Task Completion"
+            },
+            {
+                "command": "extension.sortByContext",
+                "title": "todotxt-mode: Sort by Context"
+            },
+            {
+                "command": "extension.sortByPriority",
+                "title": "todotxt-mode: Sort by Priority"
+            },
+            {
+                "command": "extension.sortByProject",
+                "title": "todotxt-mode: Sort by Project"
+            },
+            {
+                "command": "extension.sortByTag",
+                "title": "todotxt-mode: Sort by Tag"
+            },
+            {
+                "command": "extension.sortByCreationDate",
+                "title": "todotxt-mode: Sort by CreationDate"
+            },
+            {
+                "command": "extension.sortByDueDate",
+                "title": "todotxt-mode: Sort by date of 'due' Tag"
+            },
+            {
+                "command": "extension.formatTasks",
+                "title": "todotxt-mode: Format selected tasks with fields in specified order"
+            },
+            {
+                "command": "extension.archiveTasks",
+                "title": "todotxt-mode: Archive completed tasks"
+            },
+            {
+                "command": "extension.moveTasksToTodo",
+                "title": "todotxt-mode: Move tasks to Todo file"
+            },
+            {
+                "command": "extension.moveTasksToWaiting",
+                "title": "todotxt-mode: Move tasks to Waiting file"
+            },
+            {
+                "command": "extension.moveTasksToSomeday",
+                "title": "todotxt-mode: Move tasks to Someday file"
+            },
+            {
+                "command": "extension.moveTasksToProject",
+                "title": "todotxt-mode: Move tasks to Project Markdown file"
+            },
+            {
+                "command": "extension.createTaskNote",
+                "title": "todotxt-mode: Create note for task"
+            },
+            {
+                "command": "extension.incrementPriority",
+                "title": "todotxt-mode: Increment task priority"
+            },
+            {
+                "command": "extension.decrementPriority",
+                "title": "todotxt-mode: Decrement task priority"
+            },
+            {
+                "command": "extension.removePriorities",
+                "title": "todotxt-mode: Remove task priorities"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "extension.toggleCompletion",
+                "key": "ctrl+shift+x",
+                "mac": "ctrl+shift+x",
+                "when": "editorTextFocus"
+            },
+            {
+                "command": "extension.incrementPriority",
+                "key": "ctrl+shift+a",
+                "mac": "ctrl+shift+a",
+                "when": "editorTextFocus"
+            },
+            {
+                "command": "extension.decrementPriority",
+                "key": "ctrl+shift+z",
+                "mac": "ctrl+shift+z",
+                "when": "editorTextFocus"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "todotxt-mode configuraton",
+            "properties": {
+                "todotxtmode.todoFilename": {
+                    "type": "string",
+                    "default": "todo.txt",
+                    "description": "Name of main todo text file"
+                },
+                "todotxtmode.doneFilename": {
+                    "type": "string",
+                    "default": "done.txt",
+                    "description": "Name of archive file for completed tasks"
+                },
+                "todotxtmode.somedayFilename": {
+                    "type": "string",
+                    "default": "someday.txt",
+                    "description": "Name of file for someday/maybe tasks"
+                },
+                "todotxtmode.waitingFilename": {
+                    "type": "string",
+                    "default": "waiting.txt",
+                    "description": "Name of file for deferred/waiting tasks"
+                },
+                "todotxtmode.sortCompletedTasksToEnd": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Always place completed tasks at end of list when sorting"
+                },
+                "todotxtmode.removePriorityFromCompletedTasks": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Remove the priority tag from completed tasks"
+                },
+                "todotxtmode.sectionDelimiterPattern": {
+                    "type": "string",
+                    "description": "Regex pattern to delimit todo tasks section from other parts of the file",
+                    "default": "^--$"
+                },
+                "todotxtmode.todoFilePattern": {
+                    "type": "string",
+                    "decription": "Regex pattern of filenames to apply todotxt-mode commands",
+                    "default": "^.*\\.txt$"
+                },
+                "todotxtmode.markdownFilePattern": {
+                    "type": "string",
+                    "decription": "Regex pattern of Markdown filenames to apply todotxt-mode commands using markdownDecorationBeginPattern and markdownDecorationEndPattern",
+                    "default": "^.*\\.(md|markdown)$"
+                },
+                "todotxtmode.excludeDecorationsFilePattern": {
+                    "type": "string",
+                    "description": "Regex pattern of filenames to exclude todotxt-mode decorations",
+                    "default": "^done\\.txt$"
+                },
+                "todotxtmode.markdownDecorationBeginPattern": {
+                    "type": "string",
+                    "description": "Regex pattern of range in Markdown files to decorate",
+                    "default": "^#+\\s+Tasks\\s*$"
+                },
+                "todotxtmode.markdownDecorationEndPattern": {
+                    "type": "string",
+                    "description": "Regex pattern of range in Markdown files to decorate",
+                    "default": "^$"
+                },
+                "todotxtmode.noteFilenameFormat": {
+                    "type": "string",
+                    "decription": "Format for new note filenames. Can contain strftime-style format specifiers. The string '[Todo]', if used, will be selected.",
+                    "default": "[Todo]-Note-%Y%m%d-%H%M%S.md"
+                },
+                "todotxtmode.replaceNoteTextWithNoteTag": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Automatically replace note text with the note tag when creating a note for a task"
+                },
+                "todotxtmode.tagDatePattern": {
+                    "type": "string",
+                    "decription": "Format for dates in due tag. Limited strftime-style format specifiers.",
+                    "default": "%Y-%m-%d"
+                },
+                "todotxtmode.contextStyle.light.color": {
+                    "type": "string",
+                    "description": "Color of context field in light mode",
+                    "default": "rgb(40, 161, 86)"
+                },
+                "todotxtmode.contextStyle.dark.color": {
+                    "type": "string",
+                    "description": "Color of context field in dark mode",
+                    "default": "rgb(40, 161, 86)"
+                },
+                "todotxtmode.highPriorityStyle.light.color": {
+                    "type": "string",
+                    "description": "Color of context field in light mode",
+                    "default": "rgb(240, 226, 25)"
+                },
+                "todotxtmode.highPriorityStyle.dark.color": {
+                    "type": "string",
+                    "description": "Color of context field in dark mode",
+                    "default": "rgb(240, 226, 25)"
+                },
+                "todotxtmode.mediumPriorityStyle.light.color": {
+                    "type": "string",
+                    "description": "Color of context field in light mode",
+                    "default": "rgb(201, 189, 22)"
+                },
+                "todotxtmode.mediumPriorityStyle.dark.color": {
+                    "type": "string",
+                    "description": "Color of context field in dark mode",
+                    "default": "rgb(201, 189, 22)"
+                },
+                "todotxtmode.lowPriorityStyle.light.color": {
+                    "type": "string",
+                    "description": "Color of priority field in light mode",
+                    "default": "rgb(170, 160, 21)"
+                },
+                "todotxtmode.lowPriorityStyle.dark.color": {
+                    "type": "string",
+                    "description": "Color of priority field in dark mode",
+                    "default": "rgb(170, 160, 21)"
+                },
+                "todotxtmode.projectStyle.light.color": {
+                    "type": "string",
+                    "description": "Color of project field in light mode",
+                    "default": "rgb(25, 172, 230)"
+                },
+                "todotxtmode.projectStyle.dark.color": {
+                    "type": "string",
+                    "description": "Color of project field in dark mode",
+                    "default": "rgb(25, 172, 230)"
+                },
+                "todotxtmode.tagStyle.light.color": {
+                    "type": "string",
+                    "description": "Color of tag field in light mode",
+                    "default": "rgb(179, 58, 172)"
+                },
+                "todotxtmode.tagStyle.dark.color": {
+                    "type": "string",
+                    "description": "Color of tag field in dark mode",
+                    "default": "rgb(179, 58, 172)"
+                },
+                "todotxtmode.creationDateStyle.light.color": {
+                    "type": "string",
+                    "description": "Color of creation date field in light mode",
+                    "default": "rgb(200, 130, 0)"
+                },
+                "todotxtmode.creationDateStyle.dark.color": {
+                    "type": "string",
+                    "description": "Color of creation date field in dark mode",
+                    "default": "rgb(200, 130, 0)"
+                },
+                "todotxtmode.pastDateStyle.light.color": {
+                    "type": "string",
+                    "description": "Color of past due date in light mode",
+                    "default": "rgb(177, 58, 28)"
+                },
+                "todotxtmode.pastDateStyle.dark.color": {
+                    "type": "string",
+                    "description": "Color of past due date in dark mode",
+                    "default": "rgb(177, 58, 28)"
+                },
+                "todotxtmode.presentDateStyle.light.color": {
+                    "type": "string",
+                    "description": "Color of present due date in light mode",
+                    "default": "rgb(219, 216, 26)"
+                },
+                "todotxtmode.presentDateStyle.dark.color": {
+                    "type": "string",
+                    "description": "Color of present due date in dark mode",
+                    "default": "rgb(219, 216, 26)"
+                },
+                "todotxtmode.futureDateStyle.light.color": {
+                    "type": "string",
+                    "description": "Color of future due date in light mode",
+                    "default": "rgb(118, 194, 31)"
+                },
+                "todotxtmode.futureDateStyle.dark.color": {
+                    "type": "string",
+                    "description": "Color of future due date in dark mode",
+                    "default": "rgb(118, 194, 31)"
+                },
+                "todotxtmode.completedStyle.textDecoration": {
+                    "type": "string",
+                    "description": "Text decoration for completed tasks",
+                    "default": "line-through"
+                },
+                "todotxtmode.completedStyle.opacity": {
+                    "type": "string",
+                    "description": "Opacity for completed tasks",
+                    "default": "0.5"
+                }
+            }
+        }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/davraamides/todotxt-mode.git"
+    },
+    "bugs": {
+        "url": "https://github.com/davraamides/todotxt-mode/issues"
+    },
+    "homepage": "https://github.com/davraamides/todotxt-mode/blob/master/README.md",
+    "scripts": {
+        "vscode:prepublish": "npm run package",
+        "compile": "webpack",
+        "watch": "webpack --watch",
+        "package": "webpack --mode production --devtool hidden-source-map",
+        "compile-tests": "tsc -p . --outDir out",
+        "watch-tests": "tsc -p . -w --outDir out",
+        "pretest": "npm run compile-tests && npm run compile && npm run lint",
+        "lint": "eslint src --ext ts",
+        "test": "node ./out/test/runTest.js"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.77.0",
+        "@types/glob": "^8.1.0",
+        "@types/mocha": "^10.0.1",
+        "@types/node": "16.x",
+        "@typescript-eslint/eslint-plugin": "^5.56.0",
+        "@typescript-eslint/parser": "^5.56.0",
+        "eslint": "^8.36.0",
+        "glob": "^8.1.0",
+        "mocha": "^10.2.0",
+        "typescript": "^4.9.5",
+        "ts-loader": "^9.4.2",
+        "webpack": "^5.76.3",
+        "webpack-cli": "^5.0.1",
+        "@vscode/test-electron": "^2.3.0"
+    }
 }
