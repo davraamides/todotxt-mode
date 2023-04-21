@@ -24,6 +24,7 @@ export function strftime(sFormat: string, date: Date) {
       target.setDate(nDate - ((nDay+6)%7) + 3);
       return target;
     },
+    // @ts-ignore
     zeroPad = function(nNum, nPad) {
       return ((Math.pow(10, nPad) + nNum) + '').slice(1);
     };

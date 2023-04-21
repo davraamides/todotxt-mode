@@ -137,6 +137,7 @@ The remaining settings define various behavior of the extension including which 
 | `todotxtmode.removePriorityFromCompletedTasks` | Remove the priority tag from completed tasks                                                                                                 | `false`                            |
 | `todotxtmode.noteFilenameFormat`               | Format for new note filenames. Can contain strftime-style format specifiers. The string '[Todo]', if used, will be selected.                 | `[Todo]-Note-%Y%m%d-%H%M%S.md`     |
 | `todotxtmode.replaceNoteTextWithNoteTag`       | Automatically replace note text with the note tag when creating a note for a task                                                            | `false`                            |
+| `todotxtmode.addCreatedAt`                     | Add the creation date when creating a task                                                                                                   | `false`                            |
 
 ## Release Notes
 

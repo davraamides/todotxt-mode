@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.4.32 - 2023-04-21
+
+- Pull-request ["feat: insert created at on new task"](https://github.com/davraamides/todotxt-mode/pull/55).
+
 ## 1.4.30 - 2021-11-16
 
 - Fixed issue on ["Note tag hover shows note content more than once"](https://github.com/davraamides/todotxt-mode/issues/42) where hovers would show note content more than once.

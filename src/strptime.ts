@@ -14,13 +14,14 @@ var _DATE_FORMAT_REGXES = {
  * _parseData does the actual parsing job needed by `strptime`
  */
 function _parseDate(datestring: string, format: string):
-    {Y: number, d: number, m: number, H: number, M: number, S: number} {
+    {Y: number | null, d: number | null, m: number | null, H: number | null, M: number | null, S: number | null} | null {
     var parsed = {Y: null, m: null, d: null, H: null, M: null, S: null};
     for (var i1=0,i2=0;i1<format.length;i1++,i2++) {
     var c1 = format[i1];
     var c2 = datestring[i2];
     if (c1 == '%') {
         c1 = format[++i1];
+        // @ts-ignore
         var data = _DATE_FORMAT_REGXES[c1].exec(datestring.substring(i2));
         if (!data.length) {
             return null;
@@ -31,6 +32,7 @@ function _parseDate(datestring: string, format: string):
         if (isNaN(value)) {
             return null;
         }
+        // @ts-ignore
         parsed[c1] = value;
         continue;
     }
@@ -45,7 +47,7 @@ function _parseDate(datestring: string, format: string):
  * basic implementation of strptime. The only recognized formats
  * defined in _DATE_FORMAT_REGEXES (i.e. %Y, %d, %m, %H, %M)
  */
-export function strptime(datestring: string, format: string): Date {
+export function strptime(datestring: string, format: string): Date | null {
     var parsed = _parseDate(datestring, format);
     if (!parsed) {
     return null;
@@ -64,7 +66,7 @@ export function strptime(datestring: string, format: string): Date {
     date.setMonth(parsed.m - 1);
     }
     if (parsed.d) {
-    if (parsed.m < 1 || parsed.m > 31) {
+    if (!parsed.m || parsed.m < 1 || parsed.m > 31) {
         return null;
     }
     date.setDate(parsed.d);

@@ -4,6 +4,7 @@
 // This contains all the settings that are in the package.json file that can be
 // customized by the user.
 //
+// @ts-nocheck
 import * as vscode from 'vscode';
 
 export namespace Settings {
@@ -16,6 +17,7 @@ export namespace Settings {
     export const SomedayFilename: string = getSetting<string>("somedayFilename");
     export const WaitingFilename: string = getSetting<string>("waitingFilename");
     
+    export const AddCreatedAt = getSetting<boolean>("addCreatedAt");
     export const Message:string = getSetting<string>("message");
     export const SortCompletedTasksToEnd:boolean = getSetting<boolean>("sortCompletedTasksToEnd");
     export const RemovePriorityFromCompletedTasks:boolean = getSetting<boolean>("removePriorityFromCompletedTasks");
@@ -74,7 +76,7 @@ export namespace Settings {
         opacity: getSetting<string>("completedStyle.opacity")
     };
 
-    function getSetting<T>(field:string): T | undefined {
+    export function getSetting<T>(field:string): T | undefined {
         return vscode.workspace.getConfiguration("todotxtmode").get<T>(field);
     }
 

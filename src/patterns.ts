@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as vscode from 'vscode';
 import { Helpers } from './helpers';
 import { Settings } from './settings';

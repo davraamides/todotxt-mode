@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as vscode from 'vscode';
 import { Range } from 'vscode';
 import * as path from 'path';

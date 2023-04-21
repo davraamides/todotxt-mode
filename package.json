@@ -2,7 +2,7 @@
     "name": "todotxt-mode",
     "displayName": "todotxt-mode",
     "description": "Commands and decorators for managing todo.txt files",
-    "version": "1.4.30",
+    "version": "1.4.32",
     "publisher": "davraamides",
     "engines": {
         "vscode": "^1.77.0"
@@ -140,6 +140,11 @@
                     "type": "string",
                     "default": "waiting.txt",
                     "description": "Name of file for deferred/waiting tasks"
+                },
+                "todotxtmode.addCreatedAt": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Add the creation date when creating a task"
                 },
                 "todotxtmode.sortCompletedTasksToEnd": {
                     "type": "boolean",
@@ -329,19 +334,22 @@
         "test": "node ./out/test/runTest.js"
     },
     "devDependencies": {
-        "@types/vscode": "^1.77.0",
         "@types/glob": "^8.1.0",
         "@types/mocha": "^10.0.1",
         "@types/node": "16.x",
+        "@types/vscode": "^1.77.0",
         "@typescript-eslint/eslint-plugin": "^5.56.0",
         "@typescript-eslint/parser": "^5.56.0",
+        "@vscode/test-electron": "^2.3.0",
         "eslint": "^8.36.0",
         "glob": "^8.1.0",
         "mocha": "^10.2.0",
-        "typescript": "^4.9.5",
         "ts-loader": "^9.4.2",
+        "typescript": "^4.9.5",
         "webpack": "^5.76.3",
-        "webpack-cli": "^5.0.1",
-        "@vscode/test-electron": "^2.3.0"
+        "webpack-cli": "^5.0.1"
+    },
+    "dependencies": {
+        "vscode-test": "^1.6.1"
     }
 }
