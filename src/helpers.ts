@@ -93,7 +93,12 @@ export namespace Helpers {
                 }
                 i++;
             }
-            // continue searching down to find the line of the end pattern
+            // skip empty lines after the begin pattern
+            while (begLine < document.lineCount && document.lineAt(begLine).text.trim() === '') {
+                begLine++;
+            }
+            // continue searching down from begLine to find the line of the end pattern
+            i = begLine;
             while (i < document.lineCount) {
                 if (reEnd.test(document.lineAt(i).text)) {
                     endLine = i - 1;
@@ -103,8 +108,8 @@ export namespace Helpers {
             }
             if (begLine !== -1) {
                 if (endLine === -1) {
-                    // go to the end of the file if the end pattern was never found
-                    endLine = document.lineCount - 1;
+                    // if no end pattern found, do not decorate to avoid affecting the rest of the content
+                    return [0, -1];
                 }
                 return [begLine, endLine];
             }
