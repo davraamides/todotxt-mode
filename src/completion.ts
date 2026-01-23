@@ -55,7 +55,7 @@ export namespace Completion {
             } else {
                 // toggle to completed by adding in the completed flag and date fields
                 let today = Helpers.getDateTimeParts()[0];
-                if (Settings.RemovePriorityFromCompletedTasks) {
+                if (Settings.RemovePriorityFromCompletedTasks()) {
                     // NOTE if I wanted to preserve the priority like they suggest in the spec,
                     // I could do this, but don't love it
                     // if (priority) {

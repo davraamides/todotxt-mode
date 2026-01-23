@@ -10,12 +10,26 @@ import {Completion} from './completion';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
+
+// Module-level decorator instance so it can be recreated on config changes
+let decorator: Decorator;
+
 //
 // Setup and activate the extension
 //
 export function activate(context: vscode.ExtensionContext) {
-    let decorator = new Decorator();
+    decorator = new Decorator();
     Commands.ActivateCommands(context);
+
+    // Handle configuration changes - recreate decorator when style settings change
+    context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
+        if (e.affectsConfiguration('todotxtmode')) {
+            // Recreate decorator to pick up new style settings
+            decorator.dispose();
+            decorator = new Decorator();
+            decorator.decorateDocument();
+        }
+    }));
 
     vscode.window.onDidChangeTextEditorSelection(editor => {
         decorator.decorateDocument();

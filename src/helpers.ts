@@ -42,12 +42,12 @@ export namespace Helpers {
         return isTodoFile(filename) || isProjectFile(filename);
     }
     export function isTodoFile(filename: string): boolean {
-        if (filename.match(Settings.TodoFilePattern) !== null) {
+        if (filename.match(Settings.TodoFilePattern()) !== null) {
             return true;
         }
     }
     export function isProjectFile(filename: string): boolean {
-        if (filename.match(Settings.MarkdownFilePattern) !== null && Settings.MarkdownDecorationBeginPattern) {
+        if (filename.match(Settings.MarkdownFilePattern()) !== null && Settings.MarkdownDecorationBeginPattern()) {
             return true;
         }
     }
@@ -58,15 +58,16 @@ export namespace Helpers {
         return false;
     }
     export function excludeDecorations(filename: string): boolean {
-        return filename.match(Settings.ExcludeDecorationsFilePattern) !== null;
+        return filename.match(Settings.ExcludeDecorationsFilePattern()) !== null;
     }
 
     export function getLastTodoLineInDocument(document: vscode.TextDocument): number {
         // if the sectionDelimiterPattern setting has been set, find the first matching line
         //let document = vscode.window.activeTextEditor.document;
-        if (Settings.SectionDelimiterPattern !== undefined && Settings.SectionDelimiterPattern.length > 0) {
+        const sectionDelimiterPattern = Settings.SectionDelimiterPattern();
+        if (sectionDelimiterPattern !== undefined && sectionDelimiterPattern.length > 0) {
             for (var i = 0; i < document.lineCount; i++) {
-                if (document.lineAt(i).text.match(Settings.SectionDelimiterPattern)) {
+                if (document.lineAt(i).text.match(sectionDelimiterPattern)) {
                     return i === 0 ? 0 : i - 1; // return the previous line unless the first line has the delimiter
                 }
             }
@@ -75,13 +76,13 @@ export namespace Helpers {
     }
     export function getDecoratedLineRange(document: vscode.TextDocument): number[] {
         // todo files go from the beginning to the end or the optional section delimiter pattern
-        if (document.fileName.match(Settings.TodoFilePattern)) {
+        if (document.fileName.match(Settings.TodoFilePattern())) {
             return [0, getLastTodoLineInDocument(document)];
         }
         // markdown files go from the beginning to the end of the range patterns, if found
-        if (document.fileName.match(Settings.MarkdownFilePattern)) {
-            let reBeg = RegExp(Settings.MarkdownDecorationBeginPattern);
-            let reEnd = RegExp(Settings.MarkdownDecorationEndPattern);
+        if (document.fileName.match(Settings.MarkdownFilePattern())) {
+            let reBeg = RegExp(Settings.MarkdownDecorationBeginPattern());
+            let reEnd = RegExp(Settings.MarkdownDecorationEndPattern());
             let begLine = -1, endLine = -1;
 
             let i = 0;

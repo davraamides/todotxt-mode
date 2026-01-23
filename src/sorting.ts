@@ -49,7 +49,7 @@ export namespace Sorting {
         for (var i = startLine; i <= endLine; i++) {
             let text = doc.lineAt(i).text;
             let value = "";
-            if (Settings.SortCompletedTasksToEnd && Helpers.isCompleted(text)) {
+            if (Settings.SortCompletedTasksToEnd() && Helpers.isCompleted(text)) {
                 // force to very bottom, include date for sorting
                 value = text.replace(Patterns.CompletedRegex, "z ");
             } else {
@@ -93,7 +93,7 @@ export namespace Sorting {
                 if (tagName == result[1]) {
                     // parse the date in in the specified format and conver to a sortable format
                     try {
-                        let date: Date = strptime(result[2], Settings.TagDatePattern);
+                        let date: Date = strptime(result[2], Settings.TagDatePattern());
                         value = strftime('%Y%m%d', date);
                     } catch (error) {
                         value = result[2];                        

@@ -45,13 +45,13 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
         Files.archiveTasks();
     });
     let moveTasksToTodo = vscode.commands.registerCommand('extension.moveTasksToTodo', () => {
-        Files.moveTasks(Settings.TodoFilename);
+        Files.moveTasks(Settings.TodoFilename());
     });
     let moveTasksToWaiting = vscode.commands.registerCommand('extension.moveTasksToWaiting', () => {
-        Files.moveTasks(Settings.WaitingFilename);
+        Files.moveTasks(Settings.WaitingFilename());
     });
     let moveTasksToSomeday = vscode.commands.registerCommand('extension.moveTasksToSomeday', () => {
-        Files.moveTasks(Settings.SomedayFilename);
+        Files.moveTasks(Settings.SomedayFilename());
     });
     let moveTasksToProject = vscode.commands.registerCommand('extension.moveTasksToProject', () => {
         Files.moveTasksToProject();
@@ -68,20 +68,9 @@ export function ActivateCommands(context: vscode.ExtensionContext) {
     let createTaskNote = vscode.commands.registerCommand('extension.createTaskNote', () => {
         Note.createTaskNote();
     });
-    // not working and not sure if it's because settings are const and cached? maybe if I 
-    // just make sure they always go back to configuration.get() then I don't even need
-    // a "reactivate" function...
-    context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
-        extension.deactivate();
-        for (const sub of context.subscriptions) {
-            try {
-                sub.dispose();
-            } catch (e) {
-                console.error(e);
-            }
-        }
-        extension.activate(context);
-    }));
+    // Configuration changes are now handled in extension.ts.
+    // Most settings work dynamically since they're now functions that read fresh values.
+    // Only style-related settings require recreating the Decorator.
 
     // add to list of disposables so they will be cleaned up when deactivated
     context.subscriptions.push(toggleCompletion);

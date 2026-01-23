@@ -16,7 +16,7 @@ export namespace Files {
         const editor = vscode.window.activeTextEditor;
         let window = vscode.window;
         let document = editor.document;
-        let destinationPathName = path.dirname(document.fileName) + path.sep + Settings.DoneFilename;
+        let destinationPathName = path.dirname(document.fileName) + path.sep + Settings.DoneFilename();
         let lineDeletes = [];
 
         if (window.activeTextEditor != undefined) {

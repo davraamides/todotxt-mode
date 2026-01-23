@@ -30,6 +30,7 @@ interface IDecoration {
     addMatch(match: object): void;
     clear(): void;
     apply(editor: vscode.TextEditor): void;
+    dispose(): void;
 }
 
 class Decoration implements IDecoration {
@@ -53,6 +54,10 @@ class Decoration implements IDecoration {
 
     apply(editor: vscode.TextEditor) {
         editor.setDecorations(this.decorationType, this.decorationOptions);
+    }
+
+    dispose() {
+        this.decorationType.dispose();
     }
 }
 
@@ -109,6 +114,13 @@ class PriorityDecoration implements IDecoration {
             }
         }
     }
+
+    dispose() {
+        this.defaultDecorationType.dispose();
+        for (var priority in this.decorationTypeMap) {
+            this.decorationTypeMap[priority].dispose();
+        }
+    }
 }
 class DateDecoration implements IDecoration {
     regex: RegExp;
@@ -137,7 +149,7 @@ class DateDecoration implements IDecoration {
         let today: Date = new Date(new Date().setHours(0, 0, 0, 0));
         let date: Date = null;
         try {
-            date = strptime(bits[1], Settings.TagDatePattern);
+            date = strptime(bits[1], Settings.TagDatePattern());
         } catch (error) {
         }        
         if (! date || date < today) {
@@ -160,26 +172,32 @@ class DateDecoration implements IDecoration {
         editor.setDecorations(this.presentDecorationType, this.presentDecorationOptions);
         editor.setDecorations(this.futureDecorationType, this.futureDecorationOptions);
     }
+
+    dispose() {
+        this.pastDecorationType.dispose();
+        this.presentDecorationType.dispose();
+        this.futureDecorationType.dispose();
+    }
 }
 
 export default class Decorator {
 
     decorations: IDecoration[] = [
-        new Decoration(Patterns.ContextRegex, Settings.ContextStyle),
-        new Decoration(Patterns.ProjectRegex, Settings.ProjectStyle),
-        new CreationDateDecoration(Patterns.CreationDateRegex, Settings.CreationDateStyle),
-        new Decoration(Patterns.CompletedGlobalRegex, Settings.CompletedStyle),
+        new Decoration(Patterns.ContextRegex, Settings.ContextStyle()),
+        new Decoration(Patterns.ProjectRegex, Settings.ProjectStyle()),
+        new CreationDateDecoration(Patterns.CreationDateRegex, Settings.CreationDateStyle()),
+        new Decoration(Patterns.CompletedGlobalRegex, Settings.CompletedStyle()),
         new PriorityDecoration({
-            '(A)': Settings.HighPriorityStyle,
-            '(B)': Settings.MediumPriorityStyle,
-            '(C)': Settings.LowPriorityStyle
-        }, Settings.LowPriorityStyle),
+            '(A)': Settings.HighPriorityStyle(),
+            '(B)': Settings.MediumPriorityStyle(),
+            '(C)': Settings.LowPriorityStyle()
+        }, Settings.LowPriorityStyle()),
         new DateDecoration('due',
-            Settings.PastDateStyle,
-            Settings.PresentDateStyle,
-            Settings.FutureDateStyle),
+            Settings.PastDateStyle(),
+            Settings.PresentDateStyle(),
+            Settings.FutureDateStyle()),
         // first decoration wins so put the general tag one after the specific priority one
-        new Decoration(Patterns.TagRegex, Settings.TagStyle)
+        new Decoration(Patterns.TagRegex, Settings.TagStyle())
     ];
 
     public decorateDocument() {
@@ -237,5 +255,11 @@ export default class Decorator {
         }
         //console.log("matches: " + matches);
         return matches;
+    }
+
+    public dispose() {
+        this.decorations.forEach(decoration => {
+            decoration.dispose();
+        });
     }
 }
