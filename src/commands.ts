@@ -1,73 +1,70 @@
 'use strict';
 import * as vscode from 'vscode';
-import * as path from 'path';
 import { Files } from './files';
-import { Helpers } from './helpers';
 import { Patterns } from './patterns';
 import { Priority } from './priority';
 import { Settings } from './settings';
 import { Sorting } from './sorting';
-import * as extension from './extension';
-import * as fs from 'fs';
 import { Completion } from './completion';
 import { Note } from './note';
 
 //
 // Registers all the extension commands
 //
-export function ActivateCommands(context: vscode.ExtensionContext) {
+export function ActivateCommands(context: vscode.ExtensionContext): void {
 
-    let toggleCompletion = vscode.commands.registerCommand('extension.toggleCompletion', () => {
+    const toggleCompletion = vscode.commands.registerCommand('extension.toggleCompletion', () => {
         Completion.toggleCompletion();
     });
-    let sortByContext = vscode.commands.registerCommand('extension.sortByContext', () => {
+    const sortByContext = vscode.commands.registerCommand('extension.sortByContext', () => {
         Sorting.sortLinesByField("context");
     });
-    let sortByPriority = vscode.commands.registerCommand('extension.sortByPriority', () => {
+    const sortByPriority = vscode.commands.registerCommand('extension.sortByPriority', () => {
         Sorting.sortLinesByField("priority");
     });
-    let sortByProject = vscode.commands.registerCommand('extension.sortByProject', () => {
+    const sortByProject = vscode.commands.registerCommand('extension.sortByProject', () => {
         Sorting.sortLinesByField("project");
     });
-    let sortByTag = vscode.commands.registerCommand('extension.sortByTag', () => {
+    const sortByTag = vscode.commands.registerCommand('extension.sortByTag', () => {
         Sorting.sortLinesByField("tag");
     });
-    let sortByCreationDate = vscode.commands.registerCommand('extension.sortByCreationDate', () => {
+    const sortByCreationDate = vscode.commands.registerCommand('extension.sortByCreationDate', () => {
         Sorting.sortLinesByField("creationDate");
     });
-    let sortByDueDate = vscode.commands.registerCommand('extension.sortByDueDate', () => {
+    const sortByDueDate = vscode.commands.registerCommand('extension.sortByDueDate', () => {
         Sorting.sortLinesByDueDate();
     });
-    let formatTasks = vscode.commands.registerCommand('extension.formatTasks', () => {
+    const formatTasks = vscode.commands.registerCommand('extension.formatTasks', () => {
         Patterns.formatSelectedTasks();
     });
-    let archiveTasks = vscode.commands.registerCommand('extension.archiveTasks', () => {
+    const archiveTasks = vscode.commands.registerCommand('extension.archiveTasks', () => {
         Files.archiveTasks();
     });
-    let moveTasksToTodo = vscode.commands.registerCommand('extension.moveTasksToTodo', () => {
+    const moveTasksToTodo = vscode.commands.registerCommand('extension.moveTasksToTodo', () => {
         Files.moveTasks(Settings.TodoFilename());
     });
-    let moveTasksToWaiting = vscode.commands.registerCommand('extension.moveTasksToWaiting', () => {
+    const moveTasksToWaiting = vscode.commands.registerCommand('extension.moveTasksToWaiting', () => {
         Files.moveTasks(Settings.WaitingFilename());
     });
-    let moveTasksToSomeday = vscode.commands.registerCommand('extension.moveTasksToSomeday', () => {
+    const moveTasksToSomeday = vscode.commands.registerCommand('extension.moveTasksToSomeday', () => {
         Files.moveTasks(Settings.SomedayFilename());
     });
-    let moveTasksToProject = vscode.commands.registerCommand('extension.moveTasksToProject', () => {
+    const moveTasksToProject = vscode.commands.registerCommand('extension.moveTasksToProject', () => {
         Files.moveTasksToProject();
     });
-    let incrementPriority = vscode.commands.registerCommand('extension.incrementPriority', () => {
+    const incrementPriority = vscode.commands.registerCommand('extension.incrementPriority', () => {
         Priority.changePriority(true);
     });
-    let decrementPriority = vscode.commands.registerCommand('extension.decrementPriority', () => {
+    const decrementPriority = vscode.commands.registerCommand('extension.decrementPriority', () => {
         Priority.changePriority(false);
     });
-    let removePriorities = vscode.commands.registerCommand('extension.removePriorities', () => {
+    const removePriorities = vscode.commands.registerCommand('extension.removePriorities', () => {
         Priority.removePriorities();
     });
-    let createTaskNote = vscode.commands.registerCommand('extension.createTaskNote', () => {
+    const createTaskNote = vscode.commands.registerCommand('extension.createTaskNote', () => {
         Note.createTaskNote();
     });
+
     // Configuration changes are now handled in extension.ts.
     // Most settings work dynamically since they're now functions that read fresh values.
     // Only style-related settings require recreating the Decorator.

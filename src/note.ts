@@ -1,4 +1,3 @@
-// @ts-nocheck
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -18,19 +17,22 @@ import { strftime } from './strftime';
 //
 export namespace Note {
 
-    export function createTaskNote() {
+    export function createTaskNote(): void {
         const activeEditor = vscode.window.activeTextEditor;
+        if (!activeEditor) {
+            return;
+        }
         const selection = activeEditor.selection;
         if (selection.isEmpty) {
             vscode.window.showInformationMessage("No text selected for note");
             return;
         }
         const selectedText = activeEditor.document.getText(selection);
- 
-        let noteFilename = strftime(Settings.NoteFilenameFormat(), new Date());
+
+        const noteFilename = strftime(Settings.NoteFilenameFormat(), new Date());
         let selStart = noteFilename.indexOf("[");
         let selEnd = noteFilename.indexOf("]");
-        if (selStart == -1 || selEnd == -1) {
+        if (selStart === -1 || selEnd === -1) {
             selStart = selEnd = noteFilename.length;
         } else {
             selEnd += 1;
@@ -40,12 +42,19 @@ export namespace Note {
             prompt: 'Note file:',
             value: noteFilename,
             valueSelection: [selStart, selEnd]
-        }).then((noteFile:string) => {
-            let folder = path.normalize(path.dirname(vscode.window.activeTextEditor.document.fileName));
-            let notePath: string = path.join(folder, noteFile);
+        }).then((noteFile: string | undefined) => {
+            if (!noteFile) {
+                return;
+            }
+            const currentEditor = vscode.window.activeTextEditor;
+            if (!currentEditor) {
+                return;
+            }
+            const folder = path.normalize(path.dirname(currentEditor.document.fileName));
+            const notePath: string = path.join(folder, noteFile);
             try {
                 fs.writeFileSync(notePath, selectedText, 'utf8');
-                let noteTag = "note:" + noteFile;
+                const noteTag = "note:" + noteFile;
                 vscode.env.clipboard.writeText(noteTag);
                 if (Settings.ReplaceNoteTextWithNoteTag()) {
                     activeEditor.edit(builder => {
@@ -57,7 +66,7 @@ export namespace Note {
                     });
                     vscode.window.showInformationMessage("Paste the new note tag into the appropriate task");
                 }
-            } catch(e) {
+            } catch (e) {
                 vscode.window.showErrorMessage(`Failed to create note file: ${notePath}`);
             }
         });

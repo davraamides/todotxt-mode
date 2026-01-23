@@ -1,4 +1,3 @@
-// @ts-nocheck
 import * as vscode from 'vscode';
 import * as Commands from './commands';
 
@@ -6,7 +5,7 @@ import Decorator from './decorations';
 import { Settings } from './settings';
 import { Patterns } from './patterns';
 import { Helpers } from './helpers';
-import {Completion} from './completion';
+import { Completion } from './completion';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
@@ -17,7 +16,7 @@ let decorator: Decorator;
 //
 // Setup and activate the extension
 //
-export function activate(context: vscode.ExtensionContext) {
+export function activate(context: vscode.ExtensionContext): void {
     decorator = new Decorator();
     Commands.ActivateCommands(context);
 
@@ -31,14 +30,12 @@ export function activate(context: vscode.ExtensionContext) {
         }
     }));
 
-    vscode.window.onDidChangeTextEditorSelection(editor => {
+    vscode.window.onDidChangeTextEditorSelection(() => {
         decorator.decorateDocument();
     });
-    vscode.window.onDidChangeActiveTextEditor(editor => {
+    vscode.window.onDidChangeActiveTextEditor(() => {
         decorator.decorateDocument();
     });
-
-    let disposable: vscode.Disposable;
 
     // Register a hover provider for the note:xxx tag which reads the
     // note file and displays in a hover message with a link to the file.
@@ -47,26 +44,28 @@ export function activate(context: vscode.ExtensionContext) {
     // cannot contain spaces since the tag note:xxx is delimited at the
     // end by a space.
 
-    disposable = vscode.languages.registerHoverProvider({scheme: 'file', language: 'plaintext'}, {
-        provideHover(document, position, token) {
+    const noteHoverProvider = vscode.languages.registerHoverProvider({ scheme: 'file', language: 'plaintext' }, {
+        provideHover(document, position): vscode.Hover | null {
             const word = document.getText(document.getWordRangeAtPosition(position, Patterns.TagRegex));
-            // vscode.window.showInformationMessage(`word: ${word}`);
             if (Helpers.isNoteTag(word)) {
-                let bits = word.split(':');
-                let fname = bits[1];
-                let folder = path.normalize(path.dirname(vscode.window.activeTextEditor.document.fileName));
-                // vscode.window.showInformationMessage(`path: ${folder}`);
+                const bits = word.split(':');
+                const fname = bits[1];
+                const editor = vscode.window.activeTextEditor;
+                if (!editor) {
+                    return null;
+                }
+                const folder = path.normalize(path.dirname(editor.document.fileName));
                 try {
-                    let notePath:string = path.join(folder, fname);
+                    const notePath: string = path.join(folder, fname);
                     if (fs.existsSync(notePath)) {
-                        let note = fs.readFileSync(notePath);
+                        const note = fs.readFileSync(notePath);
                         // this link fails on windows - it probably needs the leading \ but then needs them converted to / or something
                         let prefix = 'file://';
-                        if (os.platform() == 'win32') {
+                        if (os.platform() === 'win32') {
                             prefix = 'file:///';
                         }
-                        let encPath = encodeURI(`${prefix}${notePath}`);
-                        let message = new vscode.MarkdownString(`[Open note](${encPath})\n\n${note}` );
+                        const encPath = encodeURI(`${prefix}${notePath}`);
+                        const message = new vscode.MarkdownString(`[Open note](${encPath})\n\n${note}`);
                         return new vscode.Hover(message);
                     }
                 } catch (err) {
@@ -78,38 +77,42 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    context.subscriptions.push(disposable);
+    context.subscriptions.push(noteHoverProvider);
 
-    disposable = vscode.workspace.onDidChangeTextDocument(async (event) => {
+    const textChangeHandler = vscode.workspace.onDidChangeTextDocument(async (event) => {
+        const addCreatedAtEnabled = Settings.getSetting<boolean>("addCreatedAt");
+        if (!Helpers.isTodoFile(event.document.fileName) || !addCreatedAtEnabled) {
+            return;
+        }
 
-        const addCreatedAtEnabled = Settings.getSetting<boolean>("addCreatedAt")
-        if (!Helpers.isTodoFile(event.document.fileName) || !addCreatedAtEnabled) return;
-
-        const isEnter = event.contentChanges[0]?.text === '\n';
-
-        if (isEnter) await Completion.insertCreatedAt();
+        const changes = event.contentChanges;
+        if (changes.length > 0 && changes[0].text === '\n') {
+            await Completion.insertCreatedAt();
+        }
     });
 
-    context.subscriptions.push(disposable);
+    context.subscriptions.push(textChangeHandler);
 
-    disposable = vscode.languages.registerHoverProvider({scheme: 'file', language: 'plaintext'}, {
-        provideHover(document, position, token) {
+    const projectHoverProvider = vscode.languages.registerHoverProvider({ scheme: 'file', language: 'plaintext' }, {
+        provideHover(document, position): vscode.Hover | null {
             const word = document.getText(document.getWordRangeAtPosition(position, Patterns.ProjectRegex));
-            // vscode.window.showInformationMessage(`word: ${word}`);
-            let fname = word.substring(1) + '.md';
-            let folder = path.normalize(path.dirname(vscode.window.activeTextEditor.document.fileName));
-            // vscode.window.showInformationMessage(`path: ${folder}`);
+            const fname = word.substring(1) + '.md';
+            const editor = vscode.window.activeTextEditor;
+            if (!editor) {
+                return null;
+            }
+            const folder = path.normalize(path.dirname(editor.document.fileName));
             try {
-                let projectPath:string = path.join(folder, fname);
+                const projectPath: string = path.join(folder, fname);
                 if (fs.existsSync(projectPath)) {
-                    let project = fs.readFileSync(projectPath);
+                    const project = fs.readFileSync(projectPath);
                     // this link fails on windows - it probably needs the leading \ but then needs them converted to / or something
                     let prefix = 'file://';
                     if (os.platform() === 'win32') {
                         prefix = 'file:///';
                     }
-                    let encPath = encodeURI(`${prefix}${projectPath}`);
-                    let message = new vscode.MarkdownString(`[Open project](${encPath})\n\n${project}` );
+                    const encPath = encodeURI(`${prefix}${projectPath}`);
+                    const message = new vscode.MarkdownString(`[Open project](${encPath})\n\n${project}`);
                     return new vscode.Hover(message);
                 }
             } catch (err) {
@@ -120,12 +123,14 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    context.subscriptions.push(disposable);
+    context.subscriptions.push(projectHoverProvider);
 
     // decorate initially on activation
     decorator.decorateDocument();
 }
 
-export function deactivate() {
+export function deactivate(): void {
+    if (decorator) {
+        decorator.dispose();
+    }
 }
-

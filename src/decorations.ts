@@ -1,4 +1,3 @@
-// @ts-nocheck
 import * as vscode from 'vscode';
 import { Range } from 'vscode';
 import * as path from 'path';
@@ -25,9 +24,15 @@ import { strptime } from './strptime';
 // for the ranges. There are special classes for priority and a date tag as
 // their style is dependent on the value of the field.
 //
+
+interface DecorationMatch {
+    range: vscode.Range;
+    value: string;
+}
+
 interface IDecoration {
     regex: RegExp;
-    addMatch(match: object): void;
+    addMatch(match: DecorationMatch): void;
     clear(): void;
     apply(editor: vscode.TextEditor): void;
     dispose(): void;
@@ -44,29 +49,29 @@ class Decoration implements IDecoration {
         this.decorationType = vscode.window.createTextEditorDecorationType(style);
     }
 
-    addMatch(match: object) {
-        this.decorationOptions.push({ range: match['range'] });
+    addMatch(match: DecorationMatch): void {
+        this.decorationOptions.push({ range: match.range });
     }
 
-    clear() {
+    clear(): void {
         this.decorationOptions = [];
     }
 
-    apply(editor: vscode.TextEditor) {
+    apply(editor: vscode.TextEditor): void {
         editor.setDecorations(this.decorationType, this.decorationOptions);
     }
 
-    dispose() {
+    dispose(): void {
         this.decorationType.dispose();
     }
 }
 
 class CreationDateDecoration extends Decoration {
-    addMatch(match: object) {
-        //adjust range so it's just the last 10 chars so ignore leading priority
-        var range = match['range'];
-        let endPos = new vscode.Position(range.end.line, range.end.character);
-        let begPos = new vscode.Position(range.start.line, range.end.character - 11);
+    addMatch(match: DecorationMatch): void {
+        // adjust range so it's just the last 10 chars so ignore leading priority
+        const range = match.range;
+        const endPos = new vscode.Position(range.end.line, range.end.character);
+        const begPos = new vscode.Position(range.start.line, range.end.character - 11);
         this.decorationOptions.push({ range: new Range(begPos, endPos) });
     }
 }
@@ -76,104 +81,109 @@ class PriorityDecoration implements IDecoration {
     decorationOptionsMap: { [priority: string]: vscode.DecorationOptions[] } = {};
     decorationTypeMap: { [priority: string]: vscode.TextEditorDecorationType } = {};
     defaultDecorationType: vscode.TextEditorDecorationType;
+
     constructor(
         styleMap: { [priority: string]: vscode.DecorationRenderOptions },
-        defaultStyle: vscode.DecorationRenderOptions) {
+        defaultStyle: vscode.DecorationRenderOptions
+    ) {
         this.regex = Patterns.PriorityWithLeadingSpaceRegex;
         this.defaultDecorationType = vscode.window.createTextEditorDecorationType(defaultStyle);
-        for (var priority in styleMap) {
+        for (const priority in styleMap) {
             this.decorationTypeMap[priority] = vscode.window.createTextEditorDecorationType(styleMap[priority]);
         }
     }
 
-    addMatch(match: object) {
+    addMatch(match: DecorationMatch): void {
         // since we allow leading whitespace and the regex matches it, we need to strip it off here so it will
         // properly index into the dicts
-        let priority = match['value'].trim();
-        if (! this.decorationOptionsMap[priority]) {
+        const priority = match.value.trim();
+        if (!this.decorationOptionsMap[priority]) {
             this.decorationOptionsMap[priority] = [];
         }
-        //console.log("adding priority match: prority=" + priority);
-        this.decorationOptionsMap[priority].push({ range: match['range'] });
+        this.decorationOptionsMap[priority].push({ range: match.range });
     }
 
-    clear() {
-        for (var priority in this.decorationOptionsMap) {
+    clear(): void {
+        for (const priority in this.decorationOptionsMap) {
             this.decorationOptionsMap[priority] = [];
         }
     }
 
-    apply(editor: vscode.TextEditor) {
-        for (var priority in this.decorationOptionsMap) {
+    apply(editor: vscode.TextEditor): void {
+        for (const priority in this.decorationOptionsMap) {
             if (priority in this.decorationTypeMap) {
-                //console.log("applying priority decoration: priority=" + priority + " type=priority map");
                 editor.setDecorations(this.decorationTypeMap[priority], this.decorationOptionsMap[priority]);
             } else {
-                //console.log("applying priority decoration: priority=" + priority + " type=default");
                 editor.setDecorations(this.defaultDecorationType, this.decorationOptionsMap[priority]);
             }
         }
     }
 
-    dispose() {
+    dispose(): void {
         this.defaultDecorationType.dispose();
-        for (var priority in this.decorationTypeMap) {
+        for (const priority in this.decorationTypeMap) {
             this.decorationTypeMap[priority].dispose();
         }
     }
 }
+
 class DateDecoration implements IDecoration {
     regex: RegExp;
     tag: string;
-    pastDecorationOptions: vscode.DecorationOptions[];
+    pastDecorationOptions: vscode.DecorationOptions[] = [];
     pastDecorationType: vscode.TextEditorDecorationType;
-    presentDecorationOptions: vscode.DecorationOptions[];
+    presentDecorationOptions: vscode.DecorationOptions[] = [];
     presentDecorationType: vscode.TextEditorDecorationType;
-    futureDecorationOptions: vscode.DecorationOptions[];
+    futureDecorationOptions: vscode.DecorationOptions[] = [];
     futureDecorationType: vscode.TextEditorDecorationType;
 
-    constructor(tag: string, pastStyle: vscode.DecorationRenderOptions,
-        presentStyle: vscode.DecorationRenderOptions, futureStyle: vscode.DecorationRenderOptions) {
-        this.regex = RegExp(Patterns.TagDateRegexString().replace("#TAG#", tag), "g");
+    constructor(
+        tag: string,
+        pastStyle: vscode.DecorationRenderOptions,
+        presentStyle: vscode.DecorationRenderOptions,
+        futureStyle: vscode.DecorationRenderOptions
+    ) {
+        this.regex = new RegExp(Patterns.TagDateRegexString().replace("#TAG#", tag), "g");
         this.tag = tag;
         this.pastDecorationType = vscode.window.createTextEditorDecorationType(pastStyle);
         this.presentDecorationType = vscode.window.createTextEditorDecorationType(presentStyle);
         this.futureDecorationType = vscode.window.createTextEditorDecorationType(futureStyle);
     }
 
-    addMatch(match: object) {
-        let bits = match['value'].split(':');
+    addMatch(match: DecorationMatch): void {
+        const bits = match.value.split(':');
         if (bits[0] !== this.tag) {
             return;
         }
-        let today: Date = new Date(new Date().setHours(0, 0, 0, 0));
-        let date: Date = null;
+        const today: Date = new Date(new Date().setHours(0, 0, 0, 0));
+        let date: Date | null = null;
         try {
             date = strptime(bits[1], Settings.TagDatePattern());
         } catch (error) {
-        }        
-        if (! date || date < today) {
-            this.pastDecorationOptions.push({ range: match['range'] });
+            // Invalid date format, treat as past
+        }
+        if (!date || date < today) {
+            this.pastDecorationOptions.push({ range: match.range });
         } else if (date > today) {
-            this.futureDecorationOptions.push({ range: match['range'] });
+            this.futureDecorationOptions.push({ range: match.range });
         } else {
-            this.presentDecorationOptions.push({ range: match['range'] });
+            this.presentDecorationOptions.push({ range: match.range });
         }
     }
 
-    clear() {
+    clear(): void {
         this.pastDecorationOptions = [];
         this.presentDecorationOptions = [];
         this.futureDecorationOptions = [];
     }
 
-    apply(editor: vscode.TextEditor) {
+    apply(editor: vscode.TextEditor): void {
         editor.setDecorations(this.pastDecorationType, this.pastDecorationOptions);
         editor.setDecorations(this.presentDecorationType, this.presentDecorationOptions);
         editor.setDecorations(this.futureDecorationType, this.futureDecorationOptions);
     }
 
-    dispose() {
+    dispose(): void {
         this.pastDecorationType.dispose();
         this.presentDecorationType.dispose();
         this.futureDecorationType.dispose();
@@ -200,12 +210,12 @@ export default class Decorator {
         new Decoration(Patterns.TagRegex, Settings.TagStyle())
     ];
 
-    public decorateDocument() {
-        let editor = vscode.window.activeTextEditor;
-        if (! editor || ! editor.document) {
+    public decorateDocument(): void {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor || !editor.document) {
             return;
         }
-        let fileName = path.basename(editor.document.fileName);
+        const fileName = path.basename(editor.document.fileName);
         if (Helpers.excludeDecorations(fileName)) {
             return;
         }
@@ -214,50 +224,41 @@ export default class Decorator {
             decoration.clear();
         });
 
-        if (editor !== undefined) {
-            if (Helpers.isDecoratedFile(fileName)) {
-                let [begLine, endLine] = Helpers.getDecoratedLineRange(editor.document);
-                for (var i = begLine; i <= endLine; i++) {
-                    let line = editor.document.lineAt(i);
-                    //console.log("*** decorating line: " + line.text);
-                    let seenMatches = new Set();
-                    this.decorations.forEach(decoration => {
-                        let matches = this.findMatchingPatterns(decoration.regex, line);
-                        for (var match of matches) {
-                            if (! seenMatches.has(match['value'])) {
-                                decoration.addMatch(match);
-                                seenMatches.add(match['value']);
-                                //console.log("added match for value=" + match["value"]);
-                            } else {
-                                //console.log("skipping seen match for value=" + match["value"]);
-                            }
+        if (Helpers.isDecoratedFile(fileName)) {
+            const [begLine, endLine] = Helpers.getDecoratedLineRange(editor.document);
+            for (let i = begLine; i <= endLine; i++) {
+                const line = editor.document.lineAt(i);
+                const seenMatches = new Set<string>();
+                this.decorations.forEach(decoration => {
+                    const matches = this.findMatchingPatterns(decoration.regex, line);
+                    for (const match of matches) {
+                        if (!seenMatches.has(match.value)) {
+                            decoration.addMatch(match);
+                            seenMatches.add(match.value);
                         }
-                    });
-                }
+                    }
+                });
             }
-
-            // Set final decorations
-            this.decorations.forEach(decoration => {
-                decoration.apply(editor);
-            });
         }
+
+        // Set final decorations
+        this.decorations.forEach(decoration => {
+            decoration.apply(editor);
+        });
     }
 
-    public findMatchingPatterns(regex: RegExp, line: vscode.TextLine): object[] {
-        let matches: object[] = [];
-        let result: RegExpExecArray;
-        //console.log("finding matches for " + regex);
-        while (result = regex.exec(line.text)) {
-            let begPos = new vscode.Position(line.range.start.line,  result.index);
-            let endPos = new vscode.Position(line.range.start.line,  result.index + result[0].length);
-            matches.push({ range: new Range(begPos, endPos), value: result[0]});
-            //console.log("pushed match at begPos=" + begPos.character + " endPos=" + endPos.character + " value=" + result[0]);
+    public findMatchingPatterns(regex: RegExp, line: vscode.TextLine): DecorationMatch[] {
+        const matches: DecorationMatch[] = [];
+        let result: RegExpExecArray | null;
+        while ((result = regex.exec(line.text)) !== null) {
+            const begPos = new vscode.Position(line.range.start.line, result.index);
+            const endPos = new vscode.Position(line.range.start.line, result.index + result[0].length);
+            matches.push({ range: new Range(begPos, endPos), value: result[0] });
         }
-        //console.log("matches: " + matches);
         return matches;
     }
 
-    public dispose() {
+    public dispose(): void {
         this.decorations.forEach(decoration => {
             decoration.dispose();
         });

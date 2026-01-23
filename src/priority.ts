@@ -1,23 +1,38 @@
-// @ts-nocheck
-import { start } from 'repl';
 import * as vscode from 'vscode';
 
 import { Helpers } from './helpers';
 import { Patterns } from './patterns';
-import { Settings } from './settings';
+
 //
 // Manipulate the priority field
 //
+
+interface PriorityChange {
+    line: number;
+    begin: number;
+    end: number;
+    newPriority: string;
+}
+
+interface LineWithPriority {
+    line: number;
+    match: RegExpMatchArray;
+}
+
 export namespace Priority {
 
-    export function changePriority(increment: boolean) {
+    export function changePriority(increment: boolean): void {
         const editor = vscode.window.activeTextEditor;
-        const selection = vscode.window.activeTextEditor.selection;
-        let [startLine, endLine] = Helpers.getSelectedLineRange(false);
-        let linesWithPriorityChange: {line, begin, end, newPriority}[] = [];
-        for (var i = startLine; i <= endLine; i++) {
-            let text = editor.document.lineAt(i).text;
-            let [oldPriority, newPriority] = Helpers.nextPriority(text, increment);
+        if (!editor) {
+            return;
+        }
+        const selection = editor.selection;
+        const [startLine, endLine] = Helpers.getSelectedLineRange(false);
+        const linesWithPriorityChange: PriorityChange[] = [];
+
+        for (let i = startLine; i <= endLine; i++) {
+            const text = editor.document.lineAt(i).text;
+            const [oldPriority, newPriority] = Helpers.nextPriority(text, increment);
             linesWithPriorityChange.push({
                 line: i,
                 begin: Math.max(oldPriority.length - 3, 0),
@@ -25,6 +40,7 @@ export namespace Priority {
                 newPriority: newPriority + (oldPriority ? '' : ' ')
             });
         }
+
         editor.edit(builder => {
             linesWithPriorityChange.forEach(elt => {
                 builder.replace(
@@ -32,35 +48,41 @@ export namespace Priority {
                     new vscode.Position(elt.line, elt.end)),
                     elt.newPriority
                 );
-            })
+            });
         }).then(() => {
             editor.selection = selection;
-         });
+        });
     }
 
-    export function removePriorities() {
+    export function removePriorities(): void {
         const editor = vscode.window.activeTextEditor;
-        const selection = vscode.window.activeTextEditor.selection;
-        let [startLine, endLine] = Helpers.getSelectedLineRange(true);
-        let linesWithPriority: {line, match}[] = [];
-        for (var i = startLine; i <= endLine; i++) {
-            let text = editor.document.lineAt(i).text;
-            if (! Helpers.isCompleted(text)) {
-                let match = text.match(Patterns.PriorityWithTrailingSpaceRegex);
-                if (match) {
-                    linesWithPriority.push({line: i, match: match});
+        if (!editor) {
+            return;
+        }
+        const selection = editor.selection;
+        const [startLine, endLine] = Helpers.getSelectedLineRange(true);
+        const linesWithPriority: LineWithPriority[] = [];
+
+        for (let i = startLine; i <= endLine; i++) {
+            const text = editor.document.lineAt(i).text;
+            if (!Helpers.isCompleted(text)) {
+                const match = text.match(Patterns.PriorityWithTrailingSpaceRegex);
+                if (match && match.index !== undefined) {
+                    linesWithPriority.push({ line: i, match: match });
                 }
             }
         }
+
         editor.edit(builder => {
             linesWithPriority.forEach(elt => {
+                const matchIndex = elt.match.index ?? 0;
                 builder.delete(
-                    new vscode.Range(new vscode.Position(elt.line, elt.match.index),
-                    new vscode.Position(elt.line, elt.match.index + elt.match[0].length))
+                    new vscode.Range(new vscode.Position(elt.line, matchIndex),
+                    new vscode.Position(elt.line, matchIndex + elt.match[0].length))
                 );
-            })
+            });
         }).then(() => {
             editor.selection = selection;
-         });
+        });
     }
 }

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import * as vscode from 'vscode';
 
 import { Patterns } from './patterns';
@@ -18,36 +17,63 @@ import { strptime } from './strptime';
 // number if the field is absent. This preserves the existing line order for
 // lines without the tag which is what you would expect (the sort is stable).
 //
+
+interface LineObject {
+    text: string;
+    value: string;
+    line: number;
+}
+
+type FieldParser = (line: string, fieldOrTagName: string, regex: RegExp) => string;
+
 export namespace Sorting {
 
-    export function sortLinesByField(fieldName: string) {
-        let [startLine, endLine] = Helpers.getSelectedLineRange(true);
-        let regex = Patterns.FieldRegex[fieldName];
-        let lineObjects = getLineObjects(vscode.window.activeTextEditor.document, startLine, endLine, fieldName, regex, parseField);
+    export function sortLinesByField(fieldName: string): void {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const [startLine, endLine] = Helpers.getSelectedLineRange(true);
+        const regex = Patterns.FieldRegex[fieldName];
+        const lineObjects = getLineObjects(editor.document, startLine, endLine, fieldName, regex, parseField);
         sort(lineObjects, startLine, endLine);
     }
 
-    export function sortLinesByTagValue(tagName: string) {
-        let [startLine, endLine] = Helpers.getSelectedLineRange(true);
-        let regex = Patterns.TagValueRegex;
-        let lineObjects = getLineObjects(vscode.window.activeTextEditor.document, startLine, endLine, tagName, regex, parseTagValue);
+    export function sortLinesByTagValue(tagName: string): void {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const [startLine, endLine] = Helpers.getSelectedLineRange(true);
+        const regex = Patterns.TagValueRegex;
+        const lineObjects = getLineObjects(editor.document, startLine, endLine, tagName, regex, parseTagValue);
         sort(lineObjects, startLine, endLine);
     }
 
-    export function sortLinesByDueDate() {
-        let [startLine, endLine] = Helpers.getSelectedLineRange(true);
-        let regex = Patterns.TagValueRegex;
-        let lineObjects = getLineObjects(vscode.window.activeTextEditor.document, startLine, endLine, 'due', regex, parseDueDate);
+    export function sortLinesByDueDate(): void {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const [startLine, endLine] = Helpers.getSelectedLineRange(true);
+        const regex = Patterns.TagValueRegex;
+        const lineObjects = getLineObjects(editor.document, startLine, endLine, 'due', regex, parseDueDate);
         sort(lineObjects, startLine, endLine);
     }
 
     // get the lines of the document as objects with the text, field value and line number
-    function getLineObjects(doc: vscode.TextDocument, startLine: number, endLine: number, fieldOrTagName: string, regex: RegExp, 
-        fieldParser: (line: string, fieldOrTagName: string, regex: RegExp) => string): object[] {
-        var lineObjects: object[] = [];
+    function getLineObjects(
+        doc: vscode.TextDocument,
+        startLine: number,
+        endLine: number,
+        fieldOrTagName: string,
+        regex: RegExp,
+        fieldParser: FieldParser
+    ): LineObject[] {
+        const lineObjects: LineObject[] = [];
 
-        for (var i = startLine; i <= endLine; i++) {
-            let text = doc.lineAt(i).text;
+        for (let i = startLine; i <= endLine; i++) {
+            const text = doc.lineAt(i).text;
             let value = "";
             if (Settings.SortCompletedTasksToEnd() && Helpers.isCompleted(text)) {
                 // force to very bottom, include date for sorting
@@ -61,12 +87,12 @@ export namespace Sorting {
     }
 
     // return the first matching portion of a regex in a line
-    // replace with patterns.parseTask?
-    function parseField(line: string, field: string, regex: RegExp): string {
-        let response = regex.exec(line);
-        if (response != null) {
+    function parseField(line: string, _field: string, regex: RegExp): string {
+        const response = regex.exec(line);
+        if (response !== null) {
             regex.lastIndex = 0;
-            return response.pop();
+            const lastMatch = response.pop();
+            return lastMatch ?? "y";
         }
         // force to bottom
         return "y";
@@ -74,10 +100,10 @@ export namespace Sorting {
 
     function parseTagValue(line: string, tagName: string, regex: RegExp): string {
         let value: string = "y"; // default forcing to bottom if not found
-        let result: RegExpExecArray;
-        while (result = regex.exec(line)) {
+        let result: RegExpExecArray | null;
+        while ((result = regex.exec(line)) !== null) {
             if (result.length > 2) {
-                if (tagName == result[1]) {
+                if (tagName === result[1]) {
                     value = result[2];
                 }
             }
@@ -87,16 +113,20 @@ export namespace Sorting {
 
     function parseDueDate(line: string, tagName: string, regex: RegExp): string {
         let value: string = "y"; // default forcing to bottom if not found
-        let result: RegExpExecArray;
-        while (result = regex.exec(line)) {
+        let result: RegExpExecArray | null;
+        while ((result = regex.exec(line)) !== null) {
             if (result.length > 2) {
-                if (tagName == result[1]) {
-                    // parse the date in in the specified format and conver to a sortable format
+                if (tagName === result[1]) {
+                    // parse the date in the specified format and convert to a sortable format
                     try {
-                        let date: Date = strptime(result[2], Settings.TagDatePattern());
-                        value = strftime('%Y%m%d', date);
+                        const date = strptime(result[2], Settings.TagDatePattern());
+                        if (date) {
+                            value = strftime('%Y%m%d', date);
+                        } else {
+                            value = result[2];
+                        }
                     } catch (error) {
-                        value = result[2];                        
+                        value = result[2];
                     }
                 }
             }
@@ -104,27 +134,31 @@ export namespace Sorting {
         return value;
     }
 
-    function sort(lineObjects: object[], startLine, endLine) {
-        let editor = vscode.window.activeTextEditor;
-        const selection = vscode.window.activeTextEditor.selection;
-        //let selectionLine = editor.selection.start.line;
+    function sort(lineObjects: LineObject[], startLine: number, endLine: number): void {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const selection = editor.selection;
 
         // sort the lines by the values of byField. leave lines without a field
         // in their existing order (i.e. a stable sort)
         lineObjects.sort((obja, objb) => {
-            if (obja["value"] > objb["value"]) {
+            if (obja.value > objb.value) {
                 return 1;
             }
-            if (obja["value"] < objb["value"]) {
+            if (obja.value < objb.value) {
                 return -1;
             }
             // for lines with equal or missing field values, use the line number to make the sort stable
-            return obja["line"] - objb["line"];
-        })
-        let sortedLines: string[] = [];
-        for (var i = 0; i < lineObjects.length; i++) {
-            sortedLines.push(lineObjects[i]["text"]);
+            return obja.line - objb.line;
+        });
+
+        const sortedLines: string[] = [];
+        for (let i = 0; i < lineObjects.length; i++) {
+            sortedLines.push(lineObjects[i].text);
         }
+
         // replace all the lines in the editor with the new sorted lines
         editor.edit(editBuilder => {
             const range = new vscode.Range(startLine, 0, endLine, editor.document.lineAt(endLine).text.length);
@@ -133,4 +167,4 @@ export namespace Sorting {
             editor.selection = selection;
         });
     }
-};
+}
