@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs';
+import * as fs from 'fs/promises';
 import * as path from 'path';
 
 import { Helpers } from './helpers';
@@ -9,10 +9,21 @@ import { Patterns, TaskObject } from './patterns';
 //
 // Manage movement of tasks to other task files.
 //
+
+// Check if a file exists (async)
+async function fileExists(filePath: string): Promise<boolean> {
+    try {
+        await fs.access(filePath);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
 export namespace Files {
 
     // Move any completed tasks to the "done" file
-    export function archiveTasks(): void {
+    export async function archiveTasks(): Promise<void> {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
@@ -21,21 +32,30 @@ export namespace Files {
         const destinationPathName = path.dirname(document.fileName) + path.sep + Settings.DoneFilename();
         const lineDeletes: number[] = [];
 
-        ensureEndsWithEOL(destinationPathName);
+        await ensureEndsWithEOL(destinationPathName);
         const lastLine = Helpers.getLastTodoLineInDocument(document);
+
+        // Collect all tasks to archive
+        const tasksToArchive: string[] = [];
         for (let i = 0; i <= lastLine; i++) {
             const lineObject = document.lineAt(i);
             if (Helpers.isCompleted(lineObject.text)) {
-                fs.appendFileSync(destinationPathName, lineObject.text + Helpers.EOL());
+                tasksToArchive.push(lineObject.text + Helpers.EOL());
                 lineDeletes.push(i);
             }
         }
+
+        // Write all tasks at once (more efficient than multiple appends)
+        if (tasksToArchive.length > 0) {
+            await fs.appendFile(destinationPathName, tasksToArchive.join(''));
+        }
+
         deleteLines(lineDeletes, editor, document);
     }
 
     // Move any selected tasks to the destination file. This is similar to archiveTasks above
     // but different in how tasks are selected, thus it requires a separate function
-    export function moveTasks(destinationFileName: string): void {
+    export async function moveTasks(destinationFileName: string): Promise<void> {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
@@ -44,16 +64,25 @@ export namespace Files {
         const lineDeletes: number[] = [];
         const destinationPathName = path.dirname(currDoc.fileName) + path.sep + destinationFileName;
 
-        ensureEndsWithEOL(destinationPathName);
+        await ensureEndsWithEOL(destinationPathName);
         const [startLine, endLine] = Helpers.getSelectedLineRange(false);
+
+        // Collect all tasks to move
+        const tasksToMove: string[] = [];
         for (let i = startLine; i <= endLine; i++) {
             const lineObject = currDoc.lineAt(i);
             // NOTE - this should really find the last *task* line in destinationPathName and add the
             // task there (in case there is a -- block), but that's not easy to do directly on
             // an external file - much easier within VS code editor
-            fs.appendFileSync(destinationPathName, lineObject.text + Helpers.EOL());
+            tasksToMove.push(lineObject.text + Helpers.EOL());
             lineDeletes.push(i);
         }
+
+        // Write all tasks at once
+        if (tasksToMove.length > 0) {
+            await fs.appendFile(destinationPathName, tasksToMove.join(''));
+        }
+
         deleteLines(lineDeletes, editor, currDoc);
     }
 
@@ -81,7 +110,7 @@ export namespace Files {
                 if (projectArray.length > 0) {
                     const filename = projectArray[0].substring(1) + '.md';
                     const filepath: string = path.join(folder, filename);
-                    if (fs.existsSync(filepath)) {
+                    if (await fileExists(filepath)) {
                         // exact match, move w/out prompting
                         moveTaskToProjectFile(i, filepath);
                         vscode.window.showInformationMessage(`Moved task to: ${filepath}`);
@@ -92,10 +121,15 @@ export namespace Files {
                         // isn't helpful, but maybe it works on Windows or Linux so I will leave it
                         const matches: string[] = [];
                         const project = projectArray[0].substring(1).toLowerCase();
-                        for (const file of fs.readdirSync(folder)) {
-                            if (file.toLowerCase().includes(project) && file.endsWith('.md')) {
-                                matches.push(file);
+                        try {
+                            const files = await fs.readdir(folder);
+                            for (const file of files) {
+                                if (file.toLowerCase().includes(project) && file.endsWith('.md')) {
+                                    matches.push(file);
+                                }
                             }
+                        } catch {
+                            // Ignore directory read errors
                         }
                         if (matches.length > 0) {
                             // just take the first one
@@ -182,11 +216,11 @@ export namespace Files {
 
     // Adds an EOL to a file if missing so that when we add a task
     // it doesn't get appended to the end of an existing task
-    function ensureEndsWithEOL(fileName: string): void {
-        if (fs.existsSync(fileName)) {
-            const text = fs.readFileSync(fileName);
-            if (!text.toString().endsWith(Helpers.EOL())) {
-                fs.appendFileSync(fileName, Helpers.EOL());
+    async function ensureEndsWithEOL(fileName: string): Promise<void> {
+        if (await fileExists(fileName)) {
+            const text = await fs.readFile(fileName, 'utf8');
+            if (!text.endsWith(Helpers.EOL())) {
+                await fs.appendFile(fileName, Helpers.EOL());
             }
         }
     }

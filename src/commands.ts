@@ -8,83 +8,51 @@ import { Sorting } from './sorting';
 import { Completion } from './completion';
 import { Note } from './note';
 
+// Command definition type
+interface CommandDefinition {
+    name: string;
+    handler: () => void | Promise<void>;
+}
+
 //
 // Registers all the extension commands
 //
 export function ActivateCommands(context: vscode.ExtensionContext): void {
+    // Define all commands in a single array for cleaner registration
+    const commands: CommandDefinition[] = [
+        // Completion
+        { name: 'toggleCompletion', handler: () => Completion.toggleCompletion() },
 
-    const toggleCompletion = vscode.commands.registerCommand('extension.toggleCompletion', () => {
-        Completion.toggleCompletion();
-    });
-    const sortByContext = vscode.commands.registerCommand('extension.sortByContext', () => {
-        Sorting.sortLinesByField("context");
-    });
-    const sortByPriority = vscode.commands.registerCommand('extension.sortByPriority', () => {
-        Sorting.sortLinesByField("priority");
-    });
-    const sortByProject = vscode.commands.registerCommand('extension.sortByProject', () => {
-        Sorting.sortLinesByField("project");
-    });
-    const sortByTag = vscode.commands.registerCommand('extension.sortByTag', () => {
-        Sorting.sortLinesByField("tag");
-    });
-    const sortByCreationDate = vscode.commands.registerCommand('extension.sortByCreationDate', () => {
-        Sorting.sortLinesByField("creationDate");
-    });
-    const sortByDueDate = vscode.commands.registerCommand('extension.sortByDueDate', () => {
-        Sorting.sortLinesByDueDate();
-    });
-    const formatTasks = vscode.commands.registerCommand('extension.formatTasks', () => {
-        Patterns.formatSelectedTasks();
-    });
-    const archiveTasks = vscode.commands.registerCommand('extension.archiveTasks', () => {
-        Files.archiveTasks();
-    });
-    const moveTasksToTodo = vscode.commands.registerCommand('extension.moveTasksToTodo', () => {
-        Files.moveTasks(Settings.TodoFilename());
-    });
-    const moveTasksToWaiting = vscode.commands.registerCommand('extension.moveTasksToWaiting', () => {
-        Files.moveTasks(Settings.WaitingFilename());
-    });
-    const moveTasksToSomeday = vscode.commands.registerCommand('extension.moveTasksToSomeday', () => {
-        Files.moveTasks(Settings.SomedayFilename());
-    });
-    const moveTasksToProject = vscode.commands.registerCommand('extension.moveTasksToProject', () => {
-        Files.moveTasksToProject();
-    });
-    const incrementPriority = vscode.commands.registerCommand('extension.incrementPriority', () => {
-        Priority.changePriority(true);
-    });
-    const decrementPriority = vscode.commands.registerCommand('extension.decrementPriority', () => {
-        Priority.changePriority(false);
-    });
-    const removePriorities = vscode.commands.registerCommand('extension.removePriorities', () => {
-        Priority.removePriorities();
-    });
-    const createTaskNote = vscode.commands.registerCommand('extension.createTaskNote', () => {
-        Note.createTaskNote();
-    });
+        // Sorting
+        { name: 'sortByContext', handler: () => Sorting.sortLinesByField("context") },
+        { name: 'sortByPriority', handler: () => Sorting.sortLinesByField("priority") },
+        { name: 'sortByProject', handler: () => Sorting.sortLinesByField("project") },
+        { name: 'sortByTag', handler: () => Sorting.sortLinesByField("tag") },
+        { name: 'sortByCreationDate', handler: () => Sorting.sortLinesByField("creationDate") },
+        { name: 'sortByDueDate', handler: () => Sorting.sortLinesByDueDate() },
 
-    // Configuration changes are now handled in extension.ts.
-    // Most settings work dynamically since they're now functions that read fresh values.
-    // Only style-related settings require recreating the Decorator.
+        // Formatting
+        { name: 'formatTasks', handler: () => Patterns.formatSelectedTasks() },
 
-    // add to list of disposables so they will be cleaned up when deactivated
-    context.subscriptions.push(toggleCompletion);
-    context.subscriptions.push(sortByContext);
-    context.subscriptions.push(sortByPriority);
-    context.subscriptions.push(sortByProject);
-    context.subscriptions.push(sortByTag);
-    context.subscriptions.push(sortByCreationDate);
-    context.subscriptions.push(sortByDueDate);
-    context.subscriptions.push(formatTasks);
-    context.subscriptions.push(archiveTasks);
-    context.subscriptions.push(moveTasksToTodo);
-    context.subscriptions.push(moveTasksToWaiting);
-    context.subscriptions.push(moveTasksToSomeday);
-    context.subscriptions.push(moveTasksToProject);
-    context.subscriptions.push(incrementPriority);
-    context.subscriptions.push(decrementPriority);
-    context.subscriptions.push(removePriorities);
-    context.subscriptions.push(createTaskNote);
+        // File operations (async)
+        { name: 'archiveTasks', handler: async () => Files.archiveTasks() },
+        { name: 'moveTasksToTodo', handler: async () => Files.moveTasks(Settings.TodoFilename()) },
+        { name: 'moveTasksToWaiting', handler: async () => Files.moveTasks(Settings.WaitingFilename()) },
+        { name: 'moveTasksToSomeday', handler: async () => Files.moveTasks(Settings.SomedayFilename()) },
+        { name: 'moveTasksToProject', handler: async () => Files.moveTasksToProject() },
+
+        // Priority
+        { name: 'incrementPriority', handler: () => Priority.changePriority(true) },
+        { name: 'decrementPriority', handler: () => Priority.changePriority(false) },
+        { name: 'removePriorities', handler: () => Priority.removePriorities() },
+
+        // Notes
+        { name: 'createTaskNote', handler: async () => Note.createTaskNote() },
+    ];
+
+    // Register all commands
+    for (const cmd of commands) {
+        const disposable = vscode.commands.registerCommand(`extension.${cmd.name}`, cmd.handler);
+        context.subscriptions.push(disposable);
+    }
 }

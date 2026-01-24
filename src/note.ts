@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import * as fs from 'fs';
+import * as fs from 'fs/promises';
 
 import { Settings } from './settings';
 import { strftime } from './strftime';
@@ -17,7 +17,7 @@ import { strftime } from './strftime';
 //
 export namespace Note {
 
-    export function createTaskNote(): void {
+    export async function createTaskNote(): Promise<void> {
         const activeEditor = vscode.window.activeTextEditor;
         if (!activeEditor) {
             return;
@@ -38,37 +38,41 @@ export namespace Note {
             selEnd += 1;
         }
 
-        vscode.window.showInputBox({
+        const noteFile = await vscode.window.showInputBox({
             prompt: 'Note file:',
             value: noteFilename,
             valueSelection: [selStart, selEnd]
-        }).then((noteFile: string | undefined) => {
-            if (!noteFile) {
-                return;
-            }
-            const currentEditor = vscode.window.activeTextEditor;
-            if (!currentEditor) {
-                return;
-            }
-            const folder = path.normalize(path.dirname(currentEditor.document.fileName));
-            const notePath: string = path.join(folder, noteFile);
-            try {
-                fs.writeFileSync(notePath, selectedText, 'utf8');
-                const noteTag = "note:" + noteFile;
-                vscode.env.clipboard.writeText(noteTag);
-                if (Settings.ReplaceNoteTextWithNoteTag()) {
-                    activeEditor.edit(builder => {
-                        builder.replace(selection, noteTag);
-                    });
-                } else {
-                    activeEditor.edit(builder => {
-                        builder.delete(selection);
-                    });
-                    vscode.window.showInformationMessage("Paste the new note tag into the appropriate task");
-                }
-            } catch (e) {
-                vscode.window.showErrorMessage(`Failed to create note file: ${notePath}`);
-            }
         });
+
+        if (!noteFile) {
+            return;
+        }
+
+        const currentEditor = vscode.window.activeTextEditor;
+        if (!currentEditor) {
+            return;
+        }
+
+        const folder = path.normalize(path.dirname(currentEditor.document.fileName));
+        const notePath: string = path.join(folder, noteFile);
+
+        try {
+            await fs.writeFile(notePath, selectedText, 'utf8');
+            const noteTag = "note:" + noteFile;
+            await vscode.env.clipboard.writeText(noteTag);
+
+            if (Settings.ReplaceNoteTextWithNoteTag()) {
+                await activeEditor.edit(builder => {
+                    builder.replace(selection, noteTag);
+                });
+            } else {
+                await activeEditor.edit(builder => {
+                    builder.delete(selection);
+                });
+                vscode.window.showInformationMessage("Paste the new note tag into the appropriate task");
+            }
+        } catch (e) {
+            vscode.window.showErrorMessage(`Failed to create note file: ${notePath}`);
+        }
     }
 }
