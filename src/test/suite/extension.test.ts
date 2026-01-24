@@ -1,15 +1,48 @@
 import * as assert from 'assert';
-
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
 import * as vscode from 'vscode';
-// import * as myExtension from '../../extension';
 
-suite('Extension Test Suite', () => {
-	vscode.window.showInformationMessage('Start all tests.');
+suite('Extension Activation Test Suite', () => {
+    test('Extension should be present', () => {
+        const extension = vscode.extensions.getExtension('davraamides.todotxt-mode');
+        assert.ok(extension, 'Extension should be found');
+    });
 
-	test('Sample test', () => {
-		assert.strictEqual(-1, [1, 2, 3].indexOf(5));
-		assert.strictEqual(-1, [1, 2, 3].indexOf(0));
-	});
+    test('Extension should activate', async () => {
+        const extension = vscode.extensions.getExtension('davraamides.todotxt-mode');
+        if (extension) {
+            await extension.activate();
+            assert.ok(extension.isActive, 'Extension should be active');
+        }
+    });
+
+    test('Commands should be registered', async () => {
+        const commands = await vscode.commands.getCommands(true);
+
+        const expectedCommands = [
+            'extension.toggleCompletion',
+            'extension.sortByContext',
+            'extension.sortByPriority',
+            'extension.sortByProject',
+            'extension.sortByTag',
+            'extension.sortByCreationDate',
+            'extension.sortByDueDate',
+            'extension.formatTasks',
+            'extension.archiveTasks',
+            'extension.moveTasksToTodo',
+            'extension.moveTasksToWaiting',
+            'extension.moveTasksToSomeday',
+            'extension.moveTasksToProject',
+            'extension.createTaskNote',
+            'extension.incrementPriority',
+            'extension.decrementPriority',
+            'extension.removePriorities',
+        ];
+
+        for (const cmd of expectedCommands) {
+            assert.ok(
+                commands.includes(cmd),
+                `Command ${cmd} should be registered`
+            );
+        }
+    });
 });

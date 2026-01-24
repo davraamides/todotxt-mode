@@ -1,0 +1,6 @@
+(A) Active high priority task @work +project
+(B) Active medium priority task @home
+Task without priority due:2024-12-31
+x 2024-01-15 Completed task
+x 2024-01-10 (A) 2024-01-01 Completed with priority and dates
+  Indented task @context

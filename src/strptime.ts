@@ -23,7 +23,7 @@ function _parseDate(datestring: string, format: string):
         c1 = format[++i1];
         // @ts-ignore
         var data = _DATE_FORMAT_REGXES[c1].exec(datestring.substring(i2));
-        if (!data.length) {
+        if (!data || !data.length) {
             return null;
         }
         data = data[0];

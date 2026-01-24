@@ -1,3 +1,4 @@
-2 @c
-0 @a
-1 @b
+(C) Task with priority C @zebra
+(A) Task with priority A @apple
+(B) Task with priority B @mango
+Task without priority @context
