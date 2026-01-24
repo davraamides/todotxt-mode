@@ -2,7 +2,7 @@
     "name": "todotxt-mode",
     "displayName": "todotxt-mode",
     "description": "Commands and decorators for managing todo.txt files",
-    "version": "1.4.32",
+    "version": "1.4.33",
     "publisher": "davraamides",
     "engines": {
         "vscode": "^1.85.0"

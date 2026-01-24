@@ -1,5 +1,14 @@
 # Change Log
 
+## 1.4.33 - 2026-01-24
+
+- Pull-request ["Update markdown decoration range detection"](https://github.com/davraamides/todotxt-mode/pull/63).
+- Fixed bug in strptime with invalid dates
+- Internal code improvements
+    - Update test package and add more complete tests
+    - Remove @ts-nocheck and resolve eslint errors
+    - Convert file operations to async
+
 ## 1.4.32 - 2023-04-21
 
 - Pull-request ["feat: insert created at on new task"](https://github.com/davraamides/todotxt-mode/pull/55).
