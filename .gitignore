@@ -1,4 +1,6 @@
-dist
-node_modules
+dist/
+out/
+node_modules/
 .vscode/
+.vscode-test/
 .DS_Store
