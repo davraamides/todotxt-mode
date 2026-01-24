@@ -1,6 +1,6 @@
-import * as vscode from 'vscode';
-import { Helpers } from './helpers';
-import { Settings } from './settings';
+import * as vscode from "vscode";
+import * as Helpers from "./helpers";
+import * as Settings from "./settings";
 
 //
 // Regular Expression patterns and related functions
@@ -38,136 +38,155 @@ import { Settings } from './settings';
 
 // Interface for parsed task objects
 export interface TaskObject {
-    line: string;
-    context: string[];
-    priority: string | undefined;
-    project: string[];
-    tag: string[];
-    lead: string;
-    task?: string;
-    [key: string]: string | string[] | undefined;  // Allow dynamic tag properties
+  line: string;
+  context: string[];
+  priority: string | undefined;
+  project: string[];
+  tag: string[];
+  lead: string;
+  task?: string;
+  [key: string]: string | string[] | undefined; // Allow dynamic tag properties
 }
 
-export namespace Patterns {
+export const ContextField = "context";
+export const PriorityField = "priority";
+export const ProjectField = "project";
+export const TagField = "tag";
+export const CreationDateField = "creationDate";
 
-    export const ContextField = 'context';
-    export const PriorityField = 'priority';
-    export const ProjectField = 'project';
-    export const TagField = 'tag';
-    export const CreationDateField = 'creationDate';
+// The context and project patterns are prefixed with non-word boundary (\B) as they
+// begin with non-word chars (+@). The tag pattern is prefixed with a word bounday (\b)
+// as tags begin with a word char.
+export const ContextRegex = /\B@\S+/g;
+export const PriorityWithLeadingSpaceRegex = /^\s*[(][A-Z][)]\B/g;
+export const PriorityWithTrailingSpaceRegex = /[(][A-Z][)]\s/;
+export const PriorityOnlyRegex = /[(][A-Z][)]\B/g;
+export const ProjectRegex = /\B\+\S+/g;
+export const TagRegex = /[^\s:]+:\S+/g;
+export const CreationDateRegex = /^(?:[(][A-Z][)] )?\s*(\d{4}-\d{2}-\d{2})\s/g;
+export const TagValueRegex = /([^\s:]+):(\S+)/g;
+export const CompletedGlobalRegex = /^\s*x .*$/g;
+export const CompletedRegex = /^\s*x\s/;
 
-    // The context and project patterns are prefixed with non-word boundary (\B) as they
-    // begin with non-word chars (+@). The tag pattern is prefixed with a word bounday (\b)
-    // as tags begin with a word char.
-    export const ContextRegex = /\B@\S+/g;
-    export const PriorityWithLeadingSpaceRegex = /^\s*[(][A-Z][)]\B/g;
-    export const PriorityWithTrailingSpaceRegex = /[(][A-Z][)]\s/;
-    export const PriorityOnlyRegex = /[(][A-Z][)]\B/g;
-    export const ProjectRegex = /\B\+\S+/g;
-    export const TagRegex = /[^\s:]+:\S+/g;
-    export const CreationDateRegex = /^(?:[(][A-Z][)] )?\s*(\d{4}-\d{2}-\d{2})\s/g;
-    export const TagValueRegex = /([^\s:]+):(\S+)/g;
-    export const CompletedGlobalRegex = /^\s*x .*$/g;
-    export const CompletedRegex = /^\s*x\s/;
+export function TagDateRegexString(): string {
+  const datePattern = Settings.TagDatePattern()
+    .replace("%Y", "\\d{4}")
+    .replace("%m", "\\d{1,2}")
+    .replace("%d", "\\d{1,2}");
 
-    export function TagDateRegexString(): string {
-        const datePattern = Settings.TagDatePattern()
-            .replace('%Y', '\\d{4}')
-            .replace('%m', '\\d{1,2}')
-            .replace('%d', '\\d{1,2}');
+  return "\\b(#TAG#):(" + datePattern + ")\\b";
+}
 
-        return "\\b(#TAG#):(" + datePattern + ")\\b";
+// put them in a map so sorting by any field is consistent
+export const FieldRegex: { [key: string]: RegExp } = {
+  context: ContextRegex,
+  priority: PriorityOnlyRegex,
+  project: ProjectRegex,
+  tag: TagRegex,
+  creationDate: CreationDateRegex,
+};
+
+export function formatSelectedTasks(): void {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    return;
+  }
+  const selection = editor.selection;
+  const [startLine, endLine] = Helpers.getSelectedLineRange(false);
+
+  const newLines: string[] = [];
+  for (let i = startLine; i <= endLine; i++) {
+    const oldText = editor.document.lineAt(i).text;
+    // BUG fails for completed task with priority as it resorts and puts priority in front of "x yyyy-mm-dd"
+    const taskObj = parseTask(oldText);
+    const newText = spellTask(taskObj);
+    newLines.push(newText);
+  }
+
+  editor
+    .edit((builder) => {
+      const lastText = editor.document.lineAt(endLine).text;
+      const range = new vscode.Range(
+        new vscode.Position(startLine, 0),
+        new vscode.Position(endLine, lastText.length),
+      );
+      builder.replace(range, newLines.join("\n"));
+    })
+    .then(() => {
+      editor.selection = selection;
+    });
+  // put in utils
+  const selectedLineLength = editor.document.lineAt(startLine).text.length;
+  editor.selection = new vscode.Selection(
+    new vscode.Position(startLine, selectedLineLength),
+    new vscode.Position(startLine, selectedLineLength),
+  );
+  editor.selection = new vscode.Selection(
+    new vscode.Position(startLine, 0),
+    new vscode.Position(startLine, 0),
+  );
+}
+
+// parse a task into an object so it's easy to process individual fields
+// ignore completed status since just part of task text
+export function parseTask(line: string): TaskObject {
+  const taskObj: TaskObject = {
+    line: line,
+    context: [],
+    priority: undefined,
+    project: [],
+    tag: [],
+    lead: "",
+  };
+  const task: string[] = [];
+  const leadMatch = line.match(/^\s*/);
+  taskObj.lead = leadMatch ? leadMatch[0] : "";
+  const words = line.replace(/^\s*/, "").split(/\s+/);
+  for (const word of words) {
+    let matched = false;
+    for (const fieldName of [ContextField, ProjectField, TagField]) {
+      if (word.match(FieldRegex[fieldName])) {
+        (taskObj[fieldName] as string[]).push(word);
+        matched = true;
+        break;
+      }
     }
-
-    // put them in a map so sorting by any field is consistent
-    export const FieldRegex: { [key: string]: RegExp } = {
-        'context': ContextRegex,
-        'priority': PriorityOnlyRegex,
-        'project': ProjectRegex,
-        'tag': TagRegex,
-        'creationDate': CreationDateRegex,
-    };
-
-    export function formatSelectedTasks(): void {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return;
-        }
-        const selection = editor.selection;
-        const [startLine, endLine] = Helpers.getSelectedLineRange(false);
-
-        const newLines: string[] = [];
-        for (let i = startLine; i <= endLine; i++) {
-            const oldText = editor.document.lineAt(i).text;
-            // BUG fails for completed task with priority as it resorts and puts priority in front of "x yyyy-mm-dd"
-            const taskObj = parseTask(oldText);
-            const newText = spellTask(taskObj);
-            newLines.push(newText);
-        }
-
-        editor.edit(builder => {
-            const lastText = editor.document.lineAt(endLine).text;
-            const range = new vscode.Range(new vscode.Position(startLine, 0), new vscode.Position(endLine, lastText.length));
-            builder.replace(range, newLines.join('\n'));
-        }).then(() => {
-            editor.selection = selection;
-        });
-        // put in utils
-        const selectedLineLength = editor.document.lineAt(startLine).text.length;
-        editor.selection = new vscode.Selection(new vscode.Position(startLine, selectedLineLength), new vscode.Position(startLine, selectedLineLength));
-        editor.selection = new vscode.Selection(new vscode.Position(startLine, 0), new vscode.Position(startLine, 0));
+    if (word.match(FieldRegex[PriorityField])) {
+      taskObj[PriorityField] = word;
+      matched = true;
     }
-
-    // parse a task into an object so it's easy to process individual fields
-    // ignore completed status since just part of task text
-    export function parseTask(line: string): TaskObject {
-        const taskObj: TaskObject = { line: line, context: [], priority: undefined, project: [], tag: [], lead: '' };
-        const task: string[] = [];
-        const leadMatch = line.match(/^\s*/);
-        taskObj.lead = leadMatch ? leadMatch[0] : '';
-        const words = line.replace(/^\s*/, '').split(/\s+/);
-        for (const word of words) {
-            let matched = false;
-            for (const fieldName of [ContextField, ProjectField, TagField]) {
-                if (word.match(FieldRegex[fieldName])) {
-                    (taskObj[fieldName] as string[]).push(word);
-                    matched = true;
-                    break;
-                }
-            }
-            if (word.match(FieldRegex[PriorityField])) {
-                taskObj[PriorityField] = word;
-                matched = true;
-            }
-            if (word.match(FieldRegex[TagField])) {
-                const bits = word.split(':');
-                taskObj[bits[0]] = bits[1];
-            }
-            if (!matched) {
-                task.push(word);
-            }
-        }
-        taskObj.task = task.join(' ');
-        return taskObj;
+    if (word.match(FieldRegex[TagField])) {
+      const bits = word.split(":");
+      taskObj[bits[0]] = bits[1];
     }
-
-    // convert a task object back to a string using the specified order for the fields
-    function spellTask(taskObj: TaskObject, fieldOrder: string = "tcp"): string {
-        // build a task line back from its parts using the specified order
-        const orderMap: { [key: string]: string } = { t: TagField, c: ContextField, p: ProjectField };
-        const words: string[] = [];
-        if (taskObj[PriorityField]) {
-            words.push(taskObj[PriorityField] as string);
-        }
-        if (taskObj.task) {
-            words.push(taskObj.task);
-        }
-        for (const ch of fieldOrder) {
-            const fieldValue = taskObj[orderMap[ch]];
-            if (Array.isArray(fieldValue) && fieldValue.length) {
-                words.push(fieldValue.sort().join(' '));
-            }
-        }
-        return taskObj.lead + words.join(' ');
+    if (!matched) {
+      task.push(word);
     }
+  }
+  taskObj.task = task.join(" ");
+  return taskObj;
+}
+
+// convert a task object back to a string using the specified order for the fields
+function spellTask(taskObj: TaskObject, fieldOrder: string = "tcp"): string {
+  // build a task line back from its parts using the specified order
+  const orderMap: { [key: string]: string } = {
+    t: TagField,
+    c: ContextField,
+    p: ProjectField,
+  };
+  const words: string[] = [];
+  if (taskObj[PriorityField]) {
+    words.push(taskObj[PriorityField] as string);
+  }
+  if (taskObj.task) {
+    words.push(taskObj.task);
+  }
+  for (const ch of fieldOrder) {
+    const fieldValue = taskObj[orderMap[ch]];
+    if (Array.isArray(fieldValue) && fieldValue.length) {
+      words.push(fieldValue.sort().join(" "));
+    }
+  }
+  return taskObj.lead + words.join(" ");
 }

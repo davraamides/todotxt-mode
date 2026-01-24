@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as Extension from '../extension';
 import Decorator from '../decorations';
-import { Patterns } from '../patterns';
+import * as Patterns from '../patterns';
 
 /*
 priority - only latin A-Z

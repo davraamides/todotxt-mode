@@ -1,7 +1,8 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
-import { Helpers } from './helpers';
-import { Settings } from './settings';
+import * as Helpers from "./helpers";
+import * as Settings from "./settings";
+import { triggerRedecoration } from "./extension";
 
 //
 // Logic to toggle a task completed
@@ -13,93 +14,105 @@ import { Settings } from './settings';
 // ?, because it will match zero or more leading spaces. Thus even if there is
 // no leading space, it will return the empty string.)
 //
-const TaskCompletionRegEx = /^(\s*)(x )?(\([A-Z]\) )?(\d{4}-\d{2}-\d{2} )?(\d{4}-\d{2}-\d{2} )?(.*)$/;
+const TaskCompletionRegEx =
+  /^(\s*)(x )?(\([A-Z]\) )?(\d{4}-\d{2}-\d{2} )?(\d{4}-\d{2}-\d{2} )?(.*)$/;
 
 interface LineToToggle {
-    line: number;
-    begin: number;
-    end: number;
-    newTask: string;
+  line: number;
+  begin: number;
+  end: number;
+  newTask: string;
 }
 
-export namespace Completion {
+/**
+ * Insert the current date at the beginning of the line and move the cursor after
+ */
+export async function insertCreatedAt(): Promise<void> {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    return;
+  }
+  const [startLine] = Helpers.getSelectedLineRange(false);
+  const line = startLine + 1;
 
-    /**
-     * Insert the current date at the beginning of the line and move the cursor after
-     */
-    export async function insertCreatedAt(): Promise<void> {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return;
-        }
-        const [startLine] = Helpers.getSelectedLineRange(false);
-        const line = startLine + 1;
+  const [date] = new Date().toISOString().split("T");
 
-        const [date] = new Date().toISOString().split('T');
+  await editor.edit((builder) => {
+    builder.insert(new vscode.Position(line, 0), `${date} `);
+  });
 
-        await editor.edit(builder => {
-            builder.insert(new vscode.Position(line, 0), `${date} `);
-        });
+  const cursorPos = date.length + 1;
 
-        const cursorPos = date.length + 1;
+  editor.selection = new vscode.Selection(
+    new vscode.Position(line, cursorPos),
+    new vscode.Position(line, cursorPos),
+  );
+}
 
-        editor.selection = new vscode.Selection(new vscode.Position(line, cursorPos), new vscode.Position(line, cursorPos));
+export function toggleCompletion(): void {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    return;
+  }
+  const [startLine, endLine] = Helpers.getSelectedLineRange(false);
+  const linesToToggleCompletion: LineToToggle[] = [];
+
+  for (let i = startLine; i <= endLine; i++) {
+    const text = editor.document.lineAt(i).text;
+    const match = text.match(TaskCompletionRegEx);
+    if (!match) {
+      continue;
     }
 
-    export function toggleCompletion(): void {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return;
-        }
-        const [startLine, endLine] = Helpers.getSelectedLineRange(false);
-        const linesToToggleCompletion: LineToToggle[] = [];
+    let [, lead, completed, priority, completionDate, creationDate, task] = match;
 
-        for (let i = startLine; i <= endLine; i++) {
-            const text = editor.document.lineAt(i).text;
-            const match = text.match(TaskCompletionRegEx);
-            if (!match) {
-                continue;
-            }
-
-            let [, lead, completed, priority, completionDate, creationDate, task] = match;
-
-            // regex with one date will match the completionDate first regardless so need to fix that here
-            if (!completed && completionDate && !creationDate) {
-                creationDate = completionDate;
-                completionDate = "";
-            }
-
-            let newTask: string;
-            if (completed) {
-                // toggle back to incomplete by leaving off the completed flag and date fields
-                newTask = lead + (priority || "") + (creationDate || "") + task;
-            } else {
-                // toggle to completed by adding in the completed flag and date fields
-                const today = Helpers.getDateTimeParts()[0];
-                if (Settings.RemovePriorityFromCompletedTasks()) {
-                    priority = "";
-                }
-                newTask = lead + Settings.CompletedTaskPrefix + (priority || "") + today + ' ' + (creationDate || "") + task;
-            }
-
-            linesToToggleCompletion.push({
-                line: i,
-                begin: 0,
-                end: text.length,
-                newTask: newTask
-            });
-        }
-
-        editor.edit(builder => {
-            linesToToggleCompletion.forEach(elt => {
-                builder.replace(
-                    new vscode.Range(new vscode.Position(elt.line, elt.begin),
-                    new vscode.Position(elt.line, elt.end)),
-                    elt.newTask
-                );
-            });
-        }).then(() => { });
-
-        Helpers.triggerSelectionChange();
+    // regex with one date will match the completionDate first regardless so need to fix that here
+    if (!completed && completionDate && !creationDate) {
+      creationDate = completionDate;
+      completionDate = "";
     }
+
+    let newTask: string;
+    if (completed) {
+      // toggle back to incomplete by leaving off the completed flag and date fields
+      newTask = lead + (priority || "") + (creationDate || "") + task;
+    } else {
+      // toggle to completed by adding in the completed flag and date fields
+      const today = Helpers.getDateTimeParts()[0];
+      if (Settings.RemovePriorityFromCompletedTasks()) {
+        priority = "";
+      }
+      newTask =
+        lead +
+        Settings.CompletedTaskPrefix +
+        (priority || "") +
+        today +
+        " " +
+        (creationDate || "") +
+        task;
+    }
+
+    linesToToggleCompletion.push({
+      line: i,
+      begin: 0,
+      end: text.length,
+      newTask: newTask,
+    });
+  }
+
+  editor
+    .edit((builder) => {
+      linesToToggleCompletion.forEach((elt) => {
+        builder.replace(
+          new vscode.Range(
+            new vscode.Position(elt.line, elt.begin),
+            new vscode.Position(elt.line, elt.end),
+          ),
+          elt.newTask,
+        );
+      });
+    })
+    .then(() => {
+      triggerRedecoration();
+    });
 }
