@@ -30,6 +30,8 @@ You can publish new versions with `vsce publish`. I just manually change the ver
 
     vsce publish
 
+NOTE: I ran into some issues where my Personal Access Token had expired but when I created a new one, I still couldn't publish. But then I ran `vsce login davraamides` first, which accepted the new PAT, and then `vsce publish` succeeded.
+
 Make sure you udpate everything including `CHANGELOG.md` and check everything in and push first.
 
 I've also started publishing to OVSX, described here: https://www.gitpod.io/blog/open-vsx/
